@@ -1,37 +1,23 @@
-<!--Design and layout for risiWelcome-->
 <?xml version="1.0" encoding="UTF-8"?>
+<!--Design and layout for risiWelcome-->
+
 <interface>
   <requires lib="gtk" version="4.6"/>
   <requires lib="libadwaita" version="1.2"/>
 
-  <template class="Package" parent="AdwActionRow">
-    <property name="title" translatable="yes">Package Name</property>
-    <property name="subtitle" translatable="yes">Package Description</property>
-    <property name="packagename">package</property>
-    <property name="icon">Package Description</property>
-    <property name="activatable">True</property>
-    <property name="selectable">False</property>
-    <property name="activatable-widget">switch</property>
-    <child>
-      <object class="GtkCheckButton" id="switch">
-        <property name="halign">end</property>
-        <property name="valign">center</property>
-        <property name="margin-end">12</property>
-        <property name="margin-start">12</property>
-        <property name="active">False</property>
-        <signal name="toggled" handler="on_package_activate" swapped="no"/>
-      </object>
-    </child>
-  </template>
-
-  <object class="AdwApplicationWindow" id="window">
+  <object class="AdwApplicationWindow" id="main_window">
     <property name="title" translatable="yes">Quick Setup!</property>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
     <child>
       <object class="AdwHeaderBar" id="headerbar">
-        <property name="title" translatable="yes">Quick Setup!</property>
-        <property name="show-close-button">True</property>
+        <property name="title-widget" translatable="yes">
+          <object class="AdwWindowTitle" id="title">
+            <property name="title" translatable="yes">risiWelcome</property>
+            <property name="subtitle" translatable="yes">Quick Setup!</property>
+          </object>
+        </property>
+<!--        <property name="show-close-button">True</property>-->
       </object>
     </child>
     <child>
@@ -41,12 +27,10 @@
         <child>
           <object class="GtkBox" id="welcomeBox">
             <property name="orientation">vertical</property>
-            <property name="margin">12</property>
             <child>
                 <object class="GtkImage" id="welcomeImage">
                   <property name="icon-name">fedora-logo-icon</property>
                   <property name="halign">center</property>
-                  <property name="margin">12</property>
                   <property name="icon-size">128</property>
                 </object>
             </child>
@@ -54,7 +38,6 @@
               <object class="GtkLabel" id="welcomeLabel">
                 <property name="label" translatable="yes">Welcome to risiOS!</property>
                 <property name="halign">center</property>
-                <property name="margin">12</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                   <attribute name="scale" value="1.5"/>
@@ -65,7 +48,6 @@
               <object class="GtkLabel" id="welcomeSubLabel">
                 <property name="label" translatable="yes">Your new favorite Linux distribution.</property>
                 <property name="halign">center</property>
-                <property name="margin">12</property>
                 <attributes>
                   <attribute name="scale" value="1.2"/>
                 </attributes>
@@ -75,7 +57,6 @@
               <object class="GtkButton" id="welcomeButton">
                 <property name="label" translatable="yes">Get Started</property>
                 <property name="halign">center</property>
-                <property name="margin">12</property>
                 <signal name="clicked" handler="on_welcomeButton_clicked" swapped="no"/>
               </object>
             </child>
@@ -84,13 +65,11 @@
         <child>
           <object class="GtkBox" id="internetBox">
             <property name="orientation">vertical</property>
-            <property name="margin">12</property>
             <child>
               <object class="GtkImage" id="internetImage">
                 <property name="icon-name">network-wired-symbolic</property>
 <!--                FIXME: Make this a gif showing the user to connect to the internet-->
                 <property name="halign">center</property>
-                <property name="margin">12</property>
                 <property name="icon-size">128</property>
               </object>
             </child>
@@ -98,7 +77,6 @@
               <object class="GtkLabel" id="internetLabel">
                 <property name="label" translatable="yes">Please connect to the internet</property>
                 <property name="halign">center</property>
-                <property name="margin">12</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                   <attribute name="scale" value="1.5"/>
@@ -109,7 +87,6 @@
               <object class="GtkLabel" id="internetSubLabel">
                 <property name="label" translatable="yes">risiWelcome needs internet access to download the latest updates, add new repositories, and install applications.</property>
                 <property name="halign">center</property>
-                <property name="margin">12</property>
                 <attributes>
                   <attribute name="scale" value="1.2"/>
                 </attributes>
@@ -125,6 +102,7 @@
             </child>
           </object>
         </child>
+      </object>
     </child>
   </object>
 </interface>
