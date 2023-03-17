@@ -5,8 +5,8 @@
   <template class="Package" parent="AdwActionRow">
     <property name="title" translatable="yes">Package Name</property>
     <property name="subtitle" translatable="yes">Package Description</property>
-    <property name="packagename">package</property>
-    <property name="icon">Package Description</property>
+    <property name="package">package</property>
+    <property name="icon-file">icon.png</property>
     <property name="activatable">True</property>
     <property name="selectable">False</property>
     <property name="activatable-widget">switch</property>
@@ -17,7 +17,7 @@
         <property name="margin-end">12</property>
         <property name="margin-start">12</property>
         <property name="active">False</property>
-        <signal name="toggled" handler="on_package_activate" swapped="no"/>
+        <signal name="toggled" handler="toggle_package" swapped="no"/>
       </object>
     </child>
   </template>

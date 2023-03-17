@@ -10,95 +10,182 @@
     <property name="default-width">800</property>
     <property name="default-height">600</property>
     <child>
-      <object class="AdwHeaderBar" id="headerbar">
-        <property name="title-widget" translatable="yes">
-          <object class="AdwWindowTitle" id="title">
-            <property name="title" translatable="yes">risiWelcome</property>
-            <property name="subtitle" translatable="yes">Quick Setup!</property>
-          </object>
-        </property>
-<!--        <property name="show-close-button">True</property>-->
-      </object>
-    </child>
-    <child>
       <object class="GtkStack" id="mainStack">
-        <property name="transition-type">slide-left-right</property>
-        <property name="transition-duration">500</property>
         <child>
-          <object class="GtkBox" id="welcomeBox">
+          <object class="GtkBox">
             <property name="orientation">vertical</property>
             <child>
-                <object class="GtkImage" id="welcomeImage">
-                  <property name="icon-name">fedora-logo-icon</property>
-                  <property name="halign">center</property>
-                  <property name="icon-size">128</property>
+              <object class="AdwHeaderBar">
+                <property name="css-classes">flat</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStack" id="quickSetupStack">
+                <property name="transition-type">slide-left-right</property>
+                <property name="transition-duration">500</property>
+                <child>
+                <object class="GtkBox" id="welcomeBox">
+                  <property name="orientation">vertical</property>
+                  <property name="valign">GTK_ALIGN_CENTER</property>
+                  <property name="vexpand">true</property>
+                  <child>
+                    <object class="GtkImage" id="welcomeImage">
+                      <property name="icon-name">fedora-logo-icon</property>
+                      <property name="pixel-size">128</property>
+                      <property name="halign">center</property>
+                      <property name="margin-top">12</property>
+                      <property name="margin-bottom">12</property>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkLabel" id="welcomeLabel">
+                      <property name="label" translatable="yes">Welcome to risiOS!</property>
+                      <property name="halign">center</property>
+                      <attributes>
+                        <attribute name="weight" value="bold"/>
+                        <attribute name="scale" value="1.5"/>
+                      </attributes>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkLabel" id="welcomeSubLabel">
+                      <property name="label" translatable="yes">Your new favorite Linux distribution.</property>
+                      <property name="halign">center</property>
+                      <property name="margin-bottom">12</property>
+                      <attributes>
+                        <attribute name="scale" value="1.2"/>
+                      </attributes>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkButton" id="welcomeButton">
+                      <property name="label" translatable="yes">Get Started</property>
+                      <property name="halign">center</property>
+                    </object>
+                  </child>
                 </object>
-            </child>
-            <child>
-              <object class="GtkLabel" id="welcomeLabel">
-                <property name="label" translatable="yes">Welcome to risiOS!</property>
-                <property name="halign">center</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                  <attribute name="scale" value="1.5"/>
-                </attributes>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel" id="welcomeSubLabel">
-                <property name="label" translatable="yes">Your new favorite Linux distribution.</property>
-                <property name="halign">center</property>
-                <attributes>
-                  <attribute name="scale" value="1.2"/>
-                </attributes>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="welcomeButton">
-                <property name="label" translatable="yes">Get Started</property>
-                <property name="halign">center</property>
-                <signal name="clicked" handler="on_welcomeButton_clicked" swapped="no"/>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox" id="internetBox">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkImage" id="internetImage">
-                <property name="icon-name">network-wired-symbolic</property>
-<!--                FIXME: Make this a gif showing the user to connect to the internet-->
-                <property name="halign">center</property>
-                <property name="icon-size">128</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel" id="internetLabel">
-                <property name="label" translatable="yes">Please connect to the internet</property>
-                <property name="halign">center</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                  <attribute name="scale" value="1.5"/>
-                </attributes>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel" id="internetSubLabel">
-                <property name="label" translatable="yes">risiWelcome needs internet access to download the latest updates, add new repositories, and install applications.</property>
-                <property name="halign">center</property>
-                <attributes>
-                  <attribute name="scale" value="1.2"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwPreferencesGroup" id="browserBox">
-            <property name="title" translatable="yes">Select Web Browsers</property>
-            <property name="description" translatable="yes">risiOS out of the box ships GNOME Web because it is light, private, and respects user freedom. However, we are aware GNOME Web may not fit everyone's browser needs, so we recommend downloading a secondary browser.</property>
-            <child>
+              </child>
+              <child>
+                <object class="GtkBox" id="internetBox">
+                  <property name="orientation">vertical</property>
+                  <property name="valign">GTK_ALIGN_CENTER</property>
+                  <property name="vexpand">true</property>
+                  <child>
+                    <object class="GtkImage" id="internetImage">
+                      <property name="icon-name">network-transmit-receive-symbolic</property>
+                      <property name="pixel-size">128</property>
+                      <property name="halign">center</property>
+                      <property name="margin-top">12</property>
+                      <property name="margin-bottom">12</property>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkLabel" id="networkLabel">
+                      <property name="label" translatable="yes">Please Connect to the Internet</property>
+                      <property name="halign">center</property>
+                      <property name="margin-bottom">12</property>
+                      <attributes>
+                        <attribute name="weight" value="bold"/>
+                        <attribute name="scale" value="1.5"/>
+                      </attributes>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkLabel" id="internetSubLabel">
+                      <property name="label" translatable="yes">Quick Setup needs internet access to install updates,
+install software, and setup system repositories.
+                      </property>
+                      <property name="css-classes">dim-label</property>
+                      <property name="justify">GTK_JUSTIFY_CENTER</property>
+                      <property name="halign">center</property>
+                      <property name="margin-bottom">12</property>
+                    </object>
+                  </child>
+                </object>
+              </child>
+              <child>
+                <object class="AdwPreferencesPage" id="browserPage">
+                  <child>
+                    <object class="AdwPreferencesGroup" id="browserGroup">
+                      <property name="title" translatable="yes">Select Web Browsers</property>
+                      <property name="description" translatable="yes">risiOS out of the box ships GNOME Web because it is light, private, and respects user freedom. However, we are aware GNOME Web may not fit everyone's browser needs, so we recommend downloading a secondary browser.</property>
+                      <child>
+                        <object class="Package" id="librewolf">
+                          <property name="title" translatable="yes">Librewolf</property>
+                          <property name="subtitle" translatable="yes">Firefox Fork, Open Source, Contains Extreme Privacy Features</property>
+                          <property name="package">librewolf</property>
+                          <property name="icon-file">librewolf.png</property>
+                          <property name="css-classes">success</property>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="Package" id="firefox">
+                          <property name="title" translatable="yes">Firefox</property>
+                          <property name="subtitle" translatable="yes">Open Source, Contains Privacy Features</property>
+                          <property name="package">firefox</property>
+                          <property name="icon-file">firefox.png</property>
+                          <property name="css-classes">success</property>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="Package" id="brave">
+                          <property name="title" translatable="yes">Brave</property>
+                          <property name="subtitle" translatable="yes">Open Source, Contains Privacy Features</property>
+                          <property name="package">brave</property>
+                          <property name="icon-file">brave.png</property>
+                          <property name="css-classes">success</property>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="Package" id="chromium">
+                          <property name="title" translatable="yes">Chromium</property>
+                          <property name="subtitle" translatable="yes">Open Source</property>
+                          <property name="package">chromium</property>
+                          <property name="icon-file">chromium.png</property>
+                          <property name="css-classes">warning</property>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="Package" id="vivaldi">
+                          <property name="title" translatable="yes">Vivaldi</property>
+                          <property name="subtitle" translatable="yes">Proprietary, Contains Privacy Features</property>
+                          <property name="package">vivaldi</property>
+                          <property name="icon-file">vivaldi.png</property>
+                          <property name="css-classes">warning</property>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="Package" id="opera">
+                          <property name="title" translatable="yes">Opera</property>
+                          <property name="subtitle" translatable="yes">Proprietary</property>
+                          <property name="package">opera</property>
+                          <property name="icon-file">opera.png</property>
+                          <property name="css-classes">error</property>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="Package" id="edge">
+                          <property name="title" translatable="yes">Microsoft Edge</property>
+                          <property name="subtitle" translatable="yes">Proprietary</property>
+                          <property name="package">microsoft-edge</property>
+                          <property name="icon-file">microsoft-edge.png</property>
+                          <property name="css-classes">error</property>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="Package" id="chrome">
+                          <property name="title" translatable="yes">Google Chrome</property>
+                          <property name="subtitle" translatable="yes">Proprietary</property>
+                          <property name="package">google-chrome</property>
+                          <property name="icon-file">google-chrome.png</property>
+                          <property name="css-classes">error</property>
+                        </object>
+                      </child>
+                    </object>
+                  </child>
+                </object>
+              </child>
+            </object>
             </child>
           </object>
         </child>
