@@ -24,52 +24,60 @@
                 <property name="transition-type">slide-left-right</property>
                 <property name="transition-duration">500</property>
                 <child>
-                <object class="GtkBox" id="welcomeBox">
-                  <property name="orientation">vertical</property>
-                  <property name="valign">GTK_ALIGN_CENTER</property>
-                  <property name="vexpand">true</property>
-                  <child>
-                    <object class="GtkImage" id="welcomeImage">
-                      <property name="icon-name">fedora-logo-icon</property>
-                      <property name="pixel-size">128</property>
-                      <property name="halign">center</property>
-                      <property name="margin-top">12</property>
-                      <property name="margin-bottom">12</property>
-                    </object>
-                  </child>
-                  <child>
-                    <object class="GtkLabel" id="welcomeLabel">
-                      <property name="label" translatable="yes">Welcome to risiOS!</property>
-                      <property name="halign">center</property>
-                      <attributes>
-                        <attribute name="weight" value="bold"/>
-                        <attribute name="scale" value="1.5"/>
-                      </attributes>
-                    </object>
-                  </child>
-                  <child>
-                    <object class="GtkLabel" id="welcomeSubLabel">
-                      <property name="label" translatable="yes">Your new favorite Linux distribution.</property>
-                      <property name="halign">center</property>
-                      <property name="margin-bottom">12</property>
-                      <attributes>
-                        <attribute name="scale" value="1.2"/>
-                      </attributes>
-                    </object>
-                  </child>
-                  <child>
-                    <object class="GtkButton" id="welcomeButton">
-                      <property name="label" translatable="yes">Get Started</property>
-                      <property name="halign">center</property>
-                    </object>
-                  </child>
-                </object>
-              </child>
-              <child>
+                  <object class="GtkBox" id="welcomeBox">
+                    <property name="orientation">vertical</property>
+                    <property name="valign">GTK_ALIGN_CENTER</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="GtkImage" id="welcomeImage">
+                        <property name="icon-name">fedora-logo-icon</property>
+                        <property name="pixel-size">128</property>
+                        <property name="halign">center</property>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="welcomeLabel">
+                        <property name="label" translatable="yes">Welcome to risiOS!</property>
+                        <property name="halign">center</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                          <attribute name="scale" value="1.5"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="welcomeSubLabel">
+                        <property name="label" translatable="yes">Your new favorite Linux distribution.</property>
+                        <property name="halign">center</property>
+                        <property name="margin-bottom">12</property>
+                        <attributes>
+                          <attribute name="scale" value="1.2"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="welcomeSubSubLabel">
+                        <property name="label" translatable="yes">Quick Setup will allow you to quickly setup your computer to your liking, but you can skip this just by closing this window.</property>
+                        <property name="halign">center</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="css-classes">dim-label</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="welcomeButton">
+                        <property name="label" translatable="yes">Get Started</property>
+                        <property name="halign">center</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
                 <object class="GtkBox" id="internetBox">
                   <property name="orientation">vertical</property>
                   <property name="valign">GTK_ALIGN_CENTER</property>
-                  <property name="vexpand">true</property>
+                  <property name="vexpand">True</property>
                   <child>
                     <object class="GtkImage" id="internetImage">
                       <property name="icon-name">network-transmit-receive-symbolic</property>
@@ -103,17 +111,62 @@ install software, and setup system repositories.
                   </child>
                 </object>
               </child>
-              <child>
+                <child>
+                <object class="AdwPreferencesPage" id="repoPage">
+                  <child>
+                    <object class="AdwPreferencesGroup" id="repoGroup">
+                      <property name="title" translatable="yes">Third Party Repositories</property>
+                      <property name="description" translatable="yes">These repositories contain extra software including apps, games, codecs, and drivers.</property>
+                      <child>
+                        <object class="Package" id="rpmfusion">
+                          <property name="title" translatable="yes">Setup RPMFusion &amp; Proprietary Codecs (Highly Recommended)</property>
+                          <property name="subtitle" translatable="yes">This option installs RPMFusion (a third party repository full of software that risiOS/Fedora cannot ship), as well as installs proprietary codecs (needed to open some types of media files), and proprietary video drivers (NVIDIA only). This is recommended and only advised not to do if you are trying to avoid proprietary software on your system.</property>
+                          <property name="action">rpmfusion</property>
+                          <property name="icon-name">applications-multimedia-symbolic</property>
+                          <property name="switch-default">True</property>
+                          <property name="css-classes">success</property>
+                        </object>
+                      </child>
+                      <child>
+                        <object class="Package" id="flatpak">
+                          <property name="title" translatable="yes">Setup Flathub (Highly Recommended)</property>
+                          <property name="subtitle" translatable="yes">This option installs Flatpak and sets up the Flathub repository. This gives you a bigger selection of many types of apps including open source and proprietary apps and games alike.</property>
+                          <property name="action">flatpak</property>
+                          <property name="icon-name">package-x-generic-symbolic</property>
+                          <property name="switch-default">True</property>
+                          <property name="css-classes">success</property>
+                        </object>
+                      </child>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="AdwPreferencesGroup" id="optionsGroup">
+                      <property name="title" translatable="yes">DNF Options</property>
+                      <child>
+                        <object class="Package" id="dnfspeed">
+                          <property name="title" translatable="yes">DNF Parallel Downloads &amp; Fastest Mirror</property>
+                          <property name="subtitle" translatable="yes">Set max parallel downloads to 10 and enables fastest mirror in the package manager. This makes downloads faster on good internet, but slower on bad internet.</property>
+                          <property name="command">echo "max_parallel_downloads=10\nfastestmirror=True" >> /etc/dnf/dnf.conf</property>
+                          <property name="icon-name">folder-download-symbolic</property>
+                          <property name="css-classes">warning</property>
+                        </object>
+                      </child>
+                    </object>
+                  </child>
+                </object>
+              </child>
+                <child>
                 <object class="AdwPreferencesPage" id="browserPage">
                   <child>
                     <object class="AdwPreferencesGroup" id="browserGroup">
                       <property name="title" translatable="yes">Select Web Browsers</property>
-                      <property name="description" translatable="yes">risiOS out of the box ships GNOME Web because it is light, private, and respects user freedom. However, we are aware GNOME Web may not fit everyone's browser needs, so we recommend downloading a secondary browser.</property>
+                      <property name="description" translatable="yes">risiOS out of the box ships GNOME Web because it is light, private, respects user freedom, and has improved significantly in it's most recent 44 release. However, we are aware GNOME Web may not fit everyone's browser needs, so we recommend downloading an additional browser.</property>
                       <child>
                         <object class="Package" id="librewolf">
                           <property name="title" translatable="yes">Librewolf</property>
-                          <property name="subtitle" translatable="yes">Firefox Fork, Open Source, Contains Extreme Privacy Features</property>
+                          <property name="subtitle" translatable="yes">Respects Web Standards, Open Source, Extremely Private</property>
                           <property name="package">librewolf</property>
+                          <property name="command">dnf config-manager --add-repo https://rpm.librewolf.net/librewolf-repo.repo</property>
                           <property name="icon-file">librewolf.png</property>
                           <property name="css-classes">success</property>
                         </object>
@@ -121,7 +174,7 @@ install software, and setup system repositories.
                       <child>
                         <object class="Package" id="firefox">
                           <property name="title" translatable="yes">Firefox</property>
-                          <property name="subtitle" translatable="yes">Open Source, Contains Privacy Features</property>
+                          <property name="subtitle" translatable="yes">Respects Web Standards, Open Source, Private</property>
                           <property name="package">firefox</property>
                           <property name="icon-file">firefox.png</property>
                           <property name="css-classes">success</property>
@@ -130,10 +183,11 @@ install software, and setup system repositories.
                       <child>
                         <object class="Package" id="brave">
                           <property name="title" translatable="yes">Brave</property>
-                          <property name="subtitle" translatable="yes">Open Source, Contains Privacy Features</property>
-                          <property name="package">brave</property>
+                          <property name="subtitle" translatable="yes">Open Source, Private, but contains BAT Token Integration</property>
+                          <property name="package">brave-browser</property>
+                          <property name="command">dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo &amp;&amp; rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc</property>
                           <property name="icon-file">brave.png</property>
-                          <property name="css-classes">success</property>
+                          <property name="css-classes">warning</property>
                         </object>
                       </child>
                       <child>
@@ -148,8 +202,9 @@ install software, and setup system repositories.
                       <child>
                         <object class="Package" id="vivaldi">
                           <property name="title" translatable="yes">Vivaldi</property>
-                          <property name="subtitle" translatable="yes">Proprietary, Contains Privacy Features</property>
-                          <property name="package">vivaldi</property>
+                          <property name="subtitle" translatable="yes">Proprietary</property>
+                          <property name="package">vivaldi-stable</property>
+                          <property name="command">dnf config-manager --add-repo https://repo.vivaldi.com/archive/vivaldi-fedora.repo</property>
                           <property name="icon-file">vivaldi.png</property>
                           <property name="css-classes">warning</property>
                         </object>
@@ -158,7 +213,8 @@ install software, and setup system repositories.
                         <object class="Package" id="opera">
                           <property name="title" translatable="yes">Opera</property>
                           <property name="subtitle" translatable="yes">Proprietary</property>
-                          <property name="package">opera</property>
+                          <property name="package">opera-stable</property>
+                          <property name="command">rpm --import https://rpm.opera.com/rpmrepo.key &amp;&amp; dnf config-manager --add-repo https://rpm.opera.com/rpm</property>
                           <property name="icon-file">opera.png</property>
                           <property name="css-classes">error</property>
                         </object>
@@ -166,18 +222,19 @@ install software, and setup system repositories.
                       <child>
                         <object class="Package" id="edge">
                           <property name="title" translatable="yes">Microsoft Edge</property>
-                          <property name="subtitle" translatable="yes">Proprietary</property>
-                          <property name="package">microsoft-edge</property>
-                          <property name="icon-file">microsoft-edge.png</property>
+                          <property name="subtitle" translatable="yes">Proprietary, Contains Microsoft Trackers</property>
+                          <property name="package">microsoft-edge-stable</property>
+                          <property name="command">rpm --import https://packages.microsoft.com/keys/microsoft.asc &amp;&amp; dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge</property>
+                          <property name="icon-file">edge.png</property>
                           <property name="css-classes">error</property>
                         </object>
                       </child>
                       <child>
                         <object class="Package" id="chrome">
                           <property name="title" translatable="yes">Google Chrome</property>
-                          <property name="subtitle" translatable="yes">Proprietary</property>
-                          <property name="package">google-chrome</property>
-                          <property name="icon-file">google-chrome.png</property>
+                          <property name="subtitle" translatable="yes">Proprietary, Contains Google Trackers</property>
+                          <property name="package">https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm</property>
+                          <property name="icon-file">chrome.png</property>
                           <property name="css-classes">error</property>
                         </object>
                       </child>
@@ -185,7 +242,7 @@ install software, and setup system repositories.
                   </child>
                 </object>
               </child>
-            </object>
+              </object>
             </child>
           </object>
         </child>
