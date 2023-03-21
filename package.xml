@@ -6,10 +6,14 @@
     <property name="title" translatable="yes">Package Name</property>
     <property name="subtitle" translatable="yes">Package Description</property>
     <property name="switch-default">False</property>
-    <property name="icon-file">icon.png</property>
     <property name="activatable">True</property>
     <property name="selectable">False</property>
     <property name="activatable-widget">switch</property>
+    <child type="prefix">
+      <object class="GtkImage" id="icon_image">
+        <property name="pixel-size">24</property>
+      </object>
+    </child>
     <child>
       <object class="GtkCheckButton" id="switch">
         <property name="halign">end</property>
@@ -19,6 +23,9 @@
         <signal name="toggled" handler="toggle_package" swapped="no"/>
       </object>
     </child>
-    <callback name="update_defaults" handler="on_update_defaults" />
+    <!--   Probably isn't the best way to do this, but who cares...   -->
+    <signal name="notify::switch-default" handler="on_update_defaults" />
+    <signal name="notify::iconfile" handler="on_update_defaults" />
+    <signal name="notify::iconname" handler="on_update_defaults" />
   </template>
 </interface>

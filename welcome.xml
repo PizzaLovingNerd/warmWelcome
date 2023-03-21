@@ -80,7 +80,7 @@
                   <property name="vexpand">True</property>
                   <child>
                     <object class="GtkImage" id="internetImage">
-                      <property name="icon-name">network-transmit-receive-symbolic</property>
+                      <property name="icon_name">network-transmit-receive-symbolic</property>
                       <property name="pixel-size">128</property>
                       <property name="halign">center</property>
                       <property name="margin-top">12</property>
@@ -119,10 +119,10 @@ install software, and setup system repositories.
                       <property name="description" translatable="yes">These repositories contain extra software including apps, games, codecs, and drivers.</property>
                       <child>
                         <object class="Package" id="rpmfusion">
-                          <property name="title" translatable="yes">Setup RPMFusion &amp; Proprietary Codecs (Highly Recommended)</property>
+                          <property name="title" translatable="yes">Setup RPMFusion &amp;amp; Proprietary Codecs (Highly Recommended)</property>
                           <property name="subtitle" translatable="yes">This option installs RPMFusion (a third party repository full of software that risiOS/Fedora cannot ship), as well as installs proprietary codecs (needed to open some types of media files), and proprietary video drivers (NVIDIA only). This is recommended and only advised not to do if you are trying to avoid proprietary software on your system.</property>
                           <property name="action">rpmfusion</property>
-                          <property name="icon-name">applications-multimedia-symbolic</property>
+                          <property name="iconname">applications-multimedia-symbolic</property>
                           <property name="switch-default">True</property>
                           <property name="css-classes">success</property>
                         </object>
@@ -132,7 +132,7 @@ install software, and setup system repositories.
                           <property name="title" translatable="yes">Setup Flathub (Highly Recommended)</property>
                           <property name="subtitle" translatable="yes">This option installs Flatpak and sets up the Flathub repository. This gives you a bigger selection of many types of apps including open source and proprietary apps and games alike.</property>
                           <property name="action">flatpak</property>
-                          <property name="icon-name">package-x-generic-symbolic</property>
+                          <property name="iconname">package-x-generic-symbolic</property>
                           <property name="switch-default">True</property>
                           <property name="css-classes">success</property>
                         </object>
@@ -144,11 +144,22 @@ install software, and setup system repositories.
                       <property name="title" translatable="yes">DNF Options</property>
                       <child>
                         <object class="Package" id="dnfspeed">
-                          <property name="title" translatable="yes">DNF Parallel Downloads &amp; Fastest Mirror</property>
-                          <property name="subtitle" translatable="yes">Set max parallel downloads to 10 and enables fastest mirror in the package manager. This makes downloads faster on good internet, but slower on bad internet.</property>
+                          <property name="title" translatable="yes">DNF Parallel Downloads &amp;amp; Fastest Mirror</property>
+                          <property name="subtitle" translatable="yes">Set max parallel downloads to 10 and enables "fastest mirror" in the package manager. This makes downloads faster on good internet, but slower on bad internet.</property>
                           <property name="command">echo "max_parallel_downloads=10\nfastestmirror=True" >> /etc/dnf/dnf.conf</property>
-                          <property name="icon-name">folder-download-symbolic</property>
+                          <property name="iconname">folder-download-symbolic</property>
                           <property name="css-classes">warning</property>
+                        </object>
+                      </child>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="AdwPreferencesGroup">
+                      <child>
+                        <object class="NavigationRow">
+                          <property name="stack">quickSetupStack</property>
+                          <property name="next-page">browserPage</property>
+                          <property name="previous-page">welcomeBox</property>
                         </object>
                       </child>
                     </object>
@@ -167,7 +178,7 @@ install software, and setup system repositories.
                           <property name="subtitle" translatable="yes">Respects Web Standards, Open Source, Extremely Private</property>
                           <property name="package">librewolf</property>
                           <property name="command">dnf config-manager --add-repo https://rpm.librewolf.net/librewolf-repo.repo</property>
-                          <property name="icon-file">librewolf.png</property>
+                          <property name="iconfile">librewolf.png</property>
                           <property name="css-classes">success</property>
                         </object>
                       </child>
@@ -176,7 +187,7 @@ install software, and setup system repositories.
                           <property name="title" translatable="yes">Firefox</property>
                           <property name="subtitle" translatable="yes">Respects Web Standards, Open Source, Private</property>
                           <property name="package">firefox</property>
-                          <property name="icon-file">firefox.png</property>
+                          <property name="iconfile">firefox.png</property>
                           <property name="css-classes">success</property>
                         </object>
                       </child>
@@ -186,7 +197,7 @@ install software, and setup system repositories.
                           <property name="subtitle" translatable="yes">Open Source, Private, but contains BAT Token Integration</property>
                           <property name="package">brave-browser</property>
                           <property name="command">dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo &amp;&amp; rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc</property>
-                          <property name="icon-file">brave.png</property>
+                          <property name="iconfile">brave.png</property>
                           <property name="css-classes">warning</property>
                         </object>
                       </child>
@@ -195,7 +206,7 @@ install software, and setup system repositories.
                           <property name="title" translatable="yes">Chromium</property>
                           <property name="subtitle" translatable="yes">Open Source</property>
                           <property name="package">chromium</property>
-                          <property name="icon-file">chromium.png</property>
+                          <property name="iconfile">chromium.png</property>
                           <property name="css-classes">warning</property>
                         </object>
                       </child>
@@ -205,7 +216,7 @@ install software, and setup system repositories.
                           <property name="subtitle" translatable="yes">Proprietary</property>
                           <property name="package">vivaldi-stable</property>
                           <property name="command">dnf config-manager --add-repo https://repo.vivaldi.com/archive/vivaldi-fedora.repo</property>
-                          <property name="icon-file">vivaldi.png</property>
+                          <property name="iconfile">vivaldi.png</property>
                           <property name="css-classes">warning</property>
                         </object>
                       </child>
@@ -215,7 +226,7 @@ install software, and setup system repositories.
                           <property name="subtitle" translatable="yes">Proprietary</property>
                           <property name="package">opera-stable</property>
                           <property name="command">rpm --import https://rpm.opera.com/rpmrepo.key &amp;&amp; dnf config-manager --add-repo https://rpm.opera.com/rpm</property>
-                          <property name="icon-file">opera.png</property>
+                          <property name="iconfile">opera.png</property>
                           <property name="css-classes">error</property>
                         </object>
                       </child>
@@ -225,7 +236,7 @@ install software, and setup system repositories.
                           <property name="subtitle" translatable="yes">Proprietary, Contains Microsoft Trackers</property>
                           <property name="package">microsoft-edge-stable</property>
                           <property name="command">rpm --import https://packages.microsoft.com/keys/microsoft.asc &amp;&amp; dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge</property>
-                          <property name="icon-file">edge.png</property>
+                          <property name="iconfile">edge.png</property>
                           <property name="css-classes">error</property>
                         </object>
                       </child>
@@ -234,7 +245,7 @@ install software, and setup system repositories.
                           <property name="title" translatable="yes">Google Chrome</property>
                           <property name="subtitle" translatable="yes">Proprietary, Contains Google Trackers</property>
                           <property name="package">https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm</property>
-                          <property name="icon-file">chrome.png</property>
+                          <property name="iconfile">chrome.png</property>
                           <property name="css-classes">error</property>
                         </object>
                       </child>
