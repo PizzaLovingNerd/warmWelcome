@@ -6,6 +6,8 @@ import requests
 
 import gettext
 
+import urllib3
+
 _ = gettext.gettext
 
 gi.require_version("Gtk", "4.0")
@@ -24,6 +26,7 @@ quick_setup_extras = []
 class Application(Adw.Application):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, application_id='io.risi.welcome', **kwargs)
+        self.set_resource_base_path(os.path.dirname(os.path.abspath(__file__)) + "/style.css")
 
         self.builder = Gtk.Builder()
         self.builder.add_from_file(_WINDOW_FILE)
@@ -58,16 +61,16 @@ class Application(Adw.Application):
             response = requests.get("https://nmcheck.gnome.org/check_network_status.txt")
             if "NetworkManager is online" in response.text:
                 GLib.idle_add(self.wait_for_internet_idle, "repoPage")
-        except requests.RequestException:
+        except (requests.exceptions.RequestException, urllib3.exceptions.HTTPError):
             GLib.idle_add(
-                GLib.idle_add(self.wait_for_internet_idle, "internetBox")
+                self.wait_for_internet_idle, "internetBox"
             )
         while not connected:
             try:
                 response = requests.get("https://nmcheck.gnome.org/check_network_status.txt")
                 if "NetworkManager is online" in response.text:
                     connected = True
-            except requests.RequestException:
+            except (requests.exceptions.RequestException, urllib3.exceptions.HTTPError):
                 connected = False
         GLib.idle_add(lambda: self.quick_setup_stack.set_visible_child(
             self.builder.get_object("repoPage")

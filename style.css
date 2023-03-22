@@ -1,0 +1,6 @@
+/* make colors darker for the success, warning, and error colors */
+
+.success { color: #ffffff; }
+/*label.success { color: @green-5; }*/
+/*label.warning { color: @yellow-5; }*/
+/*label.error { color: @red-5; }*/
