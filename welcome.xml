@@ -261,7 +261,7 @@
                         <child>
                           <object class="Package" id="opera">
                             <property name="title" translatable="yes">Opera</property>
-                            <property name="subtitle" translatable="yes">Proprietary</property>
+                            <property name="subtitle" translatable="yes">Proprietary, Misleading Marketing</property>
                             <property name="package">opera-stable</property>
                             <property name="command">rpm --import https://rpm.opera.com/rpmrepo.key &amp;&amp; dnf config-manager --add-repo https://rpm.opera.com/rpm</property>
                             <property name="iconfile">opera.png</property>
@@ -294,7 +294,7 @@
                         <child>
                           <object class="NavigationRow">
                             <property name="stack">quickSetupStack</property>
-                            <property name="next-page">welcomeBox</property>
+                            <property name="next-page">additionalProgramsStack</property>
                             <property name="previous-page">repoPage</property>
                           </object>
                         </child>
@@ -303,17 +303,201 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkBox" id="additionalProgramsBox">
-                    <property name="orientation">vertical</property>
-                    <property name="valign">GTK_ALIGN_CENTER</property>
-                    <property name="vexpand">True</property>
+                  <object class="GtkStack" id="additionalProgramsStack">
+                    <property name="transition-type">slide-left-right</property>
+                    <property name="transition-duration">500</property>
                     <child>
-                      <object class="AdwFlap">
+                      <object class="AdwPreferencesPage" id="additionalProgramsCategories">
                         <child>
-<!--                          put the item selector here-->
+                          <object class="AdwPreferencesGroup">
+                            <child>
+                              <object class="CategoryChooser">
+                                <property name="title" translatable="yes">Audio Consumption</property>
+                                <property name="subtitle" translatable="yes">Applications needed for listening to music or managing your music library.</property>
+                                <property name="page">audioConsumptionPage</property>
+                                <property name="iconname">audio-headset-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
                         </child>
-                        <child type="flap">
-<!--                          put the stack full of items here-->
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesPage" id="audioConsumptionPage">
+                        <property name="title" translatable="yes">Audio Consumption</property>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title" translatable="yes">Music Players</property>
+                            <child>
+                              <object class="Package" id="gnome-music">
+                                <property name="title" translatable="yes">GNOME Music</property>
+                                <property name="subtitle" translatable="yes">Bare-bones simple UI, but not many features.</property>
+                                <property name="package">gnome-music</property>
+                                <property name="iconfile">gnome-music.png</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="lollypop">
+                                <property name="title" translatable="yes">Lollypop</property>
+                                <property name="subtitle" translatable="yes">Easy to use, a lot of features, but can be slower, especially for large music libraries.</property>
+                                <property name="package">lollypop</property>
+                                <property name="iconfile">lollypop.png</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="rhythmbox">
+                                <property name="title" translatable="yes">Rhythmbox</property>
+                                <property name="subtitle" translatable="yes">Older-school iTunes style music player, great for large music libraries.</property>
+                                <property name="package">rhythmbox rhythmbox-alternative-toolbar</property>
+                                <property name="iconfile">rhythmbox.png</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                          <property name="title" translatable="yes">Music Tools</property>
+                          <child>
+                            <object class="Package" id="picard">
+                              <property name="title" translatable="yes">MusicBrainz Picard</property>
+                              <property name="subtitle" translatable="yes">Automatic music tagger that can pull metadata from the internet.</property>
+                              <property name="package">picard</property>
+                              <property name="iconfile">picard.png</property>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="Package" id="soundconverter">
+                              <property name="title" translatable="yes">SoundConverter</property>
+                              <property name="subtitle" translatable="yes">A tool for converting audio file formats.</property>
+                              <property name="package">soundconverter</property>
+                              <property name="iconfile">soundconverter.png</property>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="Package" id="soundjuicer">
+                              <property name="title" translatable="yes">Sound Juicer</property>
+                              <property name="subtitle" translatable="yes">A tool for ripping CDs.</property>
+                              <property name="package">sound-juicer</property>
+                              <property name="iconfile">soundjuicer.png</property>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="Package" id="audacity">
+                              <property name="title" translatable="yes">Audacity</property>
+                              <property name="subtitle" translatable="yes">Full featured audio editor.</property>
+                              <property name="package">audacity</property>
+                              <property name="iconfile">audacity.png</property>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="Package" id="easyeffects">
+                              <property name="title" translatable="yes">Easy Effects</property>
+                              <property name="subtitle" translatable="yes">Allows you to manipulate system audio.</property>
+                              <property name="package">easyeffects</property>
+                              <property name="iconfile">easyeffects.png</property>
+                            </object>
+                          </child>
+                        </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesPage" id="audioProductionPage">
+                        <property name="title" translatable="yes">Audio Production</property>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title" translatable="yes">Digital Audio Workstations (DAWs)</property>
+                            <child>
+                              <object class="Package" id="ardour">
+                                <property name="title" translatable="yes">Ardour 6</property>
+                                <property name="subtitle" translatable="yes">A multi-channel digital audio workstation.</property>
+                                <property name="package">ardour6</property>
+                                <property name="iconfile">ardour.png</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="lmms">
+                                <property name="title" translatable="yes">LMMS</property>
+                                <property name="subtitle" translatable="yes">A free and open source FL Studio style DAW.</property>
+                                <property name="package">lmms</property>
+                                <property name="iconfile">lmms.png</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="qtractor">
+                                <property name="title" translatable="yes">Qtractor</property>
+                                <property name="subtitle" translatable="yes">Audio/MIDI multi-track sequencer application.</property>
+                                <property name="package">qtractor</property>
+                                <property name="iconfile">qtractor.png</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title" translatable="yes">Music Composition Tools</property>
+                            <child>
+                              <object class="Package" id="musescore">
+                                <property name="title" translatable="yes">Musescore</property>
+                                <property name="subtitle" translatable="yes">A multi-channel digital audio workstation.</property>
+                                <property name="package">mscore</property>
+                                <property name="iconfile">musescore.png</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="rosegarden">
+                                <property name="title" translatable="yes">Rosegarden</property>
+                                <property name="subtitle" translatable="yes">A free and open source FL Studio style DAW.</property>
+                                <property name="package">rosegarden4</property>
+                                <property name="iconfile">rosegarden.png</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                          <property name="title" translatable="yes">Music Tools</property>
+                          <child>
+                            <object class="Package" id="picard">
+                              <property name="title" translatable="yes">MusicBrainz Picard</property>
+                              <property name="subtitle" translatable="yes">Automatic music tagger that can pull metadata from the internet.</property>
+                              <property name="package">picard</property>
+                              <property name="iconfile">picard.png</property>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="Package" id="soundconverter">
+                              <property name="title" translatable="yes">SoundConverter</property>
+                              <property name="subtitle" translatable="yes">A tool for converting audio file formats.</property>
+                              <property name="package">soundconverter</property>
+                              <property name="iconfile">soundconverter.png</property>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="Package" id="soundjuicer">
+                              <property name="title" translatable="yes">Sound Juicer</property>
+                              <property name="subtitle" translatable="yes">A tool for ripping CDs.</property>
+                              <property name="package">sound-juicer</property>
+                              <property name="iconfile">soundjuicer.png</property>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="Package" id="audacity">
+                              <property name="title" translatable="yes">Audacity</property>
+                              <property name="subtitle" translatable="yes">Full featured audio editor.</property>
+                              <property name="package">audacity</property>
+                              <property name="iconfile">audacity.png</property>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="Package" id="easyeffects">
+                              <property name="title" translatable="yes">Easy Effects</property>
+                              <property name="subtitle" translatable="yes">Allows you to manipulate system audio.</property>
+                              <property name="package">easyeffects</property>
+                              <property name="iconfile">easyeffects.png</property>
+                            </object>
+                          </child>
+                        </object>
                         </child>
                       </object>
                     </child>

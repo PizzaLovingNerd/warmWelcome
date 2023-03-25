@@ -1,0 +1,32 @@
+<interface>
+  <requires lib="gtk" version="4.6"/>
+  <requires lib="libadwaita" version="1.2"/>
+
+  <template class="CategoryChooser" parent="AdwActionRow">
+    <property name="title" translatable="yes">Category Name</property>
+    <property name="subtitle" translatable="yes">Category Description</property>
+    <property name="page">none</property>
+    <property name="activatable">True</property>
+    <property name="selectable">False</property>
+    <property name="activatable-widget">button</property>
+    <child>
+      <object class="GtkButton" id="button">
+        <property name="halign">end</property>
+        <property name="valign">center</property>
+        <property name="margin-end">12</property>
+        <property name="margin-start">12</property>
+        <property name="icon-name">go-next-symbolic</property>
+        <property name="css-classes">flat
+circular</property>
+        <signal name="clicked" handler="btn_clicked" swapped="no"/>
+      </object>
+    </child>
+    <child type="prefix">
+      <object class="GtkImage" id="icon_image">
+        <property name="pixel-size">24</property>
+      </object>
+    </child>
+    <signal name="notify::iconfile" handler="on_update_defaults" />
+    <signal name="notify::iconname" handler="on_update_defaults" />
+  </template>
+</interface>

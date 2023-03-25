@@ -17,6 +17,7 @@ from gi.repository import Gtk, Adw, GLib, GObject
 _WINDOW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/welcome.xml"
 _PACKAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/package.xml"
 _NAVIGATION_ROW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/navigation_row.xml"
+_CATEGORY_CHOOSER_FILE = os.path.dirname(os.path.abspath(__file__)) + "/category_chooser.xml"
 
 quick_setup_packages = []
 quick_setup_commands = []
@@ -35,6 +36,11 @@ class Application(Adw.Application):
 
     def get_widget_id(self, widget):
         return self.builder.get_object(widget)
+
+    def reveal_app_list(self, page):
+        self.builder.get_object("additionalProgramsStack").set_visible_child(
+            self.builder.get_object(page)
+        )
 
     def do_activate(self):
         self.window.set_application(self)
@@ -220,6 +226,52 @@ class NavigationRow(Adw.ActionRow):
         self.next_btn.set_visible(self.next_page_id is not None)
 
 
+@Gtk.Template(filename=_CATEGORY_CHOOSER_FILE)
+class CategoryChooser(Adw.ActionRow):
+    __gtype_name__ = "CategoryChooser"
+    _page = None
+    icon_path = None
+    internal_icon_name = None
+    icon = Gtk.Template.Child("icon_image")
+
+    def __init__(self):
+        super().__init__()
+
+    @Gtk.Template.Callback("btn_clicked")
+    def btn_clicked(self, button):
+        application = button.get_root().get_application()
+        application.reveal_app_list(self._page)
+
+    @GObject.Property(type=str)
+    def page(self):
+        return self._page
+
+    @page.setter
+    def page(self, name):
+        self._page = name
+
+    @GObject.Property(type=str)
+    def iconfile(self):
+        return self.icon_path
+
+    @iconfile.setter
+    def iconfile(self, icon):
+        self.icon_path = os.path.dirname(os.path.abspath(__file__)) + f"/icons/{icon}"
+
+    @GObject.Property(type=str)
+    def iconname(self):
+        return self.internal_icon_name
+
+    @iconname.setter
+    def iconname(self, icon):
+        self.internal_icon_name = icon
+
+    @Gtk.Template.Callback("on_update_defaults")
+    def on_update_defaults(self, *args, **kwargs):
+        if self.icon_path is not None:
+            self.icon.set_from_file(self.icon_path)
+        if self.internal_icon_name is not None:
+            self.icon.set_from_icon_name(self.internal_icon_name)
 
 if __name__ == "__main__":
     app = Application()
