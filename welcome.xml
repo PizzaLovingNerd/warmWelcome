@@ -318,6 +318,14 @@
                                 <property name="iconname">audio-headset-symbolic</property>
                               </object>
                             </child>
+                            <child>
+                              <object class="CategoryChooser">
+                                <property name="title" translatable="yes">Audio Production</property>
+                                <property name="subtitle" translatable="yes">Tools made for producing music and other types of audio.</property>
+                                <property name="page">audioProductionPage</property>
+                                <property name="iconname">audio-input-microphone-symbolic</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -379,14 +387,6 @@
                               <property name="subtitle" translatable="yes">A tool for ripping CDs.</property>
                               <property name="package">sound-juicer</property>
                               <property name="iconfile">soundjuicer.png</property>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="Package" id="audacity">
-                              <property name="title" translatable="yes">Audacity</property>
-                              <property name="subtitle" translatable="yes">Full featured audio editor.</property>
-                              <property name="package">audacity</property>
-                              <property name="iconfile">audacity.png</property>
                             </object>
                           </child>
                           <child>
@@ -456,48 +456,56 @@
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup">
-                          <property name="title" translatable="yes">Music Tools</property>
-                          <child>
-                            <object class="Package" id="picard">
-                              <property name="title" translatable="yes">MusicBrainz Picard</property>
-                              <property name="subtitle" translatable="yes">Automatic music tagger that can pull metadata from the internet.</property>
-                              <property name="package">picard</property>
-                              <property name="iconfile">picard.png</property>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="Package" id="soundconverter">
-                              <property name="title" translatable="yes">SoundConverter</property>
-                              <property name="subtitle" translatable="yes">A tool for converting audio file formats.</property>
-                              <property name="package">soundconverter</property>
-                              <property name="iconfile">soundconverter.png</property>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="Package" id="soundjuicer">
-                              <property name="title" translatable="yes">Sound Juicer</property>
-                              <property name="subtitle" translatable="yes">A tool for ripping CDs.</property>
-                              <property name="package">sound-juicer</property>
-                              <property name="iconfile">soundjuicer.png</property>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="Package" id="audacity">
-                              <property name="title" translatable="yes">Audacity</property>
-                              <property name="subtitle" translatable="yes">Full featured audio editor.</property>
-                              <property name="package">audacity</property>
-                              <property name="iconfile">audacity.png</property>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="Package" id="easyeffects">
-                              <property name="title" translatable="yes">Easy Effects</property>
-                              <property name="subtitle" translatable="yes">Allows you to manipulate system audio.</property>
-                              <property name="package">easyeffects</property>
-                              <property name="iconfile">easyeffects.png</property>
-                            </object>
-                          </child>
-                        </object>
+                            <property name="title" translatable="yes">Audio Tools</property>
+                            <child>
+                              <object class="Package" id="audacity">
+                                <property name="title" translatable="yes">Audacity</property>
+                                <property name="subtitle" translatable="yes">Full featured audio editor.</property>
+                                <property name="package">audacity</property>
+                                <property name="iconfile">audacity.png</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="carla">
+                                <property name="title" translatable="yes">Carla</property>
+                                <property name="subtitle" translatable="yes">A fully-featured audio plugin host.</property>
+                                <property name="package">Carla</property>
+                                <property name="iconfile">carla.png</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="hydrogen">
+                                <property name="title" translatable="yes">Hydrogen</property>
+                                <property name="subtitle" translatable="yes">An advanced drum machine.</property>
+                                <property name="package">hydrogen</property>
+                                <property name="iconfile">hydrogen.png</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="tuxguitar">
+                                <property name="title" translatable="yes">TuxGuitar</property>
+                                <property name="subtitle" translatable="yes">A tablature editor and player.</property>
+                                <property name="package">tuxguitar</property>
+                                <property name="iconfile">tuxguitar.png</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="guitarix">
+                                <property name="title" translatable="yes">Guitarix</property>
+                                <property name="subtitle" translatable="yes">A virtual guitar amplifier.</property>
+                                <property name="package">guitarix</property>
+                                <property name="iconfile">guitarix.png</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="yoshimi">
+                                <property name="title" translatable="yes">Yoshimi</property>
+                                <property name="subtitle" translatable="yes">A software synthesizer.</property>
+                                <property name="package">yoshimi</property>
+                                <property name="iconfile">yoshimi.png</property>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                     </child>

@@ -19,6 +19,8 @@ _PACKAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/package.xml"
 _NAVIGATION_ROW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/navigation_row.xml"
 _CATEGORY_CHOOSER_FILE = os.path.dirname(os.path.abspath(__file__)) + "/category_chooser.xml"
 
+packages = []
+
 quick_setup_packages = []
 quick_setup_commands = []
 quick_setup_extras = []
@@ -92,11 +94,13 @@ class Package(Adw.ActionRow):
     icon_path = None
     internal_icon_name = None
     default = False
+    rpmfusion = False
     icon = Gtk.Template.Child("icon_image")
     switch = Gtk.Template.Child("switch")
 
     def __init__(self):
         super().__init__(self)
+        packages.append(self)
 
     @Gtk.Template.Callback("on_update_defaults")
     def on_update_defaults(self, *args, **kwargs):
@@ -116,6 +120,8 @@ class Package(Adw.ActionRow):
                 quick_setup_commands.append(self.action_name)
             if self.action_extra is not None:
                 quick_setup_extras.append(self.action_extra)
+                for package in packages:
+                    package.check_rpmfusion()
         else:
             if self.package_name is not None:
                 quick_setup_packages.remove(self.package_name)
@@ -123,6 +129,8 @@ class Package(Adw.ActionRow):
                 quick_setup_commands.remove(self.action_name)
             if self.action_extra is not None:
                 quick_setup_extras.remove(self.action_extra)
+                for package in packages:
+                    package.check_rpmfusion()
 
     @GObject.Property(type=str)
     def package(self):
@@ -171,6 +179,22 @@ class Package(Adw.ActionRow):
     @switch_default.setter
     def switch_default(self, default):
         self.default = default
+
+    @GObject.Property(type=bool, default=False)
+    def rpmfusion_required(self, required):
+        return self.rpmfusion
+
+    @rpmfusion_required.setter
+    def rpmfusion_required(self, required):
+        self.rpmfusion = required
+
+    # @Gtk.Template.Callback("check_rpmfusion")
+    def check_rpmfusion(self):
+        if self.rpmfusion == True:
+            if "rpmfusion" not in quick_setup_extras:
+                self.set_sensitive(False)
+            else:
+                self.set_sensitive(True)
 
 
 @Gtk.Template(filename=_NAVIGATION_ROW_FILE)
