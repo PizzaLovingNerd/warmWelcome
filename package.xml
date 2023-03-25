@@ -4,7 +4,6 @@
 
   <template class="Package" parent="AdwActionRow">
     <property name="title" translatable="yes">Package Name</property>
-    <property name="subtitle" translatable="yes">Package Description</property>
     <property name="switch-default">False</property>
     <property name="activatable">True</property>
     <property name="selectable">False</property>
@@ -23,10 +22,8 @@
         <signal name="toggled" handler="toggle_package" swapped="no"/>
       </object>
     </child>
-    <!--   Probably isn't the best way to do this, but who cares...   -->
     <signal name="notify::switch-default" handler="on_update_defaults" />
     <signal name="notify::iconfile" handler="on_update_defaults" />
     <signal name="notify::iconname" handler="on_update_defaults" />
-<!--    <signal name="notify::"-->
   </template>
 </interface>

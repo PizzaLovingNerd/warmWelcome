@@ -43,11 +43,22 @@ class Application(Adw.Application):
         self.builder.get_object("additionalProgramsStack").set_visible_child(
             self.builder.get_object(page)
         )
+        self.builder.get_object("additionalProgramsBack").set_sensitive(True)
+
+    def on_additionalProgramsBackClicked(self, button):
+        self.builder.get_object("additionalProgramsStack").set_visible_child(
+            self.builder.get_object("additionalProgramsCategories")
+        )
+        button.set_sensitive(False)
+
 
     def do_activate(self):
         self.window.set_application(self)
         self.window.present()
 
+        self.builder.get_object("additionalProgramsBack").connect(
+            "clicked", self.on_additionalProgramsBackClicked
+        )
         self.builder.get_object("welcomeButton").connect("clicked", self.on_welcomeButton)
 
     def on_welcomeButton(self, button):
@@ -188,7 +199,6 @@ class Package(Adw.ActionRow):
     def rpmfusion_required(self, required):
         self.rpmfusion = required
 
-    # @Gtk.Template.Callback("check_rpmfusion")
     def check_rpmfusion(self):
         if self.rpmfusion == True:
             if "rpmfusion" not in quick_setup_extras:
@@ -296,6 +306,7 @@ class CategoryChooser(Adw.ActionRow):
             self.icon.set_from_file(self.icon_path)
         if self.internal_icon_name is not None:
             self.icon.set_from_icon_name(self.internal_icon_name)
+
 
 if __name__ == "__main__":
     app = Application()
