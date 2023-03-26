@@ -492,7 +492,7 @@ circular</property>
                               <property name="title" translatable="yes">Music Composition Tools</property>
                               <child>
                                 <object class="Package" id="musescore">
-                                  <property name="title" translatable="yes">Musescore</property>
+                                  <property name="title" translatable="yes">MuseScore</property>
                                   <property name="subtitle" translatable="yes">A multi-channel digital audio workstation.</property>
                                   <property name="package">mscore</property>
                                   <property name="iconfile">musescore.png</property>
