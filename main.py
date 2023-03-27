@@ -7,12 +7,11 @@ import requests
 import gettext
 
 import urllib3
-
 _ = gettext.gettext
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Gtk, Adw, GLib, GObject
+from gi.repository import Gtk, Adw, GLib, GObject, GdkPixbuf
 
 _WINDOW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/welcome.xml"
 _PACKAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/package.xml"
@@ -50,7 +49,6 @@ class Application(Adw.Application):
             self.builder.get_object("additionalProgramsCategories")
         )
         button.set_sensitive(False)
-
 
     def do_activate(self):
         self.window.set_application(self)
@@ -118,7 +116,10 @@ class Package(Adw.ActionRow):
         if self.default is True:
             self.switch.set_active(True)
         if self.icon_path is not None:
-            self.icon.set_from_file(self.icon_path)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+                self.icon_path, 32, 32, True
+            )
+            self.icon.set_from_pixbuf(pixbuf)
         if self.internal_icon_name is not None:
             self.icon.set_from_icon_name(self.internal_icon_name)
 
@@ -153,11 +154,11 @@ class Package(Adw.ActionRow):
 
     @GObject.Property(type=str)
     def command(self):
-        return self.action_name
+        return self.action_command
 
     @command.setter
     def command(self, name):
-        self.action_name = name
+        self.action_command = name
 
     @GObject.Property(type=str)
     def action(self):

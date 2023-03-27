@@ -648,7 +648,7 @@ Requires RPMFusion</property>
                               <property name="title" translatable="yes">Emulators</property>
                               <child>
                                 <object class="Package" id="retroarch">
-                                  <property name="title" translatable="yes">Retroarch</property>
+                                  <property name="title" translatable="yes">RetroArch</property>
                                   <property name="subtitle" translatable="yes">A core based all in one emulator.</property>
                                   <property name="package">retroarch</property>
                                   <property name="action">retroarch-enable-network-access</property>
@@ -656,11 +656,12 @@ Requires RPMFusion</property>
                                 </object>
                               </child>
                               <child>
-                                <object class="Package" id="dosbox">
-                                  <property name="title" translatable="yes">DosBox</property>
+                                <object class="Package" id="dosboxx">
+                                  <property name="title" translatable="yes">DOSBox-X</property>
                                   <property name="subtitle" translatable="yes">An emulator for DOS.</property>
-                                  <property name="package">dosbox-staging</property>
-                                  <property name="iconfile">dosbox.png</property>
+                                  <property name="package">dosbox-x</property>
+                                  <property name="command">dnf copr enable rob72/DOSBox-X -y</property>
+                                  <property name="iconfile">dosbox-x.png</property>
                                 </object>
                               </child>
                             </object>
@@ -671,7 +672,7 @@ Requires RPMFusion</property>
                               <child>
                                 <object class="Package" id="discord">
                                   <property name="title" translatable="yes">Discord</property>
-                                  <property name="subtitle" translatable="yes">Gaming-focused text, video, and voice chat app.
+                                  <property name="subtitle" translatable="yes">Gaming focused text, video, and voice chat app.
 Requires RPMFusion</property>
                                   <property name="package">discord</property>
                                   <property name="rpmfusion-required">True</property>
@@ -706,9 +707,11 @@ Requires RPMFusion</property>
                               <child>
                                 <object class="Package" id="greenwithenvy">
                                   <property name="title" translatable="yes">GreenWithEnvy</property>
-                                  <property name="subtitle" translatable="yes">Tools for NVIDIA GPUs.</property>
-                                  <property name="package">greenwithenvy</property>
-                                  <property name="iconfile">greenwithenvy.png</property>
+                                  <property name="subtitle" translatable="yes">Tools for NVIDIA GPUs.
+Requires RPMFusion</property>
+                                  <property name="package">gwe</property>
+                                  <property name="iconfile">gwe.png</property>
+                                  <property name="rpmfusion-required">True</property>
                                 </object>
                               </child>
                               <child>
@@ -782,6 +785,8 @@ Requires RPMFusion</property>
                                   <property name="title" translatable="yes">OpenShot</property>
                                   <property name="package">openshot</property>
                                   <property name="iconfile">openshot.png</property>
+                                  <property name="subtitle" translatable="yes">Requires RPMFusion</property>
+                                  <property name="rpmfusion-required">True</property>
                                 </object>
                               </child>
                               <child>
@@ -789,6 +794,8 @@ Requires RPMFusion</property>
                                   <property name="title" translatable="yes">Shotcut</property>
                                   <property name="package">shotcut</property>
                                   <property name="iconfile">shotcut.png</property>
+                                  <property name="subtitle" translatable="yes">Requires RPMFusion</property>
+                                  <property name="rpmfusion-required">True</property>
                                 </object>
                               </child>
                               <child>
