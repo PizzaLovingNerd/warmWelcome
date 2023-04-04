@@ -25,5 +25,7 @@
     <signal name="notify::switch-default" handler="on_update_defaults" />
     <signal name="notify::iconfile" handler="on_update_defaults" />
     <signal name="notify::iconname" handler="on_update_defaults" />
+    <signal name="notify::group" handler="on_update_defaults" />
+    <signal name="notify::actions-required" handler="check_actions" />
   </template>
 </interface>

@@ -1,8 +1,10 @@
 import os
+import subprocess
 
 import gi
 import threading
 import requests
+import json
 
 import gettext
 
@@ -23,6 +25,48 @@ packages = []
 quick_setup_packages = []
 quick_setup_commands = []
 quick_setup_extras = []
+
+# Checking GPU Vendor
+lshw_data = None
+print("IGNORE THE WARNING BELOW, THIS DOES NOT AFFECT THE PROGRAM")
+lshw = subprocess.Popen("lshw -C display", shell=True, stdout=subprocess.PIPE)
+lshw_data = lshw.stdout.read().decode("utf-8")
+vendor_line = lshw_data.split("vendor: ")[1].split("\n")[0]
+if "nvidia" in vendor_line.lower():
+    quick_setup_extras.append("nvidia")
+elif "amd" in vendor_line.lower():
+    quick_setup_extras.append("amd")
+elif "intel" in vendor_line.lower():
+    quick_setup_extras.append("intel")
+quick_setup_extras.append("nvidia")
+
+actions = {
+    "rpmfusion": [
+        "echo Installing RPMFusion Repositories",
+        "dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm",
+        "echo Updating AppStream",
+        "sudo dnf groupupdate core",
+        "echo Installing Multimedia Packages"
+        "sudo dnf groupupdate multimedia --setop=\"install_weak_deps=False\" --exclude=PackageKit-gstreamer-plugin"
+        "echo Sound & Video Packages",
+        "sudo dnf groupupdate sound-and-video"
+    ],
+    "flatpak": [
+        "echo Installing Flatpak",
+        "sudo dnf install -y flatpak",
+        "echo Adding Flathub",
+        "flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo",
+        "echo Adding Theme Overrides",
+        "flatpak override --filesystem=~/.themes"
+        "flatpak override --filesystem=/usr/share/themes"
+        "flatpak override --filesystem=xdg-config/gtk-4.0"
+        "flatpak override --filesystem=xdg-config/gtk-3.0"
+    ],
+    "nvidia": [],
+    "amd": [],
+    "intel": []
+}
+package_groups = {}
 
 
 class Application(Adw.Application):
@@ -103,7 +147,8 @@ class Package(Adw.ActionRow):
     icon_path = None
     internal_icon_name = None
     default = False
-    rpmfusion = False
+    actions_required_list = None
+    button_group = None
     icon = Gtk.Template.Child("icon_image")
     switch = Gtk.Template.Child("switch")
 
@@ -122,6 +167,12 @@ class Package(Adw.ActionRow):
             self.icon.set_from_pixbuf(pixbuf)
         if self.internal_icon_name is not None:
             self.icon.set_from_icon_name(self.internal_icon_name)
+        if self.button_group is not None:
+            if self.button_group not in package_groups:
+                package_groups[self.button_group] = self.switch
+            else:
+                if package_groups[self.button_group] is not self.switch:
+                    self.switch.set_group(package_groups[self.button_group])
 
     @Gtk.Template.Callback("toggle_package")
     def toggle_package(self, button):
@@ -129,20 +180,20 @@ class Package(Adw.ActionRow):
             if self.package_name is not None:
                 quick_setup_packages.append(self.package_name)
             if self.action_command is not None:
-                quick_setup_commands.append(self.action_name)
+                quick_setup_commands.append(self.action_command)
             if self.action_extra is not None:
                 quick_setup_extras.append(self.action_extra)
                 for package in packages:
-                    package.check_rpmfusion()
+                    package.check_actions()
         else:
             if self.package_name is not None:
                 quick_setup_packages.remove(self.package_name)
             if self.action_command is not None:
-                quick_setup_commands.remove(self.action_name)
+                quick_setup_commands.remove(self.action_command)
             if self.action_extra is not None:
                 quick_setup_extras.remove(self.action_extra)
                 for package in packages:
-                    package.check_rpmfusion()
+                    package.check_actions()
 
     @GObject.Property(type=str)
     def package(self):
@@ -169,6 +220,14 @@ class Package(Adw.ActionRow):
         self.action_extra = name
 
     @GObject.Property(type=str)
+    def group(self):
+        return self.button_group
+
+    @group.setter
+    def group(self, name):
+        self.button_group = name
+
+    @GObject.Property(type=str)
     def iconfile(self):
         return self.icon_path
 
@@ -192,20 +251,27 @@ class Package(Adw.ActionRow):
     def switch_default(self, default):
         self.default = default
 
-    @GObject.Property(type=bool, default=False)
-    def rpmfusion_required(self, required):
-        return self.rpmfusion
+    @GObject.Property(type=str)
+    def actions_required(self):
+        return self.actions_required_list
 
-    @rpmfusion_required.setter
-    def rpmfusion_required(self, required):
-        self.rpmfusion = required
+    @actions_required.setter
+    def actions_required(self, actions):
+        self.actions_required_list = actions.split(",")
 
-    def check_rpmfusion(self):
-        if self.rpmfusion == True:
-            if "rpmfusion" not in quick_setup_extras:
-                self.set_sensitive(False)
-            else:
-                self.set_sensitive(True)
+    @Gtk.Template.Callback("check_actions")
+    def check_actions(self, *args, **kwargs):
+        if self.actions_required_list is not None:
+            sensitive = True
+            for action in self.actions_required_list:
+                if action not in quick_setup_extras:
+                    sensitive = False
+            self.set_sensitive(sensitive)
+
+            self.switch.set_active(False)
+            if self.button_group is not None:
+                if package_groups[self.button_group] is self.switch:
+                    self.switch.set_active(True)
 
 
 @Gtk.Template(filename=_NAVIGATION_ROW_FILE)
@@ -307,6 +373,21 @@ class CategoryChooser(Adw.ActionRow):
             self.icon.set_from_file(self.icon_path)
         if self.internal_icon_name is not None:
             self.icon.set_from_icon_name(self.internal_icon_name)
+
+
+def generate_bash_script():
+    script = ["#!/bin/bash", ""]
+    for command in quick_setup_commands:
+        script.append(command)
+    for action in quick_setup_extras:
+        script.extend(actions[action])
+    if quick_setup_packages is not None or quick_setup_packages != []:
+        script.append(f"dnf install -y {packages}")
+        script.append("Checking for installed packages...")
+        for package in quick_setup_packages:
+            script.append("rpm -q {package} || exit 1")
+    script.append("touch /usr/share/risiWelcome/quick-setup-done")
+    script.append("echo 'Done!'")
 
 
 if __name__ == "__main__":

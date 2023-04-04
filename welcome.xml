@@ -149,7 +149,7 @@
                             <child>
                               <object class="Package" id="rpmfusion">
                                 <property name="title" translatable="yes">Setup RPMFusion &amp;amp; Proprietary Codecs (Highly Recommended)</property>
-                                <property name="subtitle" translatable="yes">This option installs RPMFusion (a third party repository full of software that risiOS/Fedora cannot ship), as well as installs proprietary codecs (needed to open some types of media files), and proprietary video drivers (NVIDIA only). This is recommended and only advised not to do if you are trying to avoid proprietary software on your system.</property>
+                                <property name="subtitle" translatable="yes">This option installs RPMFusion (a third party repository full of software that risiOS/Fedora cannot ship), as well as installs proprietary codecs (needed to open some types of media files), and proprietary video drivers (NVIDIA only). This is recommended and only advised not to do if you are trying to avoid all proprietary software on your system.</property>
                                 <property name="action">rpmfusion</property>
                                 <property name="iconname">applications-multimedia-symbolic</property>
                                 <property name="switch-default">True</property>
@@ -301,10 +301,81 @@
                                 <child>
                                   <object class="NavigationRow">
                                     <property name="stack">quickSetupStack</property>
-                                    <property name="next-page">additionalProgramsPage</property>
+                                    <property name="next-page">driverPage</property>
                                     <property name="previous-page">repoPage</property>
                                   </object>
                                 </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="driverPage">
+                    <property name="orientation">vertical</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="AdwHeaderBar"/>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesPage">
+                        <property name="title" translatable="yes">Drivers</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title">NVIDIA</property>
+                            <property name="description" translatable="yes">Drivers for NVIDIA Graphics.</property>
+                            <child>
+                              <object class="Package" id="nouveau">
+                                <property name="title" translatable="yes">Open Source Driver (Nouveau)</property>
+                                <property name="subtitle" translatable="yes">This is not recommended and only advised if you are trying to avoid all proprietary software on your system. .</property>
+                                <property name="iconfile">nvidia.png</property>
+                                <property name="actions-required">nvidia</property>
+                                <property name="group">nvidia</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="geforce">
+                                <property name="title" translatable="yes">Current GeForce/Quadro/Tesla Driver</property>
+                                <property name="subtitle" translatable="yes">Suitable for any GPU released after 2014. RPMFusion Required.</property>
+                                <property name="package">akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs</property>
+                                <property name="iconfile">nvidia.png</property>
+                                <property name="actions-required">rpmfusion,nvidia</property>
+                                <property name="group">nvidia</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="oldergeforce">
+                                <property name="title" translatable="yes">Legacy GeForce 600/700 Driver</property>
+                                <property name="subtitle" translatable="yes">Suitable for any NVIDIA Kepler GPU found between 2012-2014. RPMFusion Required.</property>
+                                <property name="package">akmod-nvidia-470xx xorg-x11-drv-nvidia-470xx xorg-x11-drv-nvidia-470xx-cuda</property>
+                                <property name="iconfile">nvidia.png</property>
+                                <property name="actions-required">rpmfusion,nvidia</property>
+                                <property name="group">nvidia</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="Package" id="evenoldergeforce">
+                                <property name="title" translatable="yes">Legacy GeForce 400/500 Driver</property>
+                                <property name="subtitle" translatable="yes">Suitable for any NVIDIA Fermi GPU found between 2010-2012. RPMFusion Required.</property>
+                                <property name="package">akmod-nvidia-390xx xorg-x11-drv-nvidia-390xx xorg-x11-drv-nvidia-390xx-cuda</property>
+                                <property name="iconfile">nvidia.png</property>
+                                <property name="actions-required">rpmfusion,nvidia</property>
+                                <property name="group">nvidia</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <child>
+                              <object class="NavigationRow">
+                                <property name="stack">quickSetupStack</property>
+                                <property name="next-page">additionalProgramsPage</property>
+                                <property name="previous-page">browserPage</property>
                               </object>
                             </child>
                           </object>
@@ -378,6 +449,17 @@ circular</property>
                                   <property name="subtitle" translatable="yes">Applications commonly needed for video production work.</property>
                                   <property name="page">videoProductionPage</property>
                                   <property name="iconname">video-x-generic-symbolic</property>
+                                </object>
+                              </child>
+                            </object>
+                          </child>
+                          <child>
+                            <object class="AdwPreferencesGroup">
+                              <child>
+                                <object class="NavigationRow">
+                                  <property name="stack">quickSetupStack</property>
+                                  <property name="next-page">driverPage</property>
+                                  <property name="previous-page">driverPage</property>
                                 </object>
                               </child>
                             </object>
@@ -577,7 +659,7 @@ circular</property>
 Requires RPMFusion</property>
                                   <property name="package">steam</property>
                                   <property name="iconfile">steam.png</property>
-                                  <property name="rpmfusion-required">True</property>
+                                  <property name="actions-required">rpmfusion</property>
                                 </object>
                               </child>
                               <child>
@@ -675,7 +757,7 @@ Requires RPMFusion</property>
                                   <property name="subtitle" translatable="yes">Gaming focused text, video, and voice chat app.
 Requires RPMFusion</property>
                                   <property name="package">discord</property>
-                                  <property name="rpmfusion-required">True</property>
+                                  <property name="actions-required">rpmfusion</property>
                                   <property name="iconfile">discord.png</property>
                                 </object>
                               </child>
@@ -711,7 +793,7 @@ Requires RPMFusion</property>
 Requires RPMFusion</property>
                                   <property name="package">gwe</property>
                                   <property name="iconfile">gwe.png</property>
-                                  <property name="rpmfusion-required">True</property>
+                                  <property name="actions-required">rpmfusion</property>
                                 </object>
                               </child>
                               <child>
@@ -786,7 +868,7 @@ Requires RPMFusion</property>
                                   <property name="package">openshot</property>
                                   <property name="iconfile">openshot.png</property>
                                   <property name="subtitle" translatable="yes">Requires RPMFusion</property>
-                                  <property name="rpmfusion-required">True</property>
+                                  <property name="actions-required">rpmfusion</property>
                                 </object>
                               </child>
                               <child>
@@ -795,7 +877,7 @@ Requires RPMFusion</property>
                                   <property name="package">shotcut</property>
                                   <property name="iconfile">shotcut.png</property>
                                   <property name="subtitle" translatable="yes">Requires RPMFusion</property>
-                                  <property name="rpmfusion-required">True</property>
+                                  <property name="actions-required">rpmfusion</property>
                                 </object>
                               </child>
                               <child>
@@ -816,7 +898,17 @@ Requires RPMFusion</property>
                                   <property name="subtitle" translatable="yes">A program for video/screen recording and live streaming.
 Requires RPMFusion</property>
                                   <property name="package">obs-studio</property>
-                                  <property name="rpmfusion-required">True</property>
+                                  <property name="actions-required">rpmfusion</property>
+                                  <property name="iconfile">obs.png</property>
+                                </object>
+                              </child>
+                              <child>
+                                <object class="Package" id="handbrake">
+                                  <property name="title" translatable="yes">Handbrake</property>
+                                  <property name="subtitle" translatable="yes">Video converter and transcoder.
+Requires RPMFusion</property>
+                                  <property name="package">handbrake</property>
+                                  <property name="actions-required">rpmfusion</property>
                                   <property name="iconfile">obs.png</property>
                                 </object>
                               </child>
