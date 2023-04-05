@@ -25,5 +25,6 @@
     </child>
     <signal name="notify::next-page" handler="show_buttons" />
     <signal name="notify::previous-page" handler="show_buttons" />
+    <signal name="notify::start-button" handler="on_start_changed" />
   </template>
 </interface>

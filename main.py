@@ -1,5 +1,6 @@
 import os
 import subprocess
+import tempfile
 
 import gi
 import threading
@@ -13,7 +14,8 @@ _ = gettext.gettext
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Gtk, Adw, GLib, GObject, GdkPixbuf
+gi.require_version("Vte", "3.91")
+from gi.repository import Gtk, Adw, Vte, GLib, GObject, GdkPixbuf
 
 _WINDOW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/welcome.xml"
 _PACKAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/package.xml"
@@ -45,21 +47,21 @@ actions = {
         "echo Installing RPMFusion Repositories",
         "dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm",
         "echo Updating AppStream",
-        "sudo dnf groupupdate core",
-        "echo Installing Multimedia Packages"
-        "sudo dnf groupupdate multimedia --setop=\"install_weak_deps=False\" --exclude=PackageKit-gstreamer-plugin"
+        "dnf groupupdate core",
+        "echo Installing Multimedia Packages",
+        "dnf groupupdate multimedia --setop=\"install_weak_deps=False\" --exclude=PackageKit-gstreamer-plugin",
         "echo Sound & Video Packages",
-        "sudo dnf groupupdate sound-and-video"
+        "dnf groupupdate sound-and-video"
     ],
     "flatpak": [
         "echo Installing Flatpak",
-        "sudo dnf install -y flatpak",
+        "dnf install -y flatpak",
         "echo Adding Flathub",
         "flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo",
         "echo Adding Theme Overrides",
-        "flatpak override --filesystem=~/.themes"
-        "flatpak override --filesystem=/usr/share/themes"
-        "flatpak override --filesystem=xdg-config/gtk-4.0"
+        "flatpak override --filesystem=~/.themes",
+        "flatpak override --filesystem=/usr/share/themes",
+        "flatpak override --filesystem=xdg-config/gtk-4.0",
         "flatpak override --filesystem=xdg-config/gtk-3.0"
     ],
     "nvidia": [],
@@ -79,6 +81,49 @@ class Application(Adw.Application):
         self.window = self.builder.get_object("main_window")
         self.quick_setup_stack = self.builder.get_object("quickSetupStack")
 
+        self.vte = Vte.Terminal(vexpand=True, hexpand=True)
+        self.vte.set_input_enabled(False)
+        self.builder.get_object("vteBox").append(self.vte)
+        
+    def terminal_exited(self, terminal, status):
+        if status != 0:
+            dialog = Gtk.AlertDialog(
+                transient_for=self.window,
+                title="Error: Exit code not 0",
+                primary_text="An unknown error has occurred",
+                secondary_text="",
+                buttons=Gtk.ButtonsType.NONE,
+            )
+            dialog.add_button("View Logs", Gtk.ResponseType.YES)
+            dialog.add_button("Close Welcome", Gtk.ResponseType.NO)
+            if dialog.run() == Gtk.ResponseType.NO:
+                Gtk.main_quit()
+            else:
+                self.builder.get_object("runningStack").set_visible_child(
+                    self.builder.get_object("vteBox")
+                )
+                self.builder.get_object("installationBack").set_sensitive(False)
+            dialog.destroy()
+        else:
+            dialog = Gtk.AlertDialog(
+                transient_for=self.window,
+                title="Reboot Required",
+                primary_text="A reboot is recommended to apply drivers and for enabling Flathub.",
+                secondary_text="",
+                buttons=Gtk.ButtonsType.NONE,
+            )
+            dialog.add_button("Reboot now", Gtk.ResponseType.YES)
+            dialog.add_button("Reboot later", Gtk.ResponseType.NO)
+            if dialog.run() == Gtk.ResponseType.YES:
+                subprocess.run(["gnome-session-quit", "--reboot"])
+            dialog.destroy()
+
+    def view_progress(self, button):
+        self.builder.get_object("runningStack").set_visible_child(
+            self.builder.get_object("vteBox")
+        )
+        self.builder.get_object("installationBack").set_sensitive(True)
+
     def get_widget_id(self, widget):
         return self.builder.get_object(widget)
 
@@ -94,6 +139,12 @@ class Application(Adw.Application):
         )
         button.set_sensitive(False)
 
+    def on_installationBackClicked(self, button):
+        self.builder.get_object("runningStack").set_visible_child(
+            self.builder.get_object("runningBox")
+        )
+        button.set_sensitive(False)
+
     def do_activate(self):
         self.window.set_application(self)
         self.window.present()
@@ -102,6 +153,9 @@ class Application(Adw.Application):
             "clicked", self.on_additionalProgramsBackClicked
         )
         self.builder.get_object("welcomeButton").connect("clicked", self.on_welcomeButton)
+        self.builder.get_object("progressButton").connect("clicked", self.view_progress)
+        self.builder.get_object("installationBack").connect("clicked", self.on_installationBackClicked)
+        self.vte.connect("child_exited", self.terminal_exited)
 
     def on_welcomeButton(self, button):
         button.set_label(_("Checking Internet Connection"))
@@ -119,16 +173,16 @@ class Application(Adw.Application):
     def wait_for_internet(self):
         connected = False
         try:
-            response = requests.get("https://nmcheck.gnome.org/check_network_status.txt")
+            response = requests.get("https://nmcheck.gnome.org/check_network_status.txt", timeout=5)
             if "NetworkManager is online" in response.text:
                 GLib.idle_add(self.wait_for_internet_idle, "repoPage")
+            elif response.status_code != 200:
+                GLib.idle_add(self.wait_for_internet_idle, "internetBox")
         except (requests.exceptions.RequestException, urllib3.exceptions.HTTPError):
-            GLib.idle_add(
-                self.wait_for_internet_idle, "internetBox"
-            )
+            GLib.idle_add(self.wait_for_internet_idle, "internetBox")
         while not connected:
             try:
-                response = requests.get("https://nmcheck.gnome.org/check_network_status.txt")
+                response = requests.get("https://nmcheck.gnome.org/check_network_status.txt", timeout=3)
                 if "NetworkManager is online" in response.text:
                     connected = True
             except (requests.exceptions.RequestException, urllib3.exceptions.HTTPError):
@@ -282,6 +336,7 @@ class NavigationRow(Adw.ActionRow):
     stack_id = None
     back_btn = Gtk.Template.Child("back_btn")
     next_btn = Gtk.Template.Child("next_btn")
+    start = False
 
     @GObject.Property(type=str)
     def next_page(self):
@@ -313,6 +368,22 @@ class NavigationRow(Adw.ActionRow):
         application.builder.get_object(self.stack_id).set_visible_child(
             application.builder.get_object(self.next_page_id)
         )
+        if self.next_page_id == "installationPage":
+            application.builder.get_object("main_window").set_hide_on_close(True)
+            application.vte.spawn_async(
+                Vte.PtyFlags.DEFAULT,
+                os.environ['HOME'],
+                generate_bash_script(),
+                None, # Environmental Variables (envv)
+                GLib.SpawnFlags.DEFAULT, # Spawn Flags
+                None, None, # Child Setup
+                -1, # Timeout (-1 for indefinitely)
+                None, # Cancellable
+                None, # Callback
+                None # User Data
+            )
+            generate_bash_script()
+
 
     @Gtk.Template.Callback("on_previous_page")
     def on_previous_page(self, button):
@@ -325,6 +396,21 @@ class NavigationRow(Adw.ActionRow):
     def show_buttons(self, *args, **kwargs):
         self.back_btn.set_visible(self.previous_page_id is not None)
         self.next_btn.set_visible(self.next_page_id is not None)
+
+    @GObject.Property(type=bool, default=False)
+    def start_button(self):
+        return self.start
+
+    @start_button.setter
+    def start_button(self, start):
+        self.start = start
+
+    @Gtk.Template.Callback("on_start_changed")
+    def on_start_changed(self, *args, **kwargs):
+        if self.start:
+            self.next_btn.set_label("Start")
+        else:
+            self.next_btn.set_label("Next")
 
 
 @Gtk.Template(filename=_CATEGORY_CHOOSER_FILE)
@@ -377,17 +463,24 @@ class CategoryChooser(Adw.ActionRow):
 
 def generate_bash_script():
     script = ["#!/bin/bash", ""]
+    script.append("sleep 2 && exit 1")   # FOR DEBUGGING
     for command in quick_setup_commands:
         script.append(command)
     for action in quick_setup_extras:
-        script.extend(actions[action])
-    if quick_setup_packages is not None or quick_setup_packages != []:
-        script.append(f"dnf install -y {packages}")
-        script.append("Checking for installed packages...")
+        script = script + actions[action]
+    if quick_setup_packages is not None and quick_setup_packages != []:
+        script.append(f"dnf install -y {' '.join(quick_setup_packages)}")
+        script.append("echo Checking for installed packages...")
         for package in quick_setup_packages:
-            script.append("rpm -q {package} || exit 1")
+            script.append(f"rpm -q {package} || exit 1")
     script.append("touch /usr/share/risiWelcome/quick-setup-done")
     script.append("echo 'Done!'")
+
+    bash_file_path = tempfile.mktemp(suffix=".sh", prefix="risiWelcome-")
+    with open(bash_file_path, "w") as f:
+        f.write("\n".join(script))
+    print(bash_file_path)
+    return ["/usr/bin/pkexec", "/usr/bin/bash", bash_file_path]
 
 
 if __name__ == "__main__":

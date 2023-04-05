@@ -4,6 +4,7 @@
 <interface>
   <requires lib="gtk" version="4.6"/>
   <requires lib="libadwaita" version="1.2"/>
+  <requires lib="vte" version="3.91"/>
 
   <object class="AdwApplicationWindow" id="main_window">
     <property name="title" translatable="yes">Quick Setup!</property>
@@ -64,7 +65,8 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="welcomeSubSubLabel">
-                            <property name="label" translatable="yes">Quick Setup will allow you to quickly setup your computer to your liking, but you can skip this just by closing this window.</property>
+                            <property name="label" translatable="yes">Quick Setup will allow you to quickly setup your computer to your liking,
+but you can do this later just by closing this window.</property>
                             <property name="wrap">true</property>
                             <property name="justify">GTK_JUSTIFY_CENTER</property>
                             <property name="halign">center</property>
@@ -137,6 +139,14 @@
                     <property name="vexpand">True</property>
                     <child>
                       <object class="AdwHeaderBar">
+                        <child type="title">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Package Management</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
                         <property name="css-classes">flat</property>
                       </object>
                     </child>
@@ -203,6 +213,14 @@
                     <property name="vexpand">True</property>
                     <child>
                       <object class="AdwHeaderBar">
+                        <child type="title">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Additional Browsers</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
                         <property name="css-classes">flat</property>
                       </object>
                     </child>
@@ -289,7 +307,7 @@
                                   <object class="Package" id="chrome">
                                     <property name="title" translatable="yes">Google Chrome</property>
                                     <property name="subtitle" translatable="yes">Proprietary, Contains Google Trackers</property>
-                                    <property name="package">https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm</property>
+                                    <property name="command">dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm</property>
                                     <property name="iconfile">chrome.png</property>
                                     <property name="css-classes">error</property>
                                   </object>
@@ -318,7 +336,17 @@
                     <property name="orientation">vertical</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="AdwHeaderBar"/>
+                      <object class="AdwHeaderBar">
+                        <child type="title">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Drivers</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <property name="css-classes">flat</property>
+                      </object>
                     </child>
                     <child>
                       <object class="AdwPreferencesPage">
@@ -403,520 +431,616 @@ circular</property>
                     </child>
                     <child>
                       <object class="GtkStack" id="additionalProgramsStack">
-                      <property name="transition-type">slide-left-right</property>
-                      <property name="transition-duration">500</property>
-                      <child>
-                        <object class="AdwPreferencesPage" id="additionalProgramsCategories">
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Additional Programs</property>
-                              <property name="description" translatable="yes">Feel free to install any additional programs you may want or need.</property>
-                              <child>
-                                <object class="CategoryChooser">
-                                  <property name="title" translatable="yes">Audio Consumption</property>
-                                  <property name="subtitle" translatable="yes">Applications needed for listening to music or managing your music library.</property>
-                                  <property name="page">audioConsumptionPage</property>
-                                  <property name="iconname">audio-headset-symbolic</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="CategoryChooser">
-                                  <property name="title" translatable="yes">Audio Production</property>
-                                  <property name="subtitle" translatable="yes">Tools made for producing music and other types of audio.</property>
-                                  <property name="page">audioProductionPage</property>
-                                  <property name="iconname">audio-input-microphone-symbolic</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="CategoryChooser">
-                                  <property name="title" translatable="yes">Gaming</property>
-                                  <property name="subtitle" translatable="yes">Tools for playing videos games on risiOS.</property>
-                                  <property name="page">gamingPage</property>
-                                  <property name="iconname">applications-games-symbolic</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="CategoryChooser">
-                                  <property name="title" translatable="yes">Graphic Design &amp;amp; Photography</property>
-                                  <property name="subtitle" translatable="yes">Applications relating to graphics and image work.</property>
-                                  <property name="page">graphicsPage</property>
-                                  <property name="iconname">applications-graphics-symbolic</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="CategoryChooser">
-                                  <property name="title" translatable="yes">Video Production</property>
-                                  <property name="subtitle" translatable="yes">Applications commonly needed for video production work.</property>
-                                  <property name="page">videoProductionPage</property>
-                                  <property name="iconname">video-x-generic-symbolic</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <child>
-                                <object class="NavigationRow">
-                                  <property name="stack">quickSetupStack</property>
-                                  <property name="next-page">driverPage</property>
-                                  <property name="previous-page">driverPage</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                        </object>
-                      </child>
-                      <child>
-                        <object class="AdwPreferencesPage" id="audioConsumptionPage">
-                          <property name="title" translatable="yes">Audio Consumption</property>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Music Players</property>
-                              <child>
-                                <object class="Package" id="gnome-music">
-                                  <property name="title" translatable="yes">GNOME Music</property>
-                                  <property name="subtitle" translatable="yes">Bare-bones simple UI, but not many features.</property>
-                                  <property name="package">gnome-music</property>
-                                  <property name="iconfile">gnome-music.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="lollypop">
-                                  <property name="title" translatable="yes">Lollypop</property>
-                                  <property name="subtitle" translatable="yes">Easy to use, a lot of features, but can be slower, especially for large music libraries.</property>
-                                  <property name="package">lollypop</property>
-                                  <property name="iconfile">lollypop.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="rhythmbox">
-                                  <property name="title" translatable="yes">Rhythmbox</property>
-                                  <property name="subtitle" translatable="yes">Older-school iTunes style music player, great for large music libraries.</property>
-                                  <property name="package">rhythmbox rhythmbox-alternative-toolbar</property>
-                                  <property name="iconfile">rhythmbox.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Music Tools</property>
-                              <child>
-                                <object class="Package" id="picard">
-                                  <property name="title" translatable="yes">MusicBrainz Picard</property>
-                                  <property name="subtitle" translatable="yes">Automatic music tagger that can pull metadata from the internet.</property>
-                                  <property name="package">picard</property>
-                                  <property name="iconfile">picard.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="soundconverter">
-                                  <property name="title" translatable="yes">SoundConverter</property>
-                                  <property name="subtitle" translatable="yes">A tool for converting audio file formats.</property>
-                                  <property name="package">soundconverter</property>
-                                  <property name="iconfile">soundconverter.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="soundjuicer">
-                                  <property name="title" translatable="yes">Sound Juicer</property>
-                                  <property name="subtitle" translatable="yes">A tool for ripping CDs.</property>
-                                  <property name="package">sound-juicer</property>
-                                  <property name="iconfile">soundjuicer.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="easyeffects">
-                                  <property name="title" translatable="yes">Easy Effects</property>
-                                  <property name="subtitle" translatable="yes">Allows you to manipulate system audio.</property>
-                                  <property name="package">easyeffects</property>
-                                  <property name="iconfile">easyeffects.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                        </object>
-                      </child>
-                      <child>
-                        <object class="AdwPreferencesPage" id="audioProductionPage">
-                          <property name="title" translatable="yes">Audio Production</property>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Digital Audio Workstations (DAWs)</property>
-                              <child>
-                                <object class="Package" id="ardour">
-                                  <property name="title" translatable="yes">Ardour 6</property>
-                                  <property name="subtitle" translatable="yes">A multi-channel digital audio workstation.</property>
-                                  <property name="package">ardour6</property>
-                                  <property name="iconfile">ardour.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="lmms">
-                                  <property name="title" translatable="yes">LMMS</property>
-                                  <property name="subtitle" translatable="yes">A free and open source FL Studio style DAW.</property>
-                                  <property name="package">lmms</property>
-                                  <property name="iconfile">lmms.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="qtractor">
-                                  <property name="title" translatable="yes">Qtractor</property>
-                                  <property name="subtitle" translatable="yes">Audio/MIDI multi-track sequencer application.</property>
-                                  <property name="package">qtractor</property>
-                                  <property name="iconfile">qtractor.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Music Composition Tools</property>
-                              <child>
-                                <object class="Package" id="musescore">
-                                  <property name="title" translatable="yes">MuseScore</property>
-                                  <property name="subtitle" translatable="yes">A multi-channel digital audio workstation.</property>
-                                  <property name="package">mscore</property>
-                                  <property name="iconfile">musescore.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="rosegarden">
-                                  <property name="title" translatable="yes">Rosegarden</property>
-                                  <property name="subtitle" translatable="yes">A free and open source FL Studio style DAW.</property>
-                                  <property name="package">rosegarden4</property>
-                                  <property name="iconfile">rosegarden.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Audio Tools</property>
-                              <child>
-                                <object class="Package" id="audacity">
-                                  <property name="title" translatable="yes">Audacity</property>
-                                  <property name="subtitle" translatable="yes">Full featured audio editor.</property>
-                                  <property name="package">audacity</property>
-                                  <property name="iconfile">audacity.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="carla">
-                                  <property name="title" translatable="yes">Carla</property>
-                                  <property name="subtitle" translatable="yes">A fully-featured audio plugin host.</property>
-                                  <property name="package">Carla</property>
-                                  <property name="iconfile">carla.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="hydrogen">
-                                  <property name="title" translatable="yes">Hydrogen</property>
-                                  <property name="subtitle" translatable="yes">An advanced drum machine.</property>
-                                  <property name="package">hydrogen</property>
-                                  <property name="iconfile">hydrogen.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="tuxguitar">
-                                  <property name="title" translatable="yes">TuxGuitar</property>
-                                  <property name="subtitle" translatable="yes">A tablature editor and player.</property>
-                                  <property name="package">tuxguitar</property>
-                                  <property name="iconfile">tuxguitar.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="guitarix">
-                                  <property name="title" translatable="yes">Guitarix</property>
-                                  <property name="subtitle" translatable="yes">A virtual guitar amplifier.</property>
-                                  <property name="package">guitarix</property>
-                                  <property name="iconfile">guitarix.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="yoshimi">
-                                  <property name="title" translatable="yes">Yoshimi</property>
-                                  <property name="subtitle" translatable="yes">A software synthesizer.</property>
-                                  <property name="package">yoshimi</property>
-                                  <property name="iconfile">yoshimi.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                        </object>
-                      </child>
-                      <child>
-                        <object class="AdwPreferencesPage" id="gamingPage">
-                          <property name="title" translatable="yes">Gaming</property>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Game Store Launchers</property>
-                              <property name="description" translatable="yes">Note: Playing non-native games may have varying results. See ProtonDB for more info.</property>
-                              <child>
-                                <object class="Package" id="steam">
-                                  <property name="title" translatable="yes">Steam</property>
-                                  <property name="subtitle" translatable="yes">Store and game launcher with 1000s of games.
-Requires RPMFusion</property>
-                                  <property name="package">steam</property>
-                                  <property name="iconfile">steam.png</property>
-                                  <property name="actions-required">rpmfusion</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="minigalaxy">
-                                  <property name="title" translatable="yes">Minigalaxy</property>
-                                  <property name="subtitle" translatable="yes">Launcher for games bought through GOG</property>
-                                  <property name="package">minigalaxy</property>
-                                  <property name="iconfile">minigalaxy.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="heroic">
-                                  <property name="title" translatable="yes">Heroic Launcher</property>
-                                  <property name="subtitle" translatable="yes">Launcher for Epic Games and GOG</property>
-                                  <property name="package">heroic</property>
-                                  <property name="command">dnf copr enable atim/heroic-games-launcher -y</property>
-                                  <property name="iconfile">heroic.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Game Managers</property>
-                              <property name="description" translatable="yes">Note: Playing non-native games may have varying results. See ProtonDB for more info.</property>
-                              <child>
-                                <object class="Package" id="lutris">
-                                  <property name="title" translatable="yes">Lutris</property>
-                                  <property name="subtitle" translatable="yes">A game manager with the goal of making it as easy as possible to play any game.</property>
-                                  <property name="package">lutris</property>
-                                  <property name="iconfile">lutris.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="gamehub">
-                                  <property name="title" translatable="yes">GameHub</property>
-                                  <property name="subtitle" translatable="yes">A unified library for games from all platforms.</property>
-                                  <property name="package">gamehub</property>
-                                  <property name="iconfile">gamehub.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="gnome-games">
-                                  <property name="title" translatable="yes">GNOME Games</property>
-                                  <property name="subtitle" translatable="yes">A game launcher with built-in emulators.</property>
-                                  <property name="package">gnome-games</property>
-                                  <property name="iconfile">gnome-games.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Compatibility Tools</property>
-                              <property name="description" translatable="yes">Note: Playing non-native games may have varying results. See ProtonDB for more info.</property>
-                              <child>
-                                <object class="Package" id="bottles">
-                                  <property name="title" translatable="yes">Bottles</property>
-                                  <property name="subtitle" translatable="yes">A tool for managing Wine prefixes to make it easy to run Windows games/software.</property>
-                                  <property name="package">bottles</property>
-                                  <property name="iconfile">bottles.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Emulators</property>
-                              <child>
-                                <object class="Package" id="retroarch">
-                                  <property name="title" translatable="yes">RetroArch</property>
-                                  <property name="subtitle" translatable="yes">A core based all in one emulator.</property>
-                                  <property name="package">retroarch</property>
-                                  <property name="action">retroarch-enable-network-access</property>
-                                  <property name="iconfile">retroarch.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="dosboxx">
-                                  <property name="title" translatable="yes">DOSBox-X</property>
-                                  <property name="subtitle" translatable="yes">An emulator for DOS.</property>
-                                  <property name="package">dosbox-x</property>
-                                  <property name="command">dnf copr enable rob72/DOSBox-X -y</property>
-                                  <property name="iconfile">dosbox-x.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title" translatable="yes">Tools</property>
-                              <child>
-                                <object class="Package" id="discord">
-                                  <property name="title" translatable="yes">Discord</property>
-                                  <property name="subtitle" translatable="yes">Gaming focused text, video, and voice chat app.
-Requires RPMFusion</property>
-                                  <property name="package">discord</property>
-                                  <property name="actions-required">rpmfusion</property>
-                                  <property name="iconfile">discord.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="prism">
-                                  <property name="title" translatable="yes">Prism Launcher</property>
-                                  <property name="subtitle" translatable="yes">Minecraft Launcher supporting multiple (easy to mod) instances and accounts.</property>
-                                  <property name="package">prismlauncher java-17-openjdk java-1.8.0-openjdk</property>
-                                  <property name="command">dnf copr enable g3tchoo/prismlauncher -y</property>
-                                  <property name="iconfile">prismlauncher.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="antimicrox">
-                                  <property name="title" translatable="yes">AntiMicroX</property>
-                                  <property name="subtitle" translatable="yes">A program allowing you to map controller inputs to keys.</property>
-                                  <property name="package">antimicrox</property>
-                                  <property name="iconfile">antimicrox.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="piper">
-                                  <property name="title" translatable="yes">Piper</property>
-                                  <property name="subtitle" translatable="yes">A tool for customizing RGB devices on Linux.</property>
-                                  <property name="package">piper</property>
-                                  <property name="iconfile">piper.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="greenwithenvy">
-                                  <property name="title" translatable="yes">GreenWithEnvy</property>
-                                  <property name="subtitle" translatable="yes">Tools for NVIDIA GPUs.
-Requires RPMFusion</property>
-                                  <property name="package">gwe</property>
-                                  <property name="iconfile">gwe.png</property>
-                                  <property name="actions-required">rpmfusion</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="goverlay">
-                                  <property name="title" translatable="yes">Goverlay</property>
-                                  <property name="subtitle" translatable="yes">Managing and configure gaming overlays.</property>
-                                  <property name="package">goverlay</property>
-                                  <property name="iconfile">goverlay.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                        </object>
-                      </child>
-                      <child>
-                        <object class="AdwPreferencesPage" id="graphicsPage">
-                          <property name="title" translatable="yes">Graphic Design and Photography</property>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <child>
-                                <object class="Package" id="gimp">
-                                  <property name="title" translatable="yes">GNU Image Manipulation Program (GIMP)</property>
-                                  <property name="subtitle" translatable="yes">A program for creating and editing images (Adobe Photoshop alternative).</property>
-                                  <property name="package">gimp</property>
-                                  <property name="iconfile">gimp.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="krita">
-                                  <property name="title" translatable="yes">Krita</property>
-                                  <property name="subtitle" translatable="yes">Digital painting program.</property>
-                                  <property name="package">krita</property>
-                                  <property name="iconfile">krita.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="inkscape">
-                                  <property name="title" translatable="yes">Inkscape</property>
-                                  <property name="subtitle" translatable="yes">A vector graphics editor (Adobe Illustrator alternative).</property>
-                                  <property name="package">inkscape</property>
-                                  <property name="iconfile">inkscape.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="darktable">
-                                  <property name="title" translatable="yes">Darktable</property>
-                                  <property name="subtitle" translatable="yes">A light-table and darkroom program (Adobe Lightroom alternative).</property>
-                                  <property name="package">darktable</property>
-                                  <property name="iconfile">darktable.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                        </object>
-                      </child>
-                      <child>
-                        <object class="AdwPreferencesPage" id="videoProductionPage">
-                          <property name="title" translatable="yes">Video Production</property>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title">Video Editors</property>
-                              <child>
-                                <object class="Package" id="kdenlive">
-                                  <property name="title" translatable="yes">Kdenlive</property>
-                                  <property name="package">kdenlive mediainfo</property>
-                                  <property name="iconfile">kdenlive.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="openshot">
-                                  <property name="title" translatable="yes">OpenShot</property>
-                                  <property name="package">openshot</property>
-                                  <property name="iconfile">openshot.png</property>
-                                  <property name="subtitle" translatable="yes">Requires RPMFusion</property>
-                                  <property name="actions-required">rpmfusion</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="shotcut">
-                                  <property name="title" translatable="yes">Shotcut</property>
-                                  <property name="package">shotcut</property>
-                                  <property name="iconfile">shotcut.png</property>
-                                  <property name="subtitle" translatable="yes">Requires RPMFusion</property>
-                                  <property name="actions-required">rpmfusion</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="pitivi">
-                                  <property name="title" translatable="yes">Pitivi</property>
-                                  <property name="package">pitivi</property>
-                                  <property name="iconfile">pitivi.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                          <child>
-                            <object class="AdwPreferencesGroup">
-                              <property name="title">Tools</property>
-                              <child>
-                                <object class="Package" id="obs">
-                                  <property name="title" translatable="yes">Open Broadcaster Software (OBS Studio)</property>
-                                  <property name="subtitle" translatable="yes">A program for video/screen recording and live streaming.
-Requires RPMFusion</property>
-                                  <property name="package">obs-studio</property>
-                                  <property name="actions-required">rpmfusion</property>
-                                  <property name="iconfile">obs.png</property>
-                                </object>
-                              </child>
-                              <child>
-                                <object class="Package" id="handbrake">
-                                  <property name="title" translatable="yes">Handbrake</property>
-                                  <property name="subtitle" translatable="yes">Video converter and transcoder.
-Requires RPMFusion</property>
-                                  <property name="package">handbrake</property>
-                                  <property name="actions-required">rpmfusion</property>
-                                  <property name="iconfile">obs.png</property>
-                                </object>
-                              </child>
-                            </object>
-                          </child>
-                        </object>
-                      </child>
-                    </object>
+                        <property name="transition-type">slide-left-right</property>
+                        <property name="transition-duration">500</property>
+                        <child>
+                          <object class="AdwPreferencesPage" id="additionalProgramsCategories">
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Additional Programs</property>
+                                <property name="description" translatable="yes">Feel free to install any additional programs you may want or need.</property>
+                                <child>
+                                  <object class="CategoryChooser">
+                                    <property name="title" translatable="yes">Audio Consumption</property>
+                                    <property name="subtitle" translatable="yes">Applications needed for listening to music or managing your music library.</property>
+                                    <property name="page">audioConsumptionPage</property>
+                                    <property name="iconname">audio-headset-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="CategoryChooser">
+                                    <property name="title" translatable="yes">Audio Production</property>
+                                    <property name="subtitle" translatable="yes">Tools made for producing music and other types of audio.</property>
+                                    <property name="page">audioProductionPage</property>
+                                    <property name="iconname">audio-input-microphone-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="CategoryChooser">
+                                    <property name="title" translatable="yes">Gaming</property>
+                                    <property name="subtitle" translatable="yes">Tools for playing videos games on risiOS.</property>
+                                    <property name="page">gamingPage</property>
+                                    <property name="iconname">applications-games-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="CategoryChooser">
+                                    <property name="title" translatable="yes">Graphic Design &amp;amp; Photography</property>
+                                    <property name="subtitle" translatable="yes">Applications relating to graphics and image work.</property>
+                                    <property name="page">graphicsPage</property>
+                                    <property name="iconname">applications-graphics-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="CategoryChooser">
+                                    <property name="title" translatable="yes">Video Production</property>
+                                    <property name="subtitle" translatable="yes">Applications commonly needed for video production work.</property>
+                                    <property name="page">videoProductionPage</property>
+                                    <property name="iconname">video-x-generic-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <child>
+                                  <object class="NavigationRow">
+                                    <property name="stack">quickSetupStack</property>
+                                    <property name="start-button">True</property>
+                                    <property name="next-page">installationPage</property>
+                                    <property name="previous-page">driverPage</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesPage" id="audioConsumptionPage">
+                            <property name="title" translatable="yes">Audio Consumption</property>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Music Players</property>
+                                <child>
+                                  <object class="Package" id="gnome-music">
+                                    <property name="title" translatable="yes">GNOME Music</property>
+                                    <property name="subtitle" translatable="yes">Bare-bones simple UI, but not many features.</property>
+                                    <property name="package">gnome-music</property>
+                                    <property name="iconfile">gnome-music.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="lollypop">
+                                    <property name="title" translatable="yes">Lollypop</property>
+                                    <property name="subtitle" translatable="yes">Easy to use, a lot of features, but can be slower, especially for large music libraries.</property>
+                                    <property name="package">lollypop</property>
+                                    <property name="iconfile">lollypop.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="rhythmbox">
+                                    <property name="title" translatable="yes">Rhythmbox</property>
+                                    <property name="subtitle" translatable="yes">Older-school iTunes style music player, great for large music libraries.</property>
+                                    <property name="package">rhythmbox rhythmbox-alternative-toolbar</property>
+                                    <property name="iconfile">rhythmbox.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Music Tools</property>
+                                <child>
+                                  <object class="Package" id="picard">
+                                    <property name="title" translatable="yes">MusicBrainz Picard</property>
+                                    <property name="subtitle" translatable="yes">Automatic music tagger that can pull metadata from the internet.</property>
+                                    <property name="package">picard</property>
+                                    <property name="iconfile">picard.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="soundconverter">
+                                    <property name="title" translatable="yes">SoundConverter</property>
+                                    <property name="subtitle" translatable="yes">A tool for converting audio file formats.</property>
+                                    <property name="package">soundconverter</property>
+                                    <property name="iconfile">soundconverter.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="soundjuicer">
+                                    <property name="title" translatable="yes">Sound Juicer</property>
+                                    <property name="subtitle" translatable="yes">A tool for ripping CDs.</property>
+                                    <property name="package">sound-juicer</property>
+                                    <property name="iconfile">soundjuicer.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="easyeffects">
+                                    <property name="title" translatable="yes">Easy Effects</property>
+                                    <property name="subtitle" translatable="yes">Allows you to manipulate system audio.</property>
+                                    <property name="package">easyeffects</property>
+                                    <property name="iconfile">easyeffects.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesPage" id="audioProductionPage">
+                            <property name="title" translatable="yes">Audio Production</property>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Digital Audio Workstations (DAWs)</property>
+                                <child>
+                                  <object class="Package" id="ardour">
+                                    <property name="title" translatable="yes">Ardour 6</property>
+                                    <property name="subtitle" translatable="yes">A multi-channel digital audio workstation.</property>
+                                    <property name="package">ardour6</property>
+                                    <property name="iconfile">ardour.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="lmms">
+                                    <property name="title" translatable="yes">LMMS</property>
+                                    <property name="subtitle" translatable="yes">A free and open source FL Studio style DAW.</property>
+                                    <property name="package">lmms</property>
+                                    <property name="iconfile">lmms.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="qtractor">
+                                    <property name="title" translatable="yes">Qtractor</property>
+                                    <property name="subtitle" translatable="yes">Audio/MIDI multi-track sequencer application.</property>
+                                    <property name="package">qtractor</property>
+                                    <property name="iconfile">qtractor.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Music Composition Tools</property>
+                                <child>
+                                  <object class="Package" id="musescore">
+                                    <property name="title" translatable="yes">MuseScore</property>
+                                    <property name="subtitle" translatable="yes">A multi-channel digital audio workstation.</property>
+                                    <property name="package">mscore</property>
+                                    <property name="iconfile">musescore.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="rosegarden">
+                                    <property name="title" translatable="yes">Rosegarden</property>
+                                    <property name="subtitle" translatable="yes">A free and open source FL Studio style DAW.</property>
+                                    <property name="package">rosegarden4</property>
+                                    <property name="iconfile">rosegarden.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Audio Tools</property>
+                                <child>
+                                  <object class="Package" id="audacity">
+                                    <property name="title" translatable="yes">Audacity</property>
+                                    <property name="subtitle" translatable="yes">Full featured audio editor.</property>
+                                    <property name="package">audacity</property>
+                                    <property name="iconfile">audacity.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="carla">
+                                    <property name="title" translatable="yes">Carla</property>
+                                    <property name="subtitle" translatable="yes">A fully-featured audio plugin host.</property>
+                                    <property name="package">Carla</property>
+                                    <property name="iconfile">carla.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="hydrogen">
+                                    <property name="title" translatable="yes">Hydrogen</property>
+                                    <property name="subtitle" translatable="yes">An advanced drum machine.</property>
+                                    <property name="package">hydrogen</property>
+                                    <property name="iconfile">hydrogen.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="tuxguitar">
+                                    <property name="title" translatable="yes">TuxGuitar</property>
+                                    <property name="subtitle" translatable="yes">A tablature editor and player.</property>
+                                    <property name="package">tuxguitar</property>
+                                    <property name="iconfile">tuxguitar.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="guitarix">
+                                    <property name="title" translatable="yes">Guitarix</property>
+                                    <property name="subtitle" translatable="yes">A virtual guitar amplifier.</property>
+                                    <property name="package">guitarix</property>
+                                    <property name="iconfile">guitarix.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="yoshimi">
+                                    <property name="title" translatable="yes">Yoshimi</property>
+                                    <property name="subtitle" translatable="yes">A software synthesizer.</property>
+                                    <property name="package">yoshimi</property>
+                                    <property name="iconfile">yoshimi.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesPage" id="gamingPage">
+                            <property name="title" translatable="yes">Gaming</property>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Game Store Launchers</property>
+                                <property name="description" translatable="yes">Note: Playing non-native games may have varying results. See ProtonDB for more info.</property>
+                                <child>
+                                  <object class="Package" id="steam">
+                                    <property name="title" translatable="yes">Steam</property>
+                                    <property name="subtitle" translatable="yes">Store and game launcher with 1000s of games.
+  Requires RPMFusion</property>
+                                    <property name="package">steam</property>
+                                    <property name="iconfile">steam.png</property>
+                                    <property name="actions-required">rpmfusion</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="minigalaxy">
+                                    <property name="title" translatable="yes">Minigalaxy</property>
+                                    <property name="subtitle" translatable="yes">Launcher for games bought through GOG</property>
+                                    <property name="package">minigalaxy</property>
+                                    <property name="iconfile">minigalaxy.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="heroic">
+                                    <property name="title" translatable="yes">Heroic Launcher</property>
+                                    <property name="subtitle" translatable="yes">Launcher for Epic Games and GOG</property>
+                                    <property name="package">heroic</property>
+                                    <property name="command">dnf copr enable atim/heroic-games-launcher -y</property>
+                                    <property name="iconfile">heroic.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Game Managers</property>
+                                <property name="description" translatable="yes">Note: Playing non-native games may have varying results. See ProtonDB for more info.</property>
+                                <child>
+                                  <object class="Package" id="lutris">
+                                    <property name="title" translatable="yes">Lutris</property>
+                                    <property name="subtitle" translatable="yes">A game manager with the goal of making it as easy as possible to play any game.</property>
+                                    <property name="package">lutris</property>
+                                    <property name="iconfile">lutris.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="gamehub">
+                                    <property name="title" translatable="yes">GameHub</property>
+                                    <property name="subtitle" translatable="yes">A unified library for games from all platforms.</property>
+                                    <property name="package">gamehub</property>
+                                    <property name="iconfile">gamehub.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="gnome-games">
+                                    <property name="title" translatable="yes">GNOME Games</property>
+                                    <property name="subtitle" translatable="yes">A game launcher with built-in emulators.</property>
+                                    <property name="package">gnome-games</property>
+                                    <property name="iconfile">gnome-games.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Compatibility Tools</property>
+                                <property name="description" translatable="yes">Note: Playing non-native games may have varying results. See ProtonDB for more info.</property>
+                                <child>
+                                  <object class="Package" id="bottles">
+                                    <property name="title" translatable="yes">Bottles</property>
+                                    <property name="subtitle" translatable="yes">A tool for managing Wine prefixes to make it easy to run Windows games/software.</property>
+                                    <property name="package">bottles</property>
+                                    <property name="iconfile">bottles.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Emulators</property>
+                                <child>
+                                  <object class="Package" id="retroarch">
+                                    <property name="title" translatable="yes">RetroArch</property>
+                                    <property name="subtitle" translatable="yes">A core based all in one emulator.</property>
+                                    <property name="package">retroarch</property>
+                                    <property name="action">retroarch-enable-network-access</property>
+                                    <property name="iconfile">retroarch.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="dosboxx">
+                                    <property name="title" translatable="yes">DOSBox-X</property>
+                                    <property name="subtitle" translatable="yes">An emulator for DOS.</property>
+                                    <property name="package">dosbox-x</property>
+                                    <property name="command">dnf copr enable rob72/DOSBox-X -y</property>
+                                    <property name="iconfile">dosbox-x.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Tools</property>
+                                <child>
+                                  <object class="Package" id="discord">
+                                    <property name="title" translatable="yes">Discord</property>
+                                    <property name="subtitle" translatable="yes">Gaming focused text, video, and voice chat app.
+  Requires RPMFusion</property>
+                                    <property name="package">discord</property>
+                                    <property name="actions-required">rpmfusion</property>
+                                    <property name="iconfile">discord.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="prism">
+                                    <property name="title" translatable="yes">Prism Launcher</property>
+                                    <property name="subtitle" translatable="yes">Minecraft Launcher supporting multiple (easy to mod) instances and accounts.</property>
+                                    <property name="package">prismlauncher java-17-openjdk java-1.8.0-openjdk</property>
+                                    <property name="command">dnf copr enable g3tchoo/prismlauncher -y</property>
+                                    <property name="iconfile">prismlauncher.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="antimicrox">
+                                    <property name="title" translatable="yes">AntiMicroX</property>
+                                    <property name="subtitle" translatable="yes">A program allowing you to map controller inputs to keys.</property>
+                                    <property name="package">antimicrox</property>
+                                    <property name="iconfile">antimicrox.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="piper">
+                                    <property name="title" translatable="yes">Piper</property>
+                                    <property name="subtitle" translatable="yes">A tool for customizing RGB devices on Linux.</property>
+                                    <property name="package">piper</property>
+                                    <property name="iconfile">piper.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="greenwithenvy">
+                                    <property name="title" translatable="yes">GreenWithEnvy</property>
+                                    <property name="subtitle" translatable="yes">Tools for NVIDIA GPUs.
+  Requires RPMFusion</property>
+                                    <property name="package">gwe</property>
+                                    <property name="iconfile">gwe.png</property>
+                                    <property name="actions-required">rpmfusion</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="goverlay">
+                                    <property name="title" translatable="yes">Goverlay</property>
+                                    <property name="subtitle" translatable="yes">Managing and configure gaming overlays.</property>
+                                    <property name="package">goverlay</property>
+                                    <property name="iconfile">goverlay.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesPage" id="graphicsPage">
+                            <property name="title" translatable="yes">Graphic Design and Photography</property>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <child>
+                                  <object class="Package" id="gimp">
+                                    <property name="title" translatable="yes">GNU Image Manipulation Program (GIMP)</property>
+                                    <property name="subtitle" translatable="yes">A program for creating and editing images (Adobe Photoshop alternative).</property>
+                                    <property name="package">gimp</property>
+                                    <property name="iconfile">gimp.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="krita">
+                                    <property name="title" translatable="yes">Krita</property>
+                                    <property name="subtitle" translatable="yes">Digital painting program.</property>
+                                    <property name="package">krita</property>
+                                    <property name="iconfile">krita.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="inkscape">
+                                    <property name="title" translatable="yes">Inkscape</property>
+                                    <property name="subtitle" translatable="yes">A vector graphics editor (Adobe Illustrator alternative).</property>
+                                    <property name="package">inkscape</property>
+                                    <property name="iconfile">inkscape.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="darktable">
+                                    <property name="title" translatable="yes">Darktable</property>
+                                    <property name="subtitle" translatable="yes">A light-table and darkroom program (Adobe Lightroom alternative).</property>
+                                    <property name="package">darktable</property>
+                                    <property name="iconfile">darktable.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesPage" id="videoProductionPage">
+                            <property name="title" translatable="yes">Video Production</property>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title">Video Editors</property>
+                                <child>
+                                  <object class="Package" id="kdenlive">
+                                    <property name="title" translatable="yes">Kdenlive</property>
+                                    <property name="package">kdenlive mediainfo</property>
+                                    <property name="iconfile">kdenlive.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="openshot">
+                                    <property name="title" translatable="yes">OpenShot</property>
+                                    <property name="package">openshot</property>
+                                    <property name="iconfile">openshot.png</property>
+                                    <property name="subtitle" translatable="yes">Requires RPMFusion</property>
+                                    <property name="actions-required">rpmfusion</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="shotcut">
+                                    <property name="title" translatable="yes">Shotcut</property>
+                                    <property name="package">shotcut</property>
+                                    <property name="iconfile">shotcut.png</property>
+                                    <property name="subtitle" translatable="yes">Requires RPMFusion</property>
+                                    <property name="actions-required">rpmfusion</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="pitivi">
+                                    <property name="title" translatable="yes">Pitivi</property>
+                                    <property name="package">pitivi</property>
+                                    <property name="iconfile">pitivi.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title">Tools</property>
+                                <child>
+                                  <object class="Package" id="obs">
+                                    <property name="title" translatable="yes">Open Broadcaster Software (OBS Studio)</property>
+                                    <property name="subtitle" translatable="yes">A program for video/screen recording and live streaming.
+  Requires RPMFusion</property>
+                                    <property name="package">obs-studio</property>
+                                    <property name="actions-required">rpmfusion</property>
+                                    <property name="iconfile">obs.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Package" id="handbrake">
+                                    <property name="title" translatable="yes">Handbrake</property>
+                                    <property name="subtitle" translatable="yes">Video converter and transcoder.
+  Requires RPMFusion</property>
+                                    <property name="package">handbrake</property>
+                                    <property name="actions-required">rpmfusion</property>
+                                    <property name="iconfile">obs.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="installationPage">
+                    <property name="orientation">vertical</property>
+                    <property name="valign">GTK_ALIGN_FILL</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="AdwHeaderBar">
+                        <property name="css-classes">flat</property>
+                        <child type="title">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Running Quick Setup</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child type="start">
+                          <object class="GtkButton" id="installationBack">
+                            <property name="icon-name">go-previous-symbolic</property>
+                            <property name="sensitive">False</property>
+                            <property name="css-classes">flat
+circular</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkStack" id="runningStack">
+                        <property name="transition-type">slide-up-down</property>
+                        <property name="transition-duration">500</property>
+                        <child>
+                          <object class="GtkBox" id="runningBox">
+                            <property name="orientation">vertical</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <child>
+                              <object class="GtkSpinner" id="installSpinner">
+                                <property name="width-request">64</property>
+                                <property name="height-request">64</property>
+                                <property name="spinning">True</property>
+                                <property name="halign">center</property>
+                                <property name="margin-bottom">12</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Running Quick Setup</property>
+                                <property name="halign">center</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                  <attribute name="scale" value="1.5"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Quick Setup is currently installing your repositories, programs, drivers, etc.</property>
+                                <property name="halign">center</property>
+                                <property name="margin-top">6</property>
+                                <property name="margin-bottom">6</property>
+                                <attributes>
+                                  <attribute name="scale" value="1.2"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Feel free to use your computer while this is running, but do not shutdown, restart,
+force close this window (this will run in the background with a regular close), or disconnect from the internet while this is running.</property>
+                                <property name="wrap">true</property>
+                                <property name="justify">GTK_JUSTIFY_CENTER</property>
+                                <property name="halign">center</property>
+                                <property name="margin-bottom">12</property>
+                                <property name="css-classes">dim-label</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="progressButton">
+                                <property name="label" translatable="yes">View Installation</property>
+                                <property name="halign">center</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="vteBox">
+                            <property name="orientation">vertical</property>
+                            <property name="valign">fill</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                        </child>
+                      </object>
                     </child>
                   </object>
                 </child>
