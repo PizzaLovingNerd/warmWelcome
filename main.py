@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import tempfile
 
@@ -21,6 +22,7 @@ _WINDOW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/welcome.xml"
 _PACKAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/package.xml"
 _NAVIGATION_ROW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/navigation_row.xml"
 _CATEGORY_CHOOSER_FILE = os.path.dirname(os.path.abspath(__file__)) + "/category_chooser.xml"
+_PW_PROMPTER = os.path.dirname(os.path.abspath(__file__)) + "/prompter.sh"
 
 packages = []
 
@@ -40,7 +42,6 @@ elif "amd" in vendor_line.lower():
     quick_setup_extras.append("amd")
 elif "intel" in vendor_line.lower():
     quick_setup_extras.append("intel")
-quick_setup_extras.append("nvidia")
 
 actions = {
     "rpmfusion": [
@@ -86,37 +87,78 @@ class Application(Adw.Application):
         self.builder.get_object("vteBox").append(self.vte)
         
     def terminal_exited(self, terminal, status):
+        self.builder.get_object("installSpinner").stop()
+        if not self.builder.get_object("main_window").get_visible():
+            self.builder.get_object("main_window").set_visible(True)
         if status != 0:
-            dialog = Gtk.AlertDialog(
-                transient_for=self.window,
-                title="Error: Exit code not 0",
-                primary_text="An unknown error has occurred",
-                secondary_text="",
-                buttons=Gtk.ButtonsType.NONE,
-            )
-            dialog.add_button("View Logs", Gtk.ResponseType.YES)
-            dialog.add_button("Close Welcome", Gtk.ResponseType.NO)
-            if dialog.run() == Gtk.ResponseType.NO:
-                Gtk.main_quit()
-            else:
-                self.builder.get_object("runningStack").set_visible_child(
-                    self.builder.get_object("vteBox")
+            print(status)
+            if status == 126: ## This currently doesn't work due to a bug in VTE upstream
+                dialog = Adw.MessageDialog(
+                    heading="Error: Authentication Failed",
+                    body="You have not entered your password correctly 3 times. Please try again.",
+                    transient_for=self.window
                 )
-                self.builder.get_object("installationBack").set_sensitive(False)
-            dialog.destroy()
+                dialog.add_response("again", "Try Again")
+                dialog.add_response("close", "Close Welcome")
+                dialog.connect("response", self.on_dialogs)
+                dialog.choose()
+            else:
+                dialog = Adw.MessageDialog(
+                    heading="Error: Exit code not 1",
+                    body="An unknown error has occurred",
+                    transient_for=self.window
+                )
+                dialog.add_response("logs", "View Logs")
+                dialog.add_response("again", "Try Again")
+                dialog.add_response("close", "Close Welcome")
+                dialog.connect("response", self.on_dialogs)
+                dialog.choose()
         else:
-            dialog = Gtk.AlertDialog(
-                transient_for=self.window,
-                title="Reboot Required",
-                primary_text="A reboot is recommended to apply drivers and for enabling Flathub.",
-                secondary_text="",
-                buttons=Gtk.ButtonsType.NONE,
+            dialog = Adw.MessageDialog(
+                heading="Quick Setup Complete",
+                body="Your system has been successfully configured. We recommend rebooting your system now.",
+                transient_for=self.window
             )
-            dialog.add_button("Reboot now", Gtk.ResponseType.YES)
-            dialog.add_button("Reboot later", Gtk.ResponseType.NO)
-            if dialog.run() == Gtk.ResponseType.YES:
-                subprocess.run(["gnome-session-quit", "--reboot"])
-            dialog.destroy()
+            dialog.add_response("reboot", "Reboot now")
+            dialog.add_response("close", "Reboot later")
+            dialog.connect("response", self.on_dialogs)
+            dialog.choose()
+
+    def on_dialogs(self, dialog, response):
+        if response == "close":
+            self.quit()
+        elif response == "logs":
+            self.builder.get_object("runningStack").set_visible_child(
+                self.builder.get_object("vteBox")
+            )
+            self.builder.get_object("installationBack").set_sensitive(False)
+            self.builder.get_object("main_window").set_hide_on_close(False)
+        elif response == "reboot":
+            subprocess.run(["gnome-session-quit", "--reboot"])
+            self.quit()
+        elif response == "again":
+            self.builder.get_object("runningStack").set_visible_child(
+                self.builder.get_object("installationPage")
+            )
+            self.builder.get_object("installationBack").set_sensitive(False)
+            self.builder.get_object("runningStack").set_visible_child(
+                self.builder.get_object("runningBox")
+            )
+            self.builder.get_object("main_window").set_hide_on_close(True)
+            self.vte.spawn_async(
+                Vte.PtyFlags.DEFAULT,
+                os.environ['HOME'],
+                generate_bash_script(),
+                None,  # Environmental Variables (envv)
+                GLib.SpawnFlags.DEFAULT,  # Spawn Flags
+                None, None,  # Child Setup
+                -1,  # Timeout (-1 for indefinitely)
+                None,  # Cancellable
+                None,  # Callback
+                None  # User Data
+            )
+            self.builder.get_object("installSpinner").start()
+        dialog.destroy()
 
     def view_progress(self, button):
         self.builder.get_object("runningStack").set_visible_child(
@@ -147,6 +189,7 @@ class Application(Adw.Application):
 
     def do_activate(self):
         self.window.set_application(self)
+        self.window.maximize()
         self.window.present()
 
         self.builder.get_object("additionalProgramsBack").connect(
@@ -156,6 +199,7 @@ class Application(Adw.Application):
         self.builder.get_object("progressButton").connect("clicked", self.view_progress)
         self.builder.get_object("installationBack").connect("clicked", self.on_installationBackClicked)
         self.vte.connect("child_exited", self.terminal_exited)
+
 
     def on_welcomeButton(self, button):
         button.set_label(_("Checking Internet Connection"))
@@ -382,7 +426,7 @@ class NavigationRow(Adw.ActionRow):
                 None, # Callback
                 None # User Data
             )
-            generate_bash_script()
+            application.builder.get_object("installSpinner").start()
 
 
     @Gtk.Template.Callback("on_previous_page")
@@ -462,8 +506,7 @@ class CategoryChooser(Adw.ActionRow):
 
 
 def generate_bash_script():
-    script = ["#!/bin/bash", ""]
-    script.append("sleep 2 && exit 1")   # FOR DEBUGGING
+    script = ["#!/bin/bash"]
     for command in quick_setup_commands:
         script.append(command)
     for action in quick_setup_extras:
@@ -480,7 +523,8 @@ def generate_bash_script():
     with open(bash_file_path, "w") as f:
         f.write("\n".join(script))
     print(bash_file_path)
-    return ["/usr/bin/pkexec", "/usr/bin/bash", bash_file_path]
+
+    return ["/usr/bin/bash", _PW_PROMPTER, bash_file_path]
 
 
 if __name__ == "__main__":
