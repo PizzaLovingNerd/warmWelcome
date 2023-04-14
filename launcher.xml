@@ -1,0 +1,27 @@
+<interface>
+  <requires lib="gtk" version="4.6"/>
+  <requires lib="libadwaita" version="1.2"/>
+
+  <template class="Launcher" parent="AdwActionRow">
+    <property name="title" translatable="yes">Launcher Name</property>
+    <property name="activatable">True</property>
+    <property name="selectable">False</property>
+    <property name="activatable-widget">launch_button</property>
+    <child type="prefix">
+      <object class="GtkImage" id="icon_image">
+        <property name="pixel-size">38</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="launch_button">
+        <property name="halign">end</property>
+        <property name="valign">center</property>
+        <property name="label">Launch</property>
+        <property name="css-classes">flat</property>
+        <signal name="clicked" handler="run_launcher" swapped="no"/>
+      </object>
+    </child>
+    <signal name="notify::iconfile" handler="on_update_defaults" />
+    <signal name="notify::iconname" handler="on_update_defaults" />
+  </template>
+</interface>

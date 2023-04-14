@@ -48,11 +48,13 @@
                               <attribute name="weight" value="bold"/>
                               <attribute name="scale" value="1.5"/>
                             </attributes>
+                            <property name="wrap">true</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkLabel" id="welcomeSubLabel">
                             <property name="label" translatable="yes">Your new favorite Linux distribution.</property>
+                            <property name="wrap">true</property>
                             <property name="halign">center</property>
                             <property name="margin-top">6</property>
                             <property name="margin-bottom">6</property>
@@ -110,6 +112,7 @@ but you can do this later just by closing this window.</property>
                             <property name="label" translatable="yes">Please Connect to the Internet</property>
                             <property name="halign">center</property>
                             <property name="margin-bottom">12</property>
+                            <property name="wrap">true</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                               <attribute name="scale" value="1.5"/>
@@ -122,7 +125,6 @@ but you can do this later just by closing this window.</property>
                             <property name="wrap">true</property>
                             <property name="justify">GTK_JUSTIFY_CENTER</property>
                             <property name="css-classes">dim-label</property>
-                            <property name="justify">GTK_JUSTIFY_CENTER</property>
                             <property name="halign">center</property>
                             <property name="margin-bottom">12</property>
                           </object>
@@ -134,7 +136,6 @@ but you can do this later just by closing this window.</property>
                 <child>
                   <object class="GtkBox" id="repoPage">
                     <property name="orientation">vertical</property>
-                    <property name="vexpand">True</property>
                     <child>
                       <object class="AdwHeaderBar">
                         <child type="title">
@@ -150,6 +151,7 @@ but you can do this later just by closing this window.</property>
                     </child>
                     <child>
                       <object class="AdwPreferencesPage">
+                        <property name="vexpand">True</property>
                         <child>
                           <object class="AdwPreferencesGroup" id="repoGroup">
                             <property name="title" translatable="yes">Third Party Repositories</property>
@@ -229,6 +231,7 @@ but you can do this later just by closing this window.</property>
                         <property name="vexpand">True</property>
                         <child>
                           <object class="AdwPreferencesPage">
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="AdwPreferencesGroup" id="browserGroup">
                                 <property name="title" translatable="yes">Select Web Browsers</property>
@@ -474,6 +477,7 @@ circular</property>
                         <property name="transition-duration">500</property>
                         <child>
                           <object class="AdwPreferencesPage" id="additionalProgramsCategories">
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="AdwPreferencesGroup">
                                 <property name="title" translatable="yes">Additional Programs</property>
@@ -536,6 +540,7 @@ circular</property>
                         </child>
                         <child>
                           <object class="AdwPreferencesPage" id="audioConsumptionPage">
+                            <property name="vexpand">True</property>
                             <property name="title" translatable="yes">Audio Consumption</property>
                             <child>
                               <object class="AdwPreferencesGroup">
@@ -607,6 +612,7 @@ circular</property>
                         </child>
                         <child>
                           <object class="AdwPreferencesPage" id="audioProductionPage">
+                            <property name="vexpand">True</property>
                             <property name="title" translatable="yes">Audio Production</property>
                             <child>
                               <object class="AdwPreferencesGroup">
@@ -715,6 +721,7 @@ circular</property>
                         </child>
                         <child>
                           <object class="AdwPreferencesPage" id="gamingPage">
+                            <property name="vexpand">True</property>
                             <property name="title" translatable="yes">Gaming</property>
                             <child>
                               <object class="AdwPreferencesGroup">
@@ -875,6 +882,7 @@ circular</property>
                         </child>
                         <child>
                           <object class="AdwPreferencesPage" id="graphicsPage">
+                            <property name="vexpand">True</property>
                             <property name="title" translatable="yes">Graphic Design and Photography</property>
                             <child>
                               <object class="AdwPreferencesGroup">
@@ -916,6 +924,7 @@ circular</property>
                         </child>
                         <child>
                           <object class="AdwPreferencesPage" id="videoProductionPage">
+                            <property name="vexpand">True</property>
                             <property name="title" translatable="yes">Video Production</property>
                             <child>
                               <object class="AdwPreferencesGroup">
@@ -994,6 +1003,7 @@ circular</property>
                         <child type="title">
                           <object class="GtkLabel">
                             <property name="label" translatable="yes">Running Quick Setup</property>
+                            <property name="wrap">true</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -1029,6 +1039,7 @@ circular</property>
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Running Quick Setup</property>
+                                <property name="wrap">true</property>
                                 <property name="halign">center</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
@@ -1039,6 +1050,7 @@ circular</property>
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Quick Setup is currently installing your repositories, programs, drivers, etc.</property>
+                                <property name="wrap">true</property>
                                 <property name="halign">center</property>
                                 <property name="margin-top">6</property>
                                 <property name="margin-bottom">6</property>
@@ -1081,6 +1093,163 @@ force close this window (this will run in the background with a regular close), 
             </child>
           </object>
         </child>
+        <child>
+          <object class="AdwLeaflet" id="welcomeLeaflet">
+            <child type="under">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="hexpand">false</property>
+                <property name="vexpand">true</property>
+                <child>
+                  <object class="AdwHeaderBar" id="sidebar_headerbar">
+                    <property name="margin-end">1</property>
+                    <property name="show-end-title-buttons">false</property>
+                    <property name="show-start-title-buttons">false</property>
+                    <child type="title">
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">risiWelcome</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStackSidebar">
+                    <property name="stack">welcomeStack</property>
+                    <property name="valign">start</property>
+                    <property name="halign">fill</property>
+                    <property name="vexpand">true</property>
+                    <property name="valign">fill</property>
+                    <property name="width-request">200</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="over">
+              <object class="GtkStack" id="welcomeStack">
+                <property name="transition-type">crossfade</property>
+                <property name="transition-duration">300</property>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">Welcome</property>
+                    <property name="title" translatable="1">Welcome</property>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="hexpand">true</property>
+                        <child>
+                          <object class="AdwHeaderBar">
+                            <child type="start">
+                              <object class="SidebarButton"/>
+                            </child>
+                            <child type="title">
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Welcome to risiOS!</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesPage">
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Recommended First Steps</property>
+                                <property name="vexpand">true</property>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Install Apps with GNOME Software</property>
+                                    <property name="subtitle" translatable="yes">GNOME Software is used to search, install, update and manage applications on your computer.</property>
+                                    <property name="command" translatable="yes">/usr/bin/gnome-software</property>
+                                    <property name="iconname">org.gnome.Software</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Manage Webapps with Webapp Manager</property>
+                                    <property name="subtitle" translatable="yes">We use webapps to bridge the gap that Linux has with app compatibility. Turn your favorite webapps into desktop class apps, and discover new web apps from the store.</property>
+                                    <property name="command" translatable="yes">webapp-manager</property>
+                                    <property name="iconname">webapp-manager</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Install Custom Themes</property>
+                                    <property name="subtitle" translatable="yes">Use risiTweaks to manage rTheme and risiScripts, as well as enable advanced and experimental features.</property>
+                                    <property name="command" translatable="yes">xdg-open https://themes.risi.io</property>
+                                    <property name="iconfile">theme.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Manage Advanced Settings with risiTweaks</property>
+                                    <property name="subtitle" translatable="yes">Use risiTweaks to manage rTheme and risiScripts, as well as enable advanced and experimental features.</property>
+                                    <property name="command" translatable="yes">/usr/bin/risi-tweaks</property>
+                                    <property name="iconname">io.risi.Tweaks</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">community</property>
+                    <property name="title" translatable="1">Join The Community</property>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="hexpand">true</property>
+                        <child>
+                          <object class="AdwHeaderBar">
+                            <child type="start">
+                              <object class="SidebarButton"/>
+                            </child>
+                            <child type="title">
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Welcome to rdedededeisiOS!</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <property name="css-classes">flat</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesPage">
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Recommended First Steps</property>
+                                <property name="vexpand">true</property>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Install Apps with GNOME Software</property>
+                                    <property name="subtitle" translatable="yes">GNOME Software is used to install and update applications on your computer.</property>
+                                    <property name="command" translatable="yes">/usr/bin/gnome-software</property>
+                                    <property name="iconname">org.gnome.Software</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+      </child>
       </object>
     </child>
   </object>

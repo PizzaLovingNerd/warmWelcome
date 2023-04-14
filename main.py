@@ -21,7 +21,9 @@ from gi.repository import Gtk, Adw, Vte, GLib, GObject, GdkPixbuf
 _WINDOW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/welcome.xml"
 _PACKAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/package.xml"
 _NAVIGATION_ROW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/navigation_row.xml"
+_SIDEBAR_BUTTON_FILE = os.path.dirname(os.path.abspath(__file__)) + "/sidebar_button.xml"
 _CATEGORY_CHOOSER_FILE = os.path.dirname(os.path.abspath(__file__)) + "/category_chooser.xml"
+_LAUNCHER_FILE = os.path.dirname(os.path.abspath(__file__)) + "/launcher.xml"
 _PW_PROMPTER = os.path.dirname(os.path.abspath(__file__)) + "/prompter.sh"
 
 packages = []
@@ -29,6 +31,7 @@ packages = []
 quick_setup_packages = []
 quick_setup_commands = []
 quick_setup_extras = []
+welcome_sidebar_buttons = []
 
 # Checking GPU Vendor
 lshw_data = None
@@ -85,38 +88,60 @@ class Application(Adw.Application):
         self.vte = Vte.Terminal(vexpand=True, hexpand=True)
         self.vte.set_input_enabled(False)
         self.builder.get_object("vteBox").append(self.vte)
+
+        self.welcome_leaflet = self.builder.get_object("welcomeLeaflet")
         
+    def do_activate(self):
+        self.window.set_application(self)
+        self.window.maximize()
+        self.window.present()
+
+        self.builder.get_object("additionalProgramsBack").connect(
+            "clicked", self.on_additionalProgramsBackClicked
+        )
+        self.builder.get_object("welcomeButton").connect("clicked", self.on_welcomeButton)
+        self.builder.get_object("progressButton").connect("clicked", self.view_progress)
+        self.builder.get_object("installationBack").connect("clicked", self.on_installationBackClicked)
+        self.vte.connect("child_exited", self.terminal_exited)
+        self.builder.get_object("mainStack").set_visible_child(    # DEBUGGING
+            self.builder.get_object("welcomeLeaflet")
+        )
+
+        self.builder.get_object("welcomeStack").connect("notify::visible-child", self.on_welcome_stack_switched)
+        self.welcome_leaflet.connect("notify::folded", self.on_welcome_leaflet_unfoldable)
+        self.welcome_leaflet.navigate(Adw.NavigationDirection.FORWARD)
+
     def terminal_exited(self, terminal, status):
         self.builder.get_object("installSpinner").stop()
         if not self.builder.get_object("main_window").get_visible():
             self.builder.get_object("main_window").set_visible(True)
         if status != 0:
             print(status)
-            if status == 126: ## This currently doesn't work due to a bug in VTE upstream
+            if status == 126:  # This currently doesn't work due to a bug in VTE upstream
                 dialog = Adw.MessageDialog(
-                    heading="Error: Authentication Failed",
-                    body="You have not entered your password correctly 3 times. Please try again.",
+                    heading=_("Error: Authentication Failed"),
+                    body=_("You have not entered your password correctly 3 times. Please try again."),
                     transient_for=self.window
                 )
-                dialog.add_response("again", "Try Again")
-                dialog.add_response("close", "Close Welcome")
+                dialog.add_response("again", _("Try Again"))
+                dialog.add_response("close", _("Close Welcome"))
                 dialog.connect("response", self.on_dialogs)
                 dialog.choose()
             else:
                 dialog = Adw.MessageDialog(
-                    heading="Error: Exit code not 1",
-                    body="An unknown error has occurred",
+                    heading=_("Error: Exit code not 1"),
+                    body=_("An unknown error has occurred"),
                     transient_for=self.window
                 )
-                dialog.add_response("logs", "View Logs")
-                dialog.add_response("again", "Try Again")
-                dialog.add_response("close", "Close Welcome")
+                dialog.add_response("logs", _("View Logs"))
+                dialog.add_response("again", _("Try Again"))
+                dialog.add_response("close", _("Close Welcome"))
                 dialog.connect("response", self.on_dialogs)
                 dialog.choose()
         else:
             dialog = Adw.MessageDialog(
-                heading="Quick Setup Complete",
-                body="Your system has been successfully configured. We recommend rebooting your system now.",
+                heading=_("Quick Setup Complete"),
+                body=_("Your system has been successfully configured. We recommend rebooting your system now."),
                 transient_for=self.window
             )
             dialog.add_response("reboot", "Reboot now")
@@ -144,21 +169,23 @@ class Application(Adw.Application):
             self.builder.get_object("runningStack").set_visible_child(
                 self.builder.get_object("runningBox")
             )
-            self.builder.get_object("main_window").set_hide_on_close(True)
-            self.vte.spawn_async(
-                Vte.PtyFlags.DEFAULT,
-                os.environ['HOME'],
-                generate_bash_script(),
-                None,  # Environmental Variables (envv)
-                GLib.SpawnFlags.DEFAULT,  # Spawn Flags
-                None, None,  # Child Setup
-                -1,  # Timeout (-1 for indefinitely)
-                None,  # Cancellable
-                None,  # Callback
-                None  # User Data
-            )
-            self.builder.get_object("installSpinner").start()
         dialog.destroy()
+
+    def spawn_vte(self):
+        self.builder.get_object("main_window").set_hide_on_close(True)
+        self.vte.spawn_async(
+            Vte.PtyFlags.DEFAULT,
+            os.environ['HOME'],
+            generate_bash_script(),
+            None,  # Environmental Variables (envv)
+            GLib.SpawnFlags.DEFAULT,  # Spawn Flags
+            None, None,  # Child Setup
+            -1,  # Timeout (-1 for indefinitely)
+            None,  # Cancellable
+            None,  # Callback
+            None  # User Data
+        )
+        self.builder.get_object("installSpinner").start()
 
     def view_progress(self, button):
         self.builder.get_object("runningStack").set_visible_child(
@@ -186,20 +213,6 @@ class Application(Adw.Application):
             self.builder.get_object("runningBox")
         )
         button.set_sensitive(False)
-
-    def do_activate(self):
-        self.window.set_application(self)
-        self.window.maximize()
-        self.window.present()
-
-        self.builder.get_object("additionalProgramsBack").connect(
-            "clicked", self.on_additionalProgramsBackClicked
-        )
-        self.builder.get_object("welcomeButton").connect("clicked", self.on_welcomeButton)
-        self.builder.get_object("progressButton").connect("clicked", self.view_progress)
-        self.builder.get_object("installationBack").connect("clicked", self.on_installationBackClicked)
-        self.vte.connect("child_exited", self.terminal_exited)
-
 
     def on_welcomeButton(self, button):
         button.set_label(_("Checking Internet Connection"))
@@ -234,6 +247,19 @@ class Application(Adw.Application):
         GLib.idle_add(lambda: self.quick_setup_stack.set_visible_child(
             self.builder.get_object("repoPage")
         ))
+
+    def on_welcome_stack_switched(self, stack, page):
+        if self.welcome_leaflet.get_can_unfold():
+            self.welcome_leaflet.navigate(Adw.NavigationDirection.FORWARD)
+
+    def on_welcome_leaflet_unfoldable(self, leaflet, folded):
+        for button in welcome_sidebar_buttons:
+            button.set_visible(leaflet.get_folded())
+        self.builder.get_object("sidebar_headerbar").set_show_start_title_buttons(leaflet.get_folded())
+        self.builder.get_object("sidebar_headerbar").set_show_end_title_buttons(leaflet.get_folded())
+
+    def on_leaflet_unfold_button_visible(self, button):
+        button.set_visible(self.welcome_leaflet.get_can_unfold())
 
 
 @Gtk.Template(filename=_PACKAGE_FILE)
@@ -371,6 +397,56 @@ class Package(Adw.ActionRow):
                 if package_groups[self.button_group] is self.switch:
                     self.switch.set_active(True)
 
+@Gtk.Template(filename=_LAUNCHER_FILE)
+class Launcher(Adw.ActionRow):
+    __gtype_name__ = "Launcher"
+    launch_command = None
+    icon_path = None
+    internal_icon_name = None
+    icon = Gtk.Template.Child("icon_image")
+    button = Gtk.Template.Child("launch_button")
+
+    def __init__(self):
+        super().__init__(self)
+
+    @Gtk.Template.Callback("on_update_defaults")
+    def on_update_defaults(self, *args, **kwargs):
+        if self.icon_path is not None:
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+                self.icon_path, 32, 32, True
+            )
+            self.icon.set_from_pixbuf(pixbuf)
+        if self.internal_icon_name is not None:
+            self.icon.set_from_icon_name(self.internal_icon_name)
+
+    @Gtk.Template.Callback("run_launcher")
+    def run_launcher(self, button):
+        subprocess.Popen(self.command)
+
+    @GObject.Property(type=str)
+    def command(self):
+        return self.launch_command
+
+    @command.setter
+    def command(self, value):
+        self.launch_command = value.split(" ")
+
+    @GObject.Property(type=str)
+    def iconfile(self):
+        return self.icon_path
+
+    @iconfile.setter
+    def iconfile(self, icon):
+        self.icon_path = os.path.dirname(os.path.abspath(__file__)) + f"/icons/{icon}"
+
+    @GObject.Property(type=str)
+    def iconname(self):
+        return self.internal_icon_name
+
+    @iconname.setter
+    def iconname(self, icon):
+        self.internal_icon_name = icon
+
 
 @Gtk.Template(filename=_NAVIGATION_ROW_FILE)
 class NavigationRow(Adw.ActionRow):
@@ -414,18 +490,7 @@ class NavigationRow(Adw.ActionRow):
         )
         if self.next_page_id == "installationPage":
             application.builder.get_object("main_window").set_hide_on_close(True)
-            application.vte.spawn_async(
-                Vte.PtyFlags.DEFAULT,
-                os.environ['HOME'],
-                generate_bash_script(),
-                None, # Environmental Variables (envv)
-                GLib.SpawnFlags.DEFAULT, # Spawn Flags
-                None, None, # Child Setup
-                -1, # Timeout (-1 for indefinitely)
-                None, # Cancellable
-                None, # Callback
-                None # User Data
-            )
+            application.spawn_vte()
             application.builder.get_object("installSpinner").start()
 
 
@@ -452,10 +517,22 @@ class NavigationRow(Adw.ActionRow):
     @Gtk.Template.Callback("on_start_changed")
     def on_start_changed(self, *args, **kwargs):
         if self.start:
-            self.next_btn.set_label("Start")
+            self.next_btn.set_label(_("Start"))
         else:
-            self.next_btn.set_label("Next")
+            self.next_btn.set_label(_("Next"))
 
+
+@Gtk.Template(filename=_SIDEBAR_BUTTON_FILE)
+class SidebarButton(Gtk.Button):
+    __gtype_name__ = "SidebarButton"
+
+    def __init__(self):
+        super().__init__()
+        welcome_sidebar_buttons.append(self)
+
+    @Gtk.Template.Callback("on_click")
+    def on_click(self, button):
+        self.get_root().get_application().welcome_leaflet.navigate(Adw.NavigationDirection.BACK)
 
 @Gtk.Template(filename=_CATEGORY_CHOOSER_FILE)
 class CategoryChooser(Adw.ActionRow):
