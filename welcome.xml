@@ -1192,6 +1192,14 @@ force close this window (this will run in the background with a regular close), 
                                     <property name="iconname">io.risi.Tweaks</property>
                                   </object>
                                 </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Create a System Backup with Timeshift</property>
+                                    <property name="subtitle" translatable="yes">Use Timeshift to create a system restore point to allow you to restore a previous snapshot of risiOS if something goes wrong.</property>
+                                    <property name="command" translatable="yes">/usr/bin/timeshift-launcher</property>
+                                    <property name="iconname">timeshift</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
