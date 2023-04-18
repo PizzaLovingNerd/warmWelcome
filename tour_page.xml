@@ -1,0 +1,31 @@
+<interface>
+  <requires lib="gtk" version="4.6"/>
+  <requires lib="libadwaita" version="1.2"/>
+
+  <template class="TourPage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkVideo" id="video">
+        <property name="autoplay">true</property>
+        <property name="loop">true</property>
+        <property name="vexpand">true</property>
+        <property name="hexpand">true</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label">
+        <property name="label">The overview is where you will access workspaces, open windows, and your applications. To access it, either click the risiOS Button on the top left, use the hotcorner on the top left, swipe up with 3 fingers on a trackpad, or hit the Windows/Command/Super key on your keyboard.</property>
+        <property name="wrap">true</property>
+        <property name="justify">center</property>
+        <property name="valign">center</property>
+        <property name="margin-top">15</property>
+        <property name="margin-bottom">15</property>
+        <property name="margin-start">15</property>
+        <property name="margin-end">15</property>
+        <property name="css-classes">dim-label</property>
+      </object>
+    </child>
+    <signal name="notify::video" handler="on_update_defaults" />
+    <signal name="notify::description" handler="on_update_defaults" />
+  </template>
+</interface>

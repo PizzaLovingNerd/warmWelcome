@@ -1,0 +1,56 @@
+<interface>
+  <requires lib="gtk" version="4.6"/>
+  <requires lib="libadwaita" version="1.2"/>
+
+  <template class="Tour" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="AdwHeaderBar">
+        <child type="start">
+          <object class="SidebarButton"/>
+        </child>
+        <child type="start">
+          <object class="GtkButton" id="back_btn">
+            <property name="icon-name" translatable="yes">go-previous-symbolic</property>
+            <property name="css-classes">flat
+circular</property>
+            <signal name="clicked" handler="on_back" swapped="no"/>
+          </object>
+        </child>
+        <child type="title">
+          <object class="GtkLabel" id="headerlabel">
+            <property name="label" translatable="yes">Tour!</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkButton" id="fw_btn">
+            <property name="icon-name" translatable="yes">go-next-symbolic</property>
+            <property name="css-classes">flat
+circular</property>
+            <signal name="clicked" handler="on_forward" swapped="no"/>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwCarousel" id="carousel">
+        <child>
+          <object class="TourPage">
+            <property name="video">/usr/share/risios/tour/overview.webm</property>
+            <property name="title" translatable="yes">Overview</property>
+            <property name="description" translatable="yes">The overview is where you will access workspaces, open windows, and your applications. To access it, either click the risiOS Button on the top left, use the hotcorner on the top left, swipe up with 3 fingers on a trackpad, or hit the Windows/Command/Super key on your keyboard.</property>
+          </object>
+        </child>
+        <signal name="page-changed" handler="on_page_changed" />
+      </object>
+    </child>
+    <child>
+      <object class="AdwCarouselIndicatorDots">
+        <property name="carousel">carousel</property>
+      </object>
+    </child>
+  </template>
+</interface>

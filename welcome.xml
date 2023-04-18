@@ -1217,38 +1217,7 @@ force close this window (this will run in the background with a regular close), 
                         <property name="orientation">vertical</property>
                         <property name="hexpand">true</property>
                         <child>
-                          <object class="AdwHeaderBar">
-                            <child type="start">
-                              <object class="SidebarButton"/>
-                            </child>
-                            <child type="title">
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Welcome to rdedededeisiOS!</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                            </child>
-                            <property name="css-classes">flat</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="AdwPreferencesPage">
-                            <child>
-                              <object class="AdwPreferencesGroup">
-                                <property name="title" translatable="yes">Recommended First Steps</property>
-                                <property name="vexpand">true</property>
-                                <child>
-                                  <object class="Launcher">
-                                    <property name="title" translatable="yes">Install Apps with GNOME Software</property>
-                                    <property name="subtitle" translatable="yes">GNOME Software is used to install and update applications on your computer.</property>
-                                    <property name="command" translatable="yes">/usr/bin/gnome-software</property>
-                                    <property name="iconname">org.gnome.Software</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
+                          <object class="Tour" />
                         </child>
                       </object>
                     </property>
@@ -1257,7 +1226,7 @@ force close this window (this will run in the background with a regular close), 
               </object>
             </child>
           </object>
-      </child>
+        </child>
       </object>
     </child>
   </object>

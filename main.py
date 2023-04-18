@@ -24,6 +24,8 @@ _NAVIGATION_ROW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/navigation
 _SIDEBAR_BUTTON_FILE = os.path.dirname(os.path.abspath(__file__)) + "/sidebar_button.xml"
 _CATEGORY_CHOOSER_FILE = os.path.dirname(os.path.abspath(__file__)) + "/category_chooser.xml"
 _LAUNCHER_FILE = os.path.dirname(os.path.abspath(__file__)) + "/launcher.xml"
+_TOUR_FILE = os.path.dirname(os.path.abspath(__file__)) + "/tour.xml"
+_TOUR_PAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/tour_page.xml"
 _PW_PROMPTER = os.path.dirname(os.path.abspath(__file__)) + "/prompter.sh"
 
 packages = []
@@ -602,6 +604,69 @@ def generate_bash_script():
     print(bash_file_path)
 
     return ["/usr/bin/bash", _PW_PROMPTER, bash_file_path]
+
+@Gtk.Template(filename=_TOUR_PAGE_FILE)
+class TourPage(Gtk.Box):
+    __gtype_name__ = "TourPage"
+    _title = None
+    _description = None
+    filename = None
+    label = Gtk.Template.Child("label")
+    video = Gtk.Template.Child("video")
+
+    @GObject.Property(type=str)
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, title):
+        self._title = title
+
+    @GObject.Property(type=str)
+    def description(self):
+        return self._description
+
+    @description.setter
+    def description(self, description):
+        self._description = description
+
+    @GObject.Property(type=str)
+    def video(self):
+        return self.filename
+
+    @video.setter
+    def video(self, filename):
+        self.filename = os.path.dirname(os.path.abspath(__file__)) + f"/videos/{filename}"
+
+    @Gtk.Template.Callback("on_update_defaults")
+    def on_update_defaults(self, *args, **kwargs):
+        self.label.set_label(self._description)
+        self.video.set_from_filename(self.filename)
+
+
+@Gtk.Template(filename=_TOUR_FILE)
+class Tour(Gtk.Box):
+    __gtype_name__ = "Tour"
+    carousel = Gtk.Template.Child("carousel")
+    back_btn = Gtk.Template.Child("back_btn")
+    fw_btn = Gtk.Template.Child("fw_btn")
+    headerlabel = Gtk.Template.Child("headerlabel")
+
+    @Gtk.Template.Callback("on_forward")
+    def on_forward(self, button):
+        self.carousel.scroll_to(self.carousel.get_nth_page(self.carousel.get_position() + 1))
+
+    @Gtk.Template.Callback("on_back")
+    def on_back(self, button):
+        self.carousel.scroll_to(self.carousel.get_nth_page(self.carousel.get_position() - 1))
+
+    @Gtk.Template.Callback("on_page_changed")
+    def on_page_changed(self, carousel, postiton, user_data):
+        if carousel.get_position() == 0:
+            self.back_btn.set_sensitive(False)
+        elif carousel.get_position() == carousel.get_n_pages() - 1:
+            self.fw_btn.set_sensitive(False)
+        self.headerlabel.set_label(carousel.get_nth_page(carousel.get_position()).title())
 
 
 if __name__ == "__main__":
