@@ -57,6 +57,7 @@ circular</property>
     <child>
       <object class="AdwCarouselIndicatorDots">
         <property name="carousel">carousel</property>
+        <property name="margin-bottom">25</property>
       </object>
     </child>
   </template>

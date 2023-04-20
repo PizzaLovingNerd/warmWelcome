@@ -28,56 +28,16 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
-                        <property name="orientation">vertical</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <child>
-                          <object class="GtkImage" id="welcomeImage">
-                            <property name="icon-name">fedora-logo-icon</property>
-                            <property name="pixel-size">128</property>
-                            <property name="halign">center</property>
-                            <property name="margin-bottom">12</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="welcomeLabel">
-                            <property name="label" translatable="yes">Welcome to risiOS 38 (The Cure)</property>
-                            <property name="halign">center</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                              <attribute name="scale" value="1.5"/>
-                            </attributes>
-                            <property name="wrap">true</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="welcomeSubLabel">
-                            <property name="label" translatable="yes">Your new favorite Linux distribution.</property>
-                            <property name="wrap">true</property>
-                            <property name="halign">center</property>
-                            <property name="margin-top">6</property>
-                            <property name="margin-bottom">6</property>
-                            <attributes>
-                              <attribute name="scale" value="1.2"/>
-                            </attributes>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="welcomeSubSubLabel">
-                            <property name="label" translatable="yes">Quick Setup will allow you to quickly setup your computer to your liking,
-but you can do this later just by closing this window.</property>
-                            <property name="wrap">true</property>
-                            <property name="justify">GTK_JUSTIFY_CENTER</property>
-                            <property name="halign">center</property>
-                            <property name="margin-bottom">12</property>
-                            <property name="css-classes">dim-label</property>
-                          </object>
-                        </child>
+                      <object class="AdwStatusPage">
+                        <property name="icon-name">fedora-logo-icon</property>
+                        <property name="title" translatable="yes">Welcome to risiOS 38 (The Cure)</property>
+                        <property name="description" translatable="yes">Quick Setup will allow you to quickly setup your computer to your liking, but you can do this later just by closing this window.</property>
+                        <property name="vexpand">true</property>
                         <child>
                           <object class="GtkButton" id="welcomeButton">
                             <property name="label" translatable="yes">Get Started</property>
                             <property name="halign">center</property>
+                            <property name="css-classes">pill</property>
                           </object>
                         </child>
                       </object>
@@ -94,41 +54,11 @@ but you can do this later just by closing this window.</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
-                        <property name="orientation">vertical</property>
-                        <property name="valign">GTK_ALIGN_CENTER</property>
-                        <property name="vexpand">True</property>
-                        <child>
-                          <object class="GtkImage" id="internetImage">
-                            <property name="icon_name">network-transmit-receive-symbolic</property>
-                            <property name="pixel-size">128</property>
-                            <property name="halign">center</property>
-                            <property name="margin-top">12</property>
-                            <property name="margin-bottom">12</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="networkLabel">
-                            <property name="label" translatable="yes">Please Connect to the Internet</property>
-                            <property name="halign">center</property>
-                            <property name="margin-bottom">12</property>
-                            <property name="wrap">true</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                              <attribute name="scale" value="1.5"/>
-                            </attributes>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="internetSubLabel">
-                            <property name="label" translatable="yes">Quick Setup needs internet access to install updates, install software, and setup system repositories.</property>
-                            <property name="wrap">true</property>
-                            <property name="justify">GTK_JUSTIFY_CENTER</property>
-                            <property name="css-classes">dim-label</property>
-                            <property name="halign">center</property>
-                            <property name="margin-bottom">12</property>
-                          </object>
-                        </child>
+                      <object class="AdwStatusPage">
+                        <property name="icon-name">network-transmit-receive-symbolic</property>
+                        <property name="title" translatable="yes">Please Connect to the Internet</property>
+                        <property name="description" translatable="yes">Quick Setup needs internet access to install updates, install software, and setup system repositories.</property>
+                        <property name="vexpand">true</property>
                       </object>
                     </child>
                   </object>

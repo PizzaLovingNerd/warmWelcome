@@ -105,9 +105,9 @@ class Application(Adw.Application):
         self.builder.get_object("progressButton").connect("clicked", self.view_progress)
         self.builder.get_object("installationBack").connect("clicked", self.on_installationBackClicked)
         self.vte.connect("child_exited", self.terminal_exited)
-        self.builder.get_object("mainStack").set_visible_child(    # DEBUGGING
-            self.builder.get_object("welcomeLeaflet")
-        )
+        # self.builder.get_object("mainStack").set_visible_child(    # DEBUGGING
+        #     self.builder.get_object("welcomeLeaflet")
+        # )
 
         self.builder.get_object("welcomeStack").connect("notify::visible-child", self.on_welcome_stack_switched)
         self.welcome_leaflet.connect("notify::folded", self.on_welcome_leaflet_unfoldable)

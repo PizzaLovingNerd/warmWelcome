@@ -10,6 +10,7 @@
     <child type="prefix">
       <object class="GtkImage" id="icon_image">
         <property name="pixel-size">38</property>
+        <property name="css-classes">icon-dropshadow</property>
       </object>
     </child>
     <child>

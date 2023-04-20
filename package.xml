@@ -11,6 +11,7 @@
     <child type="prefix">
       <object class="GtkImage" id="icon_image">
         <property name="pixel-size">24</property>
+        <property name="css-classes">icon-dropshadow</property>
       </object>
     </child>
     <child>
@@ -19,6 +20,7 @@
         <property name="valign">center</property>
         <property name="margin-end">12</property>
         <property name="margin-start">12</property>
+        <property name="css-classes">selection-mode</property>
         <signal name="toggled" handler="toggle_package" swapped="no"/>
       </object>
     </child>
