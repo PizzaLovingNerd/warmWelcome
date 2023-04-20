@@ -4,6 +4,8 @@
 
   <template class="TourPage" parent="GtkBox">
     <property name="orientation">vertical</property>
+    <property name="vexpand">true</property>
+    <property name="hexpand">true</property>
     <child>
       <object class="GtkVideo" id="video">
         <property name="autoplay">true</property>

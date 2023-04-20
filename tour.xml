@@ -44,6 +44,13 @@ circular</property>
             <property name="description" translatable="yes">The overview is where you will access workspaces, open windows, and your applications. To access it, either click the risiOS Button on the top left, use the hotcorner on the top left, swipe up with 3 fingers on a trackpad, or hit the Windows/Command/Super key on your keyboard.</property>
           </object>
         </child>
+        <child>
+          <object class="TourPage">
+            <property name="video">/usr/share/risios/tour/overview.webm</property>
+            <property name="title" translatable="yes">Overview</property>
+            <property name="description" translatable="yes">The overview is where you will access workspaces, open windows, and your applications. To access it, either click the risiOS Button on the top left, use the hotcorner on the top left, swipe up with 3 fingers on a trackpad, or hit the Windows/Command/Super key on your keyboard.</property>
+          </object>
+        </child>
         <signal name="page-changed" handler="on_page_changed" />
       </object>
     </child>

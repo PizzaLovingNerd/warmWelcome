@@ -612,7 +612,7 @@ class TourPage(Gtk.Box):
     _description = None
     filename = None
     label = Gtk.Template.Child("label")
-    video = Gtk.Template.Child("video")
+    video_player = Gtk.Template.Child("video")
 
     @GObject.Property(type=str)
     def title(self):
@@ -641,7 +641,7 @@ class TourPage(Gtk.Box):
     @Gtk.Template.Callback("on_update_defaults")
     def on_update_defaults(self, *args, **kwargs):
         self.label.set_label(self._description)
-        self.video.set_from_filename(self.filename)
+        self.video_player.set_filename(self.filename)
 
 
 @Gtk.Template(filename=_TOUR_FILE)
@@ -652,13 +652,15 @@ class Tour(Gtk.Box):
     fw_btn = Gtk.Template.Child("fw_btn")
     headerlabel = Gtk.Template.Child("headerlabel")
 
+    Adw.init()
+
     @Gtk.Template.Callback("on_forward")
     def on_forward(self, button):
-        self.carousel.scroll_to(self.carousel.get_nth_page(self.carousel.get_position() + 1))
+        self.carousel.scroll_to(self.carousel.get_nth_page(self.carousel.get_position() + 1), True)
 
     @Gtk.Template.Callback("on_back")
     def on_back(self, button):
-        self.carousel.scroll_to(self.carousel.get_nth_page(self.carousel.get_position() - 1))
+        self.carousel.scroll_to(self.carousel.get_nth_page(self.carousel.get_position() - 1), True)
 
     @Gtk.Template.Callback("on_page_changed")
     def on_page_changed(self, carousel, postiton, user_data):
