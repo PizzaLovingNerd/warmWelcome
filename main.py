@@ -14,7 +14,9 @@ _ = gettext.gettext
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 gi.require_version("Vte", "3.91")
-from gi.repository import Gtk, Adw, Vte, GLib, GObject, GdkPixbuf
+from gi.repository import Gtk, Adw, Vte, GLib, GObject, GdkPixbuf, Gio
+
+setting = Gio.Settings.new("io.risi.Welcome")
 
 _WINDOW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/welcome.xml"
 _PACKAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/package.xml"
@@ -134,6 +136,7 @@ class Application(Adw.Application):
                 dialog.connect("response", self.on_dialogs)
                 dialog.choose()
         else:
+            setting.set_boolean("startup-show", False)
             dialog = Adw.MessageDialog(
                 heading=_("Quick Setup Complete"),
                 body=_("Your system has been successfully configured. We recommend rebooting your system now."),
