@@ -33,7 +33,6 @@
             <property name="margin-bottom">15</property>
             <property name="margin-start">15</property>
             <property name="margin-end">15</property>
-            <property name="css-classes">dim-label</property>
           </object>
         </child>
       </object>

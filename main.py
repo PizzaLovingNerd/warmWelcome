@@ -1,12 +1,10 @@
 import os
-import shutil
 import subprocess
 import tempfile
-
+import time
 import gi
 import threading
 import requests
-import json
 
 import gettext
 
@@ -34,19 +32,6 @@ quick_setup_packages = []
 quick_setup_commands = []
 quick_setup_extras = []
 welcome_sidebar_buttons = []
-
-# Checking GPU Vendor
-lshw_data = None
-print("IGNORE THE WARNING BELOW, THIS DOES NOT AFFECT THE PROGRAM")
-lshw = subprocess.Popen("lshw -C display", shell=True, stdout=subprocess.PIPE)
-lshw_data = lshw.stdout.read().decode("utf-8")
-vendor_line = lshw_data.split("vendor: ")[1].split("\n")[0]
-if "nvidia" in vendor_line.lower():
-    quick_setup_extras.append("nvidia")
-elif "amd" in vendor_line.lower():
-    quick_setup_extras.append("amd")
-elif "intel" in vendor_line.lower():
-    quick_setup_extras.append("intel")
 
 actions = {
     "rpmfusion": [
@@ -104,14 +89,22 @@ class Application(Adw.Application):
         self.builder.get_object("welcomeButton").connect("clicked", self.on_welcomeButton)
         self.builder.get_object("progressButton").connect("clicked", self.view_progress)
         self.builder.get_object("installationBack").connect("clicked", self.on_installationBackClicked)
+
         self.vte.connect("child_exited", self.terminal_exited)
-        # self.builder.get_object("mainStack").set_visible_child(    # DEBUGGING
-        #     self.builder.get_object("welcomeLeaflet")
-        # )
 
         self.builder.get_object("welcomeStack").connect("notify::visible-child", self.on_welcome_stack_switched)
         self.welcome_leaflet.connect("notify::folded", self.on_welcome_leaflet_unfoldable)
         self.welcome_leaflet.navigate(Adw.NavigationDirection.FORWARD)
+
+        # check if quick setup is needed
+        if os.path.exists("/usr/share/risiWelcome/quick-setup-done"):
+            self.builder.get_object("mainStack").set_visible_child(
+                self.builder.get_object("welcomeLeaflet")
+            )
+        else:
+            vendor_thread = threading.Thread(target=self.get_vendor_data)
+            vendor_thread.daemon = True
+            vendor_thread.start()
 
     def terminal_exited(self, terminal, status):
         self.builder.get_object("installSpinner").stop()
@@ -151,9 +144,37 @@ class Application(Adw.Application):
             dialog.connect("response", self.on_dialogs)
             dialog.choose()
 
+    def get_vendor_data(self):
+        # Slight delay to prevent loading confusion for users
+        time.sleep(1)
+        # Checking GPU Vendor
+        lshw_data = None
+        print("IGNORE THE WARNING BELOW, THIS DOES NOT AFFECT THE PROGRAM")
+        lshw = subprocess.Popen("lshw -C display", shell=True, stdout=subprocess.PIPE)
+        lshw_data = lshw.stdout.read().decode("utf-8")
+        vendor_line = lshw_data.split("vendor: ")[1].split("\n")[0]
+        if "nvidia" in vendor_line.lower():
+            quick_setup_extras.append("nvidia")
+        elif "amd" in vendor_line.lower():
+            quick_setup_extras.append("amd")
+        elif "intel" in vendor_line.lower():
+            quick_setup_extras.append("intel")
+        else:
+            print("WARNING: Unable to detect GPU vendor, assuming Intel")
+            print(f"vendor_line: {vendor_line}")
+            quick_setup_extras.append("intel")
+        GLib.idle_add(lambda: self.builder.get_object("welcomeButton").set_label(_("Get Started")))
+        GLib.idle_add(lambda: self.builder.get_object("welcomeButton").set_sensitive(True))
+
     def on_dialogs(self, dialog, response):
         if response == "close":
-            self.quit()
+            self.builder.get_object("mainStack").set_transition_type(
+                Gtk.StackTransitionType.CROSSFADE
+            )
+            self.builder.get_object("mainStack").set_transition_duration(500)
+            self.builder.get_object("mainStack").set_visible_child(
+                self.builder.get_object("welcomeLeaflet")
+            )
         elif response == "logs":
             self.builder.get_object("runningStack").set_visible_child(
                 self.builder.get_object("vteBox")
@@ -217,7 +238,7 @@ class Application(Adw.Application):
         button.set_sensitive(False)
 
     def on_welcomeButton(self, button):
-        button.set_label(_("Checking Internet Connection"))
+        button.set_label(_("Checking Internet Connection..."))
         button.set_sensitive(False)
         internet_thread = threading.Thread(target=self.wait_for_internet)
         internet_thread.daemon = True
@@ -663,12 +684,17 @@ class Tour(Gtk.Box):
         self.carousel.scroll_to(self.carousel.get_nth_page(self.carousel.get_position() - 1), True)
 
     @Gtk.Template.Callback("on_page_changed")
-    def on_page_changed(self, carousel, postiton, user_data):
+    def on_page_changed(self, carousel, user_data):
+        self.headerlabel.set_label(carousel.get_nth_page(carousel.get_position()).title)
         if carousel.get_position() == 0:
             self.back_btn.set_sensitive(False)
-        elif carousel.get_position() == carousel.get_n_pages() - 1:
+        else:
+            self.back_btn.set_sensitive(True)
+
+        if carousel.get_position() == carousel.get_n_pages() - 1:
             self.fw_btn.set_sensitive(False)
-        self.headerlabel.set_label(carousel.get_nth_page(carousel.get_position()).title())
+        else:
+            self.fw_btn.set_sensitive(True)
 
 
 if __name__ == "__main__":

@@ -14,6 +14,7 @@
             <property name="icon-name" translatable="yes">go-previous-symbolic</property>
             <property name="css-classes">flat
 circular</property>
+            <property name="sensitive">False</property>
             <signal name="clicked" handler="on_back" swapped="no"/>
           </object>
         </child>

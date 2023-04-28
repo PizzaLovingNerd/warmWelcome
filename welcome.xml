@@ -35,7 +35,8 @@
                         <property name="vexpand">true</property>
                         <child>
                           <object class="GtkButton" id="welcomeButton">
-                            <property name="label" translatable="yes">Get Started</property>
+                            <property name="label" translatable="yes">Checking Hardware Info...</property>
+                            <property name="sensitive">false</property>
                             <property name="halign">center</property>
                             <property name="css-classes">pill</property>
                           </object>
@@ -361,7 +362,7 @@
                             <child>
                               <object class="Package" id="mediadriver">
                                 <property name="title" translatable="yes">Intel Media Driver &amp;amp; Intel Libva Driver</property>
-                                <property name="subtitle" translatable="yes">Recommended on systems with Intel graphics for video accelerated codecs.</property>
+                                <property name="subtitle" translatable="yes">Recommended on systems with Intel graphics for video accelerated codecs. RPMFusion Required.</property>
                                 <property name="iconfile">intel.png</property>
                                 <property name="package">intel-media-driver libva-intel-driver</property>
                                 <property name="actions-required">intel,rpmfusion</property>
@@ -1094,7 +1095,7 @@ force close this window (this will run in the background with a regular close), 
                                   <object class="Launcher">
                                     <property name="title" translatable="yes">Install Apps with GNOME Software</property>
                                     <property name="subtitle" translatable="yes">GNOME Software is used to search, install, update and manage applications on your computer.</property>
-                                    <property name="command" translatable="yes">/usr/bin/gnome-software</property>
+                                    <property name="command">/usr/bin/gnome-software</property>
                                     <property name="iconname">org.gnome.Software</property>
                                   </object>
                                 </child>
@@ -1102,7 +1103,7 @@ force close this window (this will run in the background with a regular close), 
                                   <object class="Launcher">
                                     <property name="title" translatable="yes">Manage Webapps with Webapp Manager</property>
                                     <property name="subtitle" translatable="yes">We use webapps to bridge the gap that Linux has with app compatibility. Turn your favorite webapps into desktop class apps, and discover new web apps from the store.</property>
-                                    <property name="command" translatable="yes">webapp-manager</property>
+                                    <property name="command">webapp-manager</property>
                                     <property name="iconname">webapp-manager</property>
                                   </object>
                                 </child>
@@ -1110,7 +1111,7 @@ force close this window (this will run in the background with a regular close), 
                                   <object class="Launcher">
                                     <property name="title" translatable="yes">Install Custom Themes</property>
                                     <property name="subtitle" translatable="yes">Use risiTweaks to manage rTheme and risiScripts, as well as enable advanced and experimental features.</property>
-                                    <property name="command" translatable="yes">xdg-open https://themes.risi.io</property>
+                                    <property name="command">xdg-open https://themes.risi.io</property>
                                     <property name="iconfile">theme.png</property>
                                   </object>
                                 </child>
@@ -1118,7 +1119,7 @@ force close this window (this will run in the background with a regular close), 
                                   <object class="Launcher">
                                     <property name="title" translatable="yes">Manage Advanced Settings with risiTweaks</property>
                                     <property name="subtitle" translatable="yes">Use risiTweaks to manage rTheme and risiScripts, as well as enable advanced and experimental features.</property>
-                                    <property name="command" translatable="yes">/usr/bin/risi-tweaks</property>
+                                    <property name="command">/usr/bin/risi-tweaks</property>
                                     <property name="iconname">io.risi.Tweaks</property>
                                   </object>
                                 </child>
@@ -1126,8 +1127,84 @@ force close this window (this will run in the background with a regular close), 
                                   <object class="Launcher">
                                     <property name="title" translatable="yes">Create a System Backup with Timeshift</property>
                                     <property name="subtitle" translatable="yes">Use Timeshift to create a system restore point to allow you to restore a previous snapshot of risiOS if something goes wrong.</property>
-                                    <property name="command" translatable="yes">/usr/bin/timeshift-launcher</property>
+                                    <property name="command">/usr/bin/timeshift-launcher</property>
                                     <property name="iconname">timeshift</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Socials</property>
+                                <property name="vexpand">true</property>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Medium</property>
+                                    <property name="subtitle" translatable="yes">Long form articles, updates and posts.</property>
+                                    <property name="command">xdg-open https://risiindustries.medium.com/</property>
+                                    <property name="iconfile">medium.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">risiOS Forums</property>
+                                    <property name="subtitle" translatable="yes">The official place for support, bug reporting, and more.</property>
+                                    <property name="command">/usr/bin/xdg-open https://www.reddit.com/r/risiOS/</property>
+                                    <property name="iconname">user-available-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Reddit</property>
+                                    <property name="subtitle" translatable="yes">The risiOS subreddit on the frontpage of the internet.</property>
+                                    <property name="command">/usr/bin/xdg-open https://www.reddit.com/r/risiOS/</property>
+                                    <property name="iconfile">reddit.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Twitter</property>
+                                    <property name="subtitle" translatable="yes">Short updates and posts.</property>
+                                    <property name="command">xdg-open https://twitter.com/risi_industries</property>
+                                    <property name="iconfile">twitter.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Instagram</property>
+                                    <property name="subtitle" translatable="yes">We sometimes put photos on here.</property>
+                                    <property name="command">xdg-open https://www.instagram.com/p/CZ-xvDnFebO/</property>
+                                    <property name="iconfile">instagram.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Chat</property>
+                                <property name="description">Please do not direct message admins or mods for help. You are not entitled for help.</property>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Discord</property>
+                                    <property name="subtitle" translatable="yes">Our main chat used for development, support, and generally just hanging out.</property>
+                                    <property name="command">/usr/bin/xdg-open https://discord.gg/2JD47e6</property>
+                                    <property name="iconfile">discord.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Telegram (General)</property>
+                                    <property name="subtitle" translatable="yes">A Telegram group for general risiOS discussion. Bridged with #general on Discord. Use the support group for support.</property>
+                                    <property name="command">/usr/bin/xdg-open https://t.me/+Y7qpne2MDNU5ZWFh</property>
+                                    <property name="iconfile">telegram.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Telegram (Support)</property>
+                                    <property name="subtitle" translatable="yes">A Telegram group for risiOS support. Bridged with #support on Discord.</property>
+                                    <property name="command">/usr/bin/xdg-open https://t.me/+RlkMN-tSVtJiNWZh</property>
+                                    <property name="iconfile">telegram.png</property>
                                   </object>
                                 </child>
                               </object>
@@ -1140,14 +1217,151 @@ force close this window (this will run in the background with a regular close), 
                 </child>
                 <child>
                   <object class="GtkStackPage">
-                    <property name="name">community</property>
-                    <property name="title" translatable="1">Join The Community</property>
+                    <property name="name">tour</property>
+                    <property name="title" translatable="1">Tour</property>
                     <property name="child">
                       <object class="GtkBox">
                         <property name="orientation">vertical</property>
                         <property name="hexpand">true</property>
                         <child>
                           <object class="Tour" />
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">support</property>
+                    <property name="title" translatable="1">Support Us</property>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="hexpand">true</property>
+                        <child>
+                          <object class="AdwHeaderBar">
+                            <child type="start">
+                              <object class="SidebarButton"/>
+                            </child>
+                            <child type="title">
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Support Us</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesPage">
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Donation Options</property>
+                                <property name="description">Help fund risiOS development.</property>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">$10 Monthly Donation</property>
+                                    <property name="subtitle" translatable="yes">Help fund risiOS development by contributing $10 a month. Only $2 more than Twitter Blue.</property>
+                                    <property name="command">/usr/bin/xdg-open https://buy.stripe.com/3csg0k3wg7XYaKk9AB</property>
+                                    <property name="iconfile">monthlydonation.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Custom Donation</property>
+                                    <property name="subtitle" translatable="yes">Help risiOS development with any amount of money. Whether you only have a dollar to spare, or you're Jeff Bezos.</property>
+                                    <property name="command">/usr/bin/xdg-open https://buy.stripe.com/28oeWg7Mw4LMbOo3cc</property>
+                                    <property name="iconfile">donation.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Shirts</property>
+                                    <property name="subtitle" translatable="yes">Grab a cool risiOS design and support the project.</property>
+                                    <property name="command">/usr/bin/xdg-open https://moteefe.com/store/risios-store</property>
+                                    <property name="iconfile">shirt.png</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Codeless Contributions</property>
+                                <property name="description">Ways to contribute to risiOS without knowing how to code.</property>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Help Troubleshoot User Problems</property>
+                                    <property name="subtitle" translatable="yes">Help people solve system issues on the risiOS Forums.</property>
+                                    <property name="command">/usr/bin/xdg-open https://forums.risi.io/c/troubleshooting/8</property>
+                                    <property name="iconname">user-available-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Create a custom rTheme</property>
+                                    <property name="subtitle" translatable="yes">Create and upload a custom theme for risiOS powered by rTheme.</property>
+                                    <property name="command">/usr/bin/xdg-open https://forums.risi.io/t/rtheme-creation-reply-to-this-thread-if-you-need-help/86</property>
+                                    <property name="iconfile">paint.png</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Contribute Wallpapers</property>
+                                    <property name="subtitle" translatable="yes">Future versions of risiOS need new and fresh wallpapers.</property>
+                                    <property name="command">/usr/bin/xdg-open https://github.com/risiIndustries/risios-backgrounds</property>
+                                    <property name="iconname">image-x-generic</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <property name="title" translatable="yes">Contribute Code</property>
+                                <property name="description">Help to improve risiOS by auditing and contributing to our source code.  You can also use these repositories to report bugs.</property>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">risiWelcome</property>
+                                    <property name="subtitle" translatable="yes">Quick Setup and this welcome window.</property>
+                                    <property name="command">/usr/bin/xdg-open https://github.com/risiIndustries/risiWelcomeAdw</property>
+                                    <property name="iconname">io.risi.Welcome</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">risiTweaks</property>
+                                    <property name="subtitle" translatable="yes">Our custom tweak tool.</property>
+                                    <property name="command">/usr/bin/xdg-open https://github.com/risiIndustries/risiTweaksAdw</property>
+                                    <property name="iconname">io.risi.Tweaks</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">rTheme</property>
+                                    <property name="subtitle" translatable="yes">Our theming engine for Libadwaita and GNOME Shell.</property>
+                                    <property name="command">/usr/bin/xdg-open https://github.com/risiIndustries/rtheme</property>
+                                    <property name="iconname">org.gnome.Software</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">Webapp Manager</property>
+                                    <property name="subtitle" translatable="yes">Our web app manager and store. Forked from Linux Mint.</property>
+                                    <property name="command">/usr/bin/xdg-open https://github.com/risiIndustries/webapp-manager</property>
+                                    <property name="iconname">webapp-manager</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="Launcher">
+                                    <property name="title" translatable="yes">risiUpgrade</property>
+                                    <property name="subtitle" translatable="yes">Our upgrade tool between versions of risiOS.</property>
+                                    <property name="command">/usr/bin/xdg-open https://github.com/risiIndustries/risiUpgrade</property>
+                                    <property name="iconname">io.risi.Upgrade</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                     </property>
