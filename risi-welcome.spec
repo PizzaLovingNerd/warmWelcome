@@ -34,7 +34,7 @@ cat > risi-welcome <<EOF
 #!/bin/sh
 /env/bin/python3 %{_datadir}/risiWelcome/__main__.py
 EOF
-install risi-welcome 775 %{buildroot}%{_bindir}
+install -m 755 risi-welcome %{buildroot}%{_bindir}
 
 %files
 %{_datadir}/risiWelcome
