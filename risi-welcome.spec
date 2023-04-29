@@ -30,7 +30,7 @@ cp -a usr/share %{buildroot}%{_datadir}
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/autostart/
 cp usr/share/applications/io.risi.Welcome.desktop %{buildroot}%{_sysconfdir}/xdg/autostart/
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/io.risi.Welcome.svg
-cp usr/share/icons/hicolor/scalable/apps/io.risi.Welcome.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/io.risi.Welcome.svg
+cp io.risi.Welcome.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/io.risi.Welcome.svg
 
 
 cat > risi-welcome <<EOF
