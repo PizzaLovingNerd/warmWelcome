@@ -4,8 +4,8 @@ Release:        28%{?dist}
 Summary:        risiOS's Welcome app.
 
 License:        GPL v3
-URL:            https://github.com/risiOS/risiWelcomeAdw
-Source0:        https://github.com/risiOS/risiWelcomeAdw/archive/refs/heads/main.tar.gz
+URL:            https://github.com/risiIndustries/risiWelcomeAdw
+Source0:        https://github.com/risiIndustries/risiWelcomeAdw/archive/refs/heads/main.tar.gz
 
 BuildArch:	noarch
 
