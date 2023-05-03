@@ -40,11 +40,11 @@ actions = {
         "echo Installing RPMFusion Repositories",
         "dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm",
         "echo Updating AppStream",
-        "dnf groupupdate core",
+        "dnf groupupdate core -y",
         "echo Installing Multimedia Packages",
-        "dnf groupupdate multimedia --setop=\"install_weak_deps=False\" --exclude=PackageKit-gstreamer-plugin",
+        "dnf groupupdate multimedia -y --setop=\"install_weak_deps=False\" --exclude=PackageKit-gstreamer-plugin",
         "echo Sound & Video Packages",
-        "dnf groupupdate sound-and-video"
+        "dnf groupupdate sound-and-video -y"
     ],
     "flatpak": [
         "echo Installing Flatpak",
@@ -147,7 +147,7 @@ class Application(Adw.Application):
 
     def get_vendor_data(self):
         # Slight delay to prevent loading confusion for users
-        time.sleep(1)
+        time.sleep(2)
         # Checking GPU Vendor
         lshw_data = None
         print("IGNORE THE WARNING BELOW, THIS DOES NOT AFFECT THE PROGRAM")
@@ -239,6 +239,10 @@ class Application(Adw.Application):
         button.set_sensitive(False)
 
     def on_welcomeButton(self, button):
+        # Run check_actions in packages to load drivers
+        for package in packages:
+            package.check_actions()
+
         button.set_label(_("Checking Internet Connection..."))
         button.set_sensitive(False)
         internet_thread = threading.Thread(target=self.wait_for_internet)
@@ -321,6 +325,7 @@ class Package(Adw.ActionRow):
             else:
                 if package_groups[self.button_group] is not self.switch:
                     self.switch.set_group(package_groups[self.button_group])
+        self.check_actions()
 
     @Gtk.Template.Callback("toggle_package")
     def toggle_package(self, button):
@@ -417,7 +422,9 @@ class Package(Adw.ActionRow):
             self.set_sensitive(sensitive)
 
             self.switch.set_active(False)
-            if self.button_group is not None:
+            if sensitive and self.default:
+                self.switch.set_active(True)
+            elif self.button_group is not None:
                 if package_groups[self.button_group] is self.switch:
                     self.switch.set_active(True)
 

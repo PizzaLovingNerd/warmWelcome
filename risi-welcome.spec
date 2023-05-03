@@ -32,12 +32,12 @@ cp usr/share/applications/io.risi.Welcome.desktop %{buildroot}%{_sysconfdir}/xdg
 
 cat > risi-welcome <<EOF
 #!/bin/sh
-/env/bin/python3 %{_datadir}/risiWelcome/__main__.py
+/usr/bin/env python %{_datadir}/risiWelcome/__main__.py
 EOF
 install -m 755 risi-welcome %{buildroot}%{_bindir}
 
 %files
-%{_datadir}/risiWelcome
+%dir %{_datadir}/risiWelcome
 %{_datadir}/glib-2.0/schemas/io.risi.Welcome.gschema.xml
 %{_datadir}/applications/io.risi.Welcome.desktop
 %{_datadir}/icons/hicolor/scalable/apps/io.risi.Welcome.svg

@@ -142,6 +142,7 @@
                   <object class="GtkBox" id="browserPage">
                     <property name="orientation">vertical</property>
                     <property name="vexpand">True</property>
+                    <property name="valign">GTK_ALIGN_START</property>
                     <child>
                       <object class="AdwHeaderBar">
                         <child type="title">
@@ -304,6 +305,7 @@
                                 <property name="package">akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs nvidia-vaapi-driver</property>
                                 <property name="iconfile">nvidia.png</property>
                                 <property name="actions-required">rpmfusion,nvidia</property>
+                                <property name="switch-default">True</property>
                                 <property name="group">nvidia</property>
                               </object>
                             </child>
@@ -349,6 +351,7 @@
                                 <property name="command">dnf swap mesa-va-drivers mesa-va-drivers-freeworld &amp;&amp; dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld</property>
                                 <property name="package">mesa-va-drivers-freeworld.i686 mesa-vdpau-drivers-freeworld.i686</property>
                                 <property name="iconfile">mesa.png</property>
+                                <property name="switch-default">True</property>
                                 <property name="actions-required">rpmfusion,amd</property>
                                 <property name="group">amd</property>
                               </object>
@@ -365,6 +368,7 @@
                                 <property name="subtitle" translatable="yes">Recommended on systems with Intel graphics for video accelerated codecs. RPMFusion Required.</property>
                                 <property name="iconfile">intel.png</property>
                                 <property name="package">intel-media-driver libva-intel-driver</property>
+                                <property name="switch-default">True</property>
                                 <property name="actions-required">intel,rpmfusion</property>
                               </object>
                             </child>
@@ -934,7 +938,6 @@ circular</property>
                         <child type="title">
                           <object class="GtkLabel">
                             <property name="label" translatable="yes">Running Quick Setup</property>
-                            <property name="wrap">true</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
