@@ -42,6 +42,7 @@ install -m 755 risi-welcome %{buildroot}%{_bindir}
 %files
 %{_datadir}/risiWelcome/*.py
 %{_datadir}/risiWelcome/*.xml
+%{_datadir}/risiWelcome/prompter.sh
 %{_datadir}/risiWelcome/icons/*.png
 %{_datadir}/glib-2.0/schemas/io.risi.Welcome.gschema.xml
 %{_datadir}/applications/io.risi.Welcome.desktop
