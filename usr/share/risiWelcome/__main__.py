@@ -105,6 +105,9 @@ class Application(Adw.Application):
             vendor_thread = threading.Thread(target=self.get_vendor_data)
             vendor_thread.daemon = True
             vendor_thread.start()
+        self.builder.get_object("mainStack").set_visible_child(
+            self.builder.get_object("welcomeLeaflet")
+        )
 
     def terminal_exited(self, terminal, status):
         self.builder.get_object("installSpinner").stop()

@@ -42,14 +42,56 @@ circular</property>
           <object class="TourPage">
             <property name="video">/usr/share/risios/tour/overview.webm</property>
             <property name="title" translatable="yes">Overview</property>
-            <property name="description" translatable="yes">The overview is where you will access workspaces, open windows, and your applications. To access it, either click the risiOS Button on the top left, use the hotcorner on the top left, swipe up with 3 fingers on a trackpad, or hit the Windows/Command/Super key on your keyboard.</property>
+            <property name="description" translatable="yes">The overview is where you will access workspaces, open windows, and your applications. To access it, either click the risiOS Button on the top left, use the hot-corner on the top left, swipe up with 3 fingers on a trackpad, or hit the Super key (same as the Windows/Command key) on your keyboard.</property>
           </object>
         </child>
         <child>
           <object class="TourPage">
-            <property name="video">/usr/share/risios/tour/overview.webm</property>
-            <property name="title" translatable="yes">Overview</property>
-            <property name="description" translatable="yes">The overview is where you will access workspaces, open windows, and your applications. To access it, either click the risiOS Button on the top left, use the hotcorner on the top left, swipe up with 3 fingers on a trackpad, or hit the Windows/Command/Super key on your keyboard.</property>
+            <property name="video">/usr/share/risios/tour/dock.webm</property>
+            <property name="title" translatable="yes">Dash</property>
+            <property name="description" translatable="yes">At the bottom of the overview, you will find a dock (known as the dash) with all your pinned applications. You can also access the dock by moving your cursor to the bottom of the screen.</property>
+          </object>
+        </child>
+        <child>
+          <object class="TourPage">
+            <property name="video">/usr/share/risios/tour/applications.webm</property>
+            <property name="title" translatable="yes">Applications</property>
+            <property name="description" translatable="yes">You would use the app grid in order to view your installed applications. You can access it from the dash, as well as swiping up from the overview trackpad with 3 fingers, or using Super+A. From here you can pin apps to the dash by right-clicking or dragging them to the dash.</property>
+          </object>
+        </child>
+        <child>
+          <object class="TourPage">
+            <property name="video">/usr/share/risios/tour/search.webm</property>
+            <property name="title" translatable="yes">Search</property>
+            <property name="description" translatable="yes">Inside the dash, you can just start typing to search for anything including apps, files, settings, and web searches. You can customize the search to add or remove sources inside the Control Center.</property>
+          </object>
+        </child>
+        <child>
+          <object class="TourPage">
+            <property name="video">/usr/share/risios/tour/workspaces.webm</property>
+            <property name="title" translatable="yes">Accessing Workspaces</property>
+            <property name="description" translatable="yes">In order to use risiOS efficiently, we highly recommend using workspaces. You can switch between them in the dash, swipe left or right with 3 fingers on the trackpad, or use CTRL+ALT+Left/Right Arrow Key.</property>
+          </object>
+        </child>
+        <child>
+          <object class="TourPage">
+            <property name="video">/usr/share/risios/tour/workspaces2.webm</property>
+            <property name="title" translatable="yes">Managing Workspace</property>
+            <property name="description" translatable="yes">By default, workspaces are dynamic and automatically creates workspaces as you use them. You can launch applications in a workspace by either switching to the workspace before launching them, or dragging and dropping apps from the app grid or dash into an available workspace. You can also move open apps between workspaces in the dash.</property>
+          </object>
+        </child>
+        <child>
+          <object class="TourPage">
+            <property name="video">/usr/share/risios/tour/menus.webm</property>
+            <property name="title" translatable="yes">Menus</property>
+            <property name="description" translatable="yes">By clicking on the system clock on the top-center, you can access your notifications, calendar, and now playing. The top-right features a system menu that allows you quickly access change settings, change your volume, take screenshots, and kill background apps.</property>
+          </object>
+        </child>
+        <child>
+          <object class="TourPage">
+            <property name="video">/usr/share/risios/tour/final.webm</property>
+            <property name="title" translatable="yes">Done</property>
+            <property name="description" translatable="yes">That is the end of the tour. Thanks for using risiOS!</property>
           </object>
         </child>
         <signal name="page-changed" handler="on_page_changed" />
