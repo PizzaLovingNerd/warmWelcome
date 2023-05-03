@@ -20,7 +20,7 @@ available resources for risiOS as well as help you setup
 your computer to your likings.
 
 %prep
-%autosetup -n %{name}-main
+%autosetup -n risiWelcomeAdw-main
 
 %build
 %install
