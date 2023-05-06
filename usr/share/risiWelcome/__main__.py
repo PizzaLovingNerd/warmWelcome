@@ -70,6 +70,7 @@ class Application(Adw.Application):
         self.builder = Gtk.Builder()
         self.builder.add_from_file(_WINDOW_FILE)
         self.window = self.builder.get_object("main_window")
+        self.window.set_icon_name("io.risi.Welcome")
         self.quick_setup_stack = self.builder.get_object("quickSetupStack")
 
         self.vte = Vte.Terminal(vexpand=True, hexpand=True)

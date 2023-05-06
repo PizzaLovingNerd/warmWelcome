@@ -1,6 +1,6 @@
 Name:           risi-welcome
 Version:        38.0
-Release:        30%{?dist}
+Release:        31%{?dist}
 Summary:        risiOS's Welcome app.
 
 License:        GPL v3
@@ -11,7 +11,7 @@ BuildArch:	    noarch
 
 BuildRequires:  python3
 Requires:       python3
-Requires:	      python3-gobject
+Requires:	    python3-gobject
 Requires:       libadwaita
 Requires:       lshw
 Requires:       vte291-gtk4
