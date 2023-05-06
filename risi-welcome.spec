@@ -12,7 +12,7 @@ BuildArch:	    noarch
 BuildRequires:  python3
 Requires:       python3
 Requires:	      python3-gobject
-Reqiores:       libadwaita
+Requires:       libadwaita
 Requires:       lshw
 Requires:       vte291-gtk4
 
