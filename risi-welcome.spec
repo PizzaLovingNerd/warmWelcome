@@ -1,18 +1,20 @@
 Name:           risi-welcome
 Version:        38.0
-Release:        29%{?dist}
+Release:        31%{?dist}
 Summary:        risiOS's Welcome app.
 
 License:        GPL v3
 URL:            https://github.com/risiIndustries/risiWelcomeAdw
 Source0:        https://github.com/risiIndustries/risiWelcomeAdw/archive/refs/heads/main.tar.gz
 
-BuildArch:	noarch
+BuildArch:	    noarch
 
 BuildRequires:  python3
 Requires:       python3
-Requires:	python3-gobject
-Requires:   lshw
+Requires:	    python3-gobject
+Requires:       libadwaita
+Requires:       lshw
+Requires:       vte291-gtk4
 
 %description
 This welcome program will help guide you through the

@@ -72,6 +72,7 @@ class Application(Adw.Application):
         self.builder = Gtk.Builder()
         self.builder.add_from_file(_WINDOW_FILE)
         self.window = self.builder.get_object("main_window")
+        self.window.set_icon_name("io.risi.Welcome")
         self.quick_setup_stack = self.builder.get_object("quickSetupStack")
 
         self.vte = Vte.Terminal(vexpand=True, hexpand=True)
@@ -82,6 +83,7 @@ class Application(Adw.Application):
         
     def do_activate(self):
         self.window.set_application(self)
+        self.window.set_icon_name("io.risi.Welcome")
         self.window.maximize()
         self.window.present()
 
@@ -107,9 +109,6 @@ class Application(Adw.Application):
             vendor_thread = threading.Thread(target=self.get_vendor_data)
             vendor_thread.daemon = True
             vendor_thread.start()
-        self.builder.get_object("mainStack").set_visible_child(
-            self.builder.get_object("welcomeLeaflet")
-        )
 
     def terminal_exited(self, terminal, status):
         self.builder.get_object("installSpinner").stop()
