@@ -56,9 +56,6 @@ actions = {
         "flatpak override --filesystem=xdg-config/gtk-4.0",
         "flatpak override --filesystem=xdg-config/gtk-3.0"
     ],
-    "retroarch": [
-        "sudo dnf in -y retroarch; cat /usr/bin/retroarch-enable-network-access.sh | bash"
-    ],
     "nvidia": [],
     "amd": [],
     "intel": []

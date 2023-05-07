@@ -684,7 +684,7 @@ circular</property>
                                     <property name="title" translatable="yes">Heroic Launcher</property>
                                     <property name="subtitle" translatable="yes">Launcher for Epic Games and GOG</property>
                                     <property name="package">heroic</property>
-                                    <property name="command">dnf copr enable atim/heroic-games-launcher -y</property>
+                                    <property name="command">dnf copr enable atim/heroic-games-launcher -y &amp;&amp; dnf install -y heroic</property>
                                     <property name="iconfile">heroic.png</property>
                                   </object>
                                 </child>
@@ -741,7 +741,7 @@ circular</property>
                                   <object class="Package" id="retroarch">
                                     <property name="title" translatable="yes">RetroArch</property>
                                     <property name="subtitle" translatable="yes">A core based all in one emulator.</property>
-                                    <property name="action">retroarch</property>
+                                    <property name="command">echo "Installing RetroArch" &amp;&amp; dnf in -y retroarch; cat /usr/bin/retroarch-enable-network-access.sh | bash</property>
                                     <property name="iconfile">retroarch.png</property>
                                   </object>
                                 </child>
@@ -749,8 +749,7 @@ circular</property>
                                   <object class="Package" id="dosboxx">
                                     <property name="title" translatable="yes">DOSBox-X</property>
                                     <property name="subtitle" translatable="yes">An emulator for DOS.</property>
-                                    <property name="package">dosbox-x</property>
-                                    <property name="command">dnf copr enable rob72/DOSBox-X -y</property>
+                                    <property name="command">echo "Installing DOSBox-X" &amp;&amp; dnf copr enable rob72/DOSBox-X -y &amp;&amp; dnf install -y dosbox-x</property>
                                     <property name="iconfile">dosbox-x.png</property>
                                   </object>
                                 </child>
@@ -772,8 +771,7 @@ circular</property>
                                   <object class="Package" id="prism">
                                     <property name="title" translatable="yes">Prism Launcher</property>
                                     <property name="subtitle" translatable="yes">Minecraft Launcher supporting multiple (easy to mod) instances and accounts.</property>
-                                    <property name="package">prismlauncher java-17-openjdk java-1.8.0-openjdk</property>
-                                    <property name="command">dnf copr enable g3tchoo/prismlauncher -y</property>
+                                    <property name="command">dnf copr enable g3tchoo/prismlauncher -y &amp;&amp; dnf install prismlauncher java-17-openjdk java-1.8.0-openjdk -y</property>
                                     <property name="iconfile">prismlauncher.png</property>
                                   </object>
                                 </child>
