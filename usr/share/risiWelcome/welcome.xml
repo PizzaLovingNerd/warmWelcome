@@ -741,8 +741,7 @@ circular</property>
                                   <object class="Package" id="retroarch">
                                     <property name="title" translatable="yes">RetroArch</property>
                                     <property name="subtitle" translatable="yes">A core based all in one emulator.</property>
-                                    <property name="package">retroarch</property>
-                                    <property name="action">retroarch-enable-network-access</property>
+                                    <property name="action">retroarch</property>
                                     <property name="iconfile">retroarch.png</property>
                                   </object>
                                 </child>

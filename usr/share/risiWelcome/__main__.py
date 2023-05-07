@@ -53,9 +53,11 @@ actions = {
         "flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo",
         "echo Adding Theme Overrides",
         "flatpak override --filesystem=~/.themes",
-        "flatpak override --filesystem=/usr/share/themes",
         "flatpak override --filesystem=xdg-config/gtk-4.0",
         "flatpak override --filesystem=xdg-config/gtk-3.0"
+    ],
+    "retroarch": [
+        "sudo dnf in -y retroarch; cat /usr/bin/retroarch-enable-network-access.sh | bash"
     ],
     "nvidia": [],
     "amd": [],
