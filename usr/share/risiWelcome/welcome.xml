@@ -500,7 +500,7 @@ circular</property>
                                   <object class="Package" id="rhythmbox">
                                     <property name="title" translatable="yes">Rhythmbox</property>
                                     <property name="subtitle" translatable="yes">Older-school iTunes style music player, great for large music libraries.</property>
-                                    <property name="package">rhythmbox rhythmbox-alternative-toolbar</property>
+                                    <property name="package">rhythmbox</property>
                                     <property name="iconfile">rhythmbox.png</property>
                                   </object>
                                 </child>
@@ -1110,7 +1110,7 @@ force close this window (this will run in the background with a regular close), 
                                 <child>
                                   <object class="Launcher">
                                     <property name="title" translatable="yes">Install Custom Themes</property>
-                                    <property name="subtitle" translatable="yes">Use risiTweaks to manage rTheme and risiScripts, as well as enable advanced and experimental features.</property>
+                                    <property name="subtitle" translatable="yes">Download themes for our custom rTheme theming engine.</property>
                                     <property name="command">xdg-open https://themes.risi.io</property>
                                     <property name="iconfile">theme.png</property>
                                   </object>
@@ -1149,7 +1149,7 @@ force close this window (this will run in the background with a regular close), 
                                   <object class="Launcher">
                                     <property name="title" translatable="yes">risiOS Forums</property>
                                     <property name="subtitle" translatable="yes">The official place for support, bug reporting, and more.</property>
-                                    <property name="command">/usr/bin/xdg-open https://www.reddit.com/r/risiOS/</property>
+                                    <property name="command">/usr/bin/xdg-open https://forums.risi.io</property>
                                     <property name="iconname">user-available-symbolic</property>
                                   </object>
                                 </child>
@@ -1215,21 +1215,21 @@ force close this window (this will run in the background with a regular close), 
                     </property>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkStackPage">
-                    <property name="name">tour</property>
-                    <property name="title" translatable="1">Tour</property>
-                    <property name="child">
-                      <object class="GtkBox">
-                        <property name="orientation">vertical</property>
-                        <property name="hexpand">true</property>
-                        <child>
-                          <object class="Tour" />
-                        </child>
-                      </object>
-                    </property>
-                  </object>
-                </child>
+<!--                <child>-->
+<!--                  <object class="GtkStackPage">-->
+<!--                    <property name="name">tour</property>-->
+<!--                    <property name="title" translatable="1">Tour</property>-->
+<!--                    <property name="child">-->
+<!--                      <object class="GtkBox">-->
+<!--                        <property name="orientation">vertical</property>-->
+<!--                        <property name="hexpand">true</property>-->
+<!--                        <child>-->
+<!--                          <object class="Tour" />-->
+<!--                        </child>-->
+<!--                      </object>-->
+<!--                    </property>-->
+<!--                  </object>-->
+<!--                </child>-->
                 <child>
                   <object class="GtkStackPage">
                     <property name="name">support</property>
