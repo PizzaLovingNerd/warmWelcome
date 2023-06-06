@@ -40,11 +40,12 @@ actions = {
         "echo Installing RPMFusion Repositories",
         "dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm",
         "echo Updating AppStream",
-        "dnf groupupdate core -y",
+        "dnf groupupdate core -y --skip-broken",
         "echo Installing Multimedia Packages",
-        "dnf groupupdate multimedia -y --setop=\"install_weak_deps=False\" --exclude=PackageKit-gstreamer-plugin",
-        "echo Sound & Video Packages",
-        "dnf groupupdate sound-and-video -y"
+        "dnf swap -y ffmpeg-free ffmpeg --allowerasing"
+        "dnf groupupdate multimedia -y --setop=\"install_weak_deps=False\" --exclude=PackageKit-gstreamer-plugin --skip-broken",
+        "echo Sound and Video Packages",
+        "dnf groupupdate sound-and-video -y --skip-broken"
     ],
     "flatpak": [
         "echo Installing Flatpak",
@@ -162,9 +163,8 @@ class Application(Adw.Application):
         elif "intel" in vendor_line.lower():
             quick_setup_extras.append("intel")
         else:
-            print("WARNING: Unable to detect GPU vendor, assuming Intel")
+            print("WARNING: Unable to detect GPU vendor. Ignore this on a VM.")
             print(f"vendor_line: {vendor_line}")
-            quick_setup_extras.append("intel")
         GLib.idle_add(lambda: self.builder.get_object("welcomeButton").set_label(_("Get Started")))
         GLib.idle_add(lambda: self.builder.get_object("welcomeButton").set_sensitive(True))
 
@@ -621,7 +621,7 @@ def generate_bash_script():
     for action in quick_setup_extras:
         script = script + actions[action]
     if quick_setup_packages is not None and quick_setup_packages != []:
-        script.append(f"dnf install -y {' '.join(quick_setup_packages)}")
+        script.append(f"dnf install -y --skip-broken {' '.join(quick_setup_packages)}")
         script.append("echo Checking for installed packages...")
         for package in quick_setup_packages:
             script.append(f"rpm -q {package} || exit 1")

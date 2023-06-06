@@ -116,7 +116,8 @@
                               <object class="Package" id="dnfspeed">
                                 <property name="title" translatable="yes">DNF Parallel Downloads &amp;amp; Fastest Mirror</property>
                                 <property name="subtitle" translatable="yes">Set max parallel downloads to 10 and enables "fastest mirror" in the package manager. This makes downloads faster on good internet, but slower on bad internet.</property>
-                                <property name="command">echo "max_parallel_downloads=10\nfastestmirror=True" >> /etc/dnf/dnf.conf</property>
+                                <property name="command">echo "max_parallel_downloads=10
+fastestmirror=True" >> /etc/dnf/dnf.conf</property>
                                 <property name="iconname">folder-download-symbolic</property>
                                 <property name="css-classes">warning</property>
                               </object>
@@ -683,8 +684,8 @@ circular</property>
                                   <object class="Package" id="heroic">
                                     <property name="title" translatable="yes">Heroic Launcher</property>
                                     <property name="subtitle" translatable="yes">Launcher for Epic Games and GOG</property>
-                                    <property name="package">heroic</property>
-                                    <property name="command">dnf copr enable atim/heroic-games-launcher -y &amp;&amp; dnf install -y heroic</property>
+                                    <property name="package">heroic-games-launcher-bin</property>
+                                    <property name="command">dnf copr enable atim/heroic-games-launcher -y</property>
                                     <property name="iconfile">heroic.png</property>
                                   </object>
                                 </child>
