@@ -914,7 +914,7 @@ circular</property>
                                     <property name="subtitle" translatable="yes">Video converter and transcoder. Requires RPMFusion</property>
                                     <property name="package">handbrake</property>
                                     <property name="actions-required">rpmfusion</property>
-                                    <property name="iconfile">obs.png</property>
+                                    <property name="iconfile">handbrake.png</property>
                                   </object>
                                 </child>
                               </object>

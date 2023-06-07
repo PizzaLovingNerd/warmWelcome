@@ -66,7 +66,7 @@ package_groups = {}
 
 class Application(Adw.Application):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, application_id='io.risi.welcome', **kwargs)
+        super().__init__(*args, application_id='io.risi.Welcome', **kwargs)
         self.builder = Gtk.Builder()
         self.builder.add_from_file(_WINDOW_FILE)
         self.window = self.builder.get_object("main_window")
