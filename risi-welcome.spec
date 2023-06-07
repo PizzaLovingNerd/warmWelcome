@@ -1,6 +1,6 @@
 Name:           risi-welcome
 Version:        38.0
-Release:        34%{?dist}
+Release:        35%{?dist}
 Summary:        risiOS's Welcome app.
 
 License:        GPL v3
