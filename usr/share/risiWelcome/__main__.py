@@ -80,6 +80,7 @@ class Application(Adw.Application):
         
     def do_activate(self):
         self.window.set_application(self)
+        self.window.maximize()
         self.window.present()
 
         self.builder.get_object("additionalProgramsBack").connect(
