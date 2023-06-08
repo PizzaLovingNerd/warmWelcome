@@ -212,8 +212,8 @@ fastestmirror=True" >> /etc/dnf/dnf.conf</property>
                                   <object class="Package" id="vivaldi">
                                     <property name="title" translatable="yes">Vivaldi</property>
                                     <property name="subtitle" translatable="yes">Proprietary</property>
-                                    <property name="package">vivaldi-stable</property>
-                                    <property name="command">dnf config-manager --add-repo https://repo.vivaldi.com/archive/vivaldi-fedora.repo</property>
+                                    <property name="package"></property>
+                                    <property name="command">dnf config-manager --add-repo https://repo.vivaldi.com/archive/vivaldi-fedora.repo &amp;&amp; dnf install vivaldi-stable -y &amp;&amp; rm /etc/yum.repos.d/vivaldi-fedora.repo</property>
                                     <property name="iconfile">vivaldi.png</property>
                                     <property name="css-classes">warning</property>
                                   </object>
@@ -913,7 +913,7 @@ circular</property>
                                   <object class="Package" id="handbrake">
                                     <property name="title" translatable="yes">Handbrake</property>
                                     <property name="subtitle" translatable="yes">Video converter and transcoder. Requires RPMFusion</property>
-                                    <property name="package">handbrake</property>
+                                    <property name="package">HandBrake-gui</property>
                                     <property name="actions-required">rpmfusion</property>
                                     <property name="iconfile">handbrake.png</property>
                                   </object>
