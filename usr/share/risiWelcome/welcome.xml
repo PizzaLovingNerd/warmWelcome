@@ -8,6 +8,7 @@
 
   <object class="AdwApplicationWindow" id="main_window">
     <property name="title" translatable="yes">Quick Setup!</property>
+    <property name="icon-name">io.risi.Welcome</property>
     <child>
       <object class="GtkStack" id="mainStack">
         <child>

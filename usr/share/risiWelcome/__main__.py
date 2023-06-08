@@ -42,7 +42,7 @@ actions = {
         "echo Updating AppStream",
         "dnf groupupdate core -y --skip-broken",
         "echo Installing Multimedia Packages",
-        "dnf swap -y ffmpeg-free ffmpeg --allowerasing"
+        "dnf swap -y ffmpeg-free ffmpeg --allowerasing",
         "dnf groupupdate multimedia -y --setop=\"install_weak_deps=False\" --exclude=PackageKit-gstreamer-plugin --skip-broken",
         "echo Sound and Video Packages",
         "dnf groupupdate sound-and-video -y --skip-broken"
@@ -70,7 +70,6 @@ class Application(Adw.Application):
         self.builder = Gtk.Builder()
         self.builder.add_from_file(_WINDOW_FILE)
         self.window = self.builder.get_object("main_window")
-        self.window.set_icon_name("io.risi.Welcome")
         self.quick_setup_stack = self.builder.get_object("quickSetupStack")
 
         self.vte = Vte.Terminal(vexpand=True, hexpand=True)
@@ -81,8 +80,6 @@ class Application(Adw.Application):
         
     def do_activate(self):
         self.window.set_application(self)
-        self.window.set_icon_name("io.risi.Welcome")
-        self.window.maximize()
         self.window.present()
 
         self.builder.get_object("additionalProgramsBack").connect(

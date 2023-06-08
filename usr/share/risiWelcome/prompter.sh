@@ -5,7 +5,7 @@ TRIES=0
 while [ $TRIES -lt 3 ]; do
     pkexec bash "$@"
     if [ $? -ne 126 ]; then
-        exit 0
+        exit $?
     fi
     TRIES=$((TRIES+1))
 done
