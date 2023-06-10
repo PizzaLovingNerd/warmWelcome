@@ -619,10 +619,7 @@ def generate_bash_script():
     for action in quick_setup_extras:
         script = script + actions[action]
     if quick_setup_packages is not None and quick_setup_packages != []:
-        script.append(f"dnf install -y --skip-broken {' '.join(quick_setup_packages)}")
-        script.append("echo Checking for installed packages...")
-        for package in quick_setup_packages:
-            script.append(f"rpm -q {package} || exit 1")
+        script.append(f"dnf install -y {' '.join(quick_setup_packages)}")
     script.append("touch /usr/share/risiWelcome/quick-setup-done")
     script.append("echo 'Done!'")
 
