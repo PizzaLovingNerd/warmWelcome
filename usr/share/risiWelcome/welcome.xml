@@ -1358,7 +1358,7 @@ force close this window (this will run in the background with a regular close), 
                                     <property name="title" translatable="yes">risiUpgrade</property>
                                     <property name="subtitle" translatable="yes">Our upgrade tool between versions of risiOS.</property>
                                     <property name="command">/usr/bin/xdg-open https://github.com/risiIndustries/risiUpgrade</property>
-                                    <property name="iconname">io.risi.Upgrade</property>
+                                    <property name="iconname">fedora-logo-icon</property>
                                   </object>
                                 </child>
                               </object>
