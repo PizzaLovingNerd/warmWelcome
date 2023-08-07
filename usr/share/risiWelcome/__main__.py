@@ -98,6 +98,7 @@ class Application(Adw.Application):
 
         # check if quick setup is needed
         if os.path.exists("/usr/share/risiWelcome/quick-setup-done"):
+            setting.set_boolean("startup-show", False)
             self.builder.get_object("mainStack").set_visible_child(
                 self.builder.get_object("welcomeLeaflet")
             )
@@ -110,9 +111,22 @@ class Application(Adw.Application):
         self.builder.get_object("installSpinner").stop()
         if not self.builder.get_object("main_window").get_visible():
             self.builder.get_object("main_window").set_visible(True)
-        if status != 0:
+        if not os.path.exists("/usr/share/risiWelcome/quick-setup-done"):  # Temporary work around for the VTE bug.
+            dialog = Adw.MessageDialog(
+                heading=_("Error: confirmation file not created."),
+                body=_("An unknown error has occurred"),
+                transient_for=self.window
+            )
+            dialog.add_response("logs", _("View Logs"))
+            dialog.add_response("again", _("Try Again"))
+            dialog.add_response("close", _("Close Welcome"))
+            dialog.connect("response", self.on_dialogs)
+            dialog.choose()
+        elif status != 0:
             print(status)
-            if status == 126:  # This currently doesn't work due to a bug in VTE upstream
+            if status == 126 or os.path.exists(os.path.expanduser("~") + "/.local/share/risiWelcome/root_requested"):
+                if os.path.exists(os.path.expanduser("~") + "/.local/share/risiWelcome/root_requested"):
+                    os.remove(os.path.expanduser("~") + "/.local/share/risiWelcome/root_requested")
                 dialog = Adw.MessageDialog(
                     heading=_("Error: Authentication Failed"),
                     body=_("You have not entered your password correctly 3 times. Please try again."),
@@ -134,7 +148,6 @@ class Application(Adw.Application):
                 dialog.connect("response", self.on_dialogs)
                 dialog.choose()
         else:
-            setting.set_boolean("startup-show", False)
             dialog = Adw.MessageDialog(
                 heading=_("Quick Setup Complete"),
                 body=_("Your system has been successfully configured. We recommend rebooting your system now."),
