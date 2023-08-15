@@ -626,7 +626,7 @@ class CategoryChooser(Adw.ActionRow):
 
 
 def generate_bash_script():
-    script = ["#!/bin/bash"]
+    script = ["#!/bin/bash", "echo Updating System", "sudo dnf upgrade -y"]
     for command in quick_setup_commands:
         script.append(command)
     for action in quick_setup_extras:
