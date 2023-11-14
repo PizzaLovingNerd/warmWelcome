@@ -1,11 +1,11 @@
-Name:           risi-welcome
-Version:        38.1
-Release:        41%{?dist}
-Summary:        risiOS's Welcome app.
+Name:           warm-welcome
+Version:        39
+Release:        42%{?dist}
+Summary:        risiOS's Welcome app ported to other distributions.
 
 License:        GPL v3
-URL:            https://github.com/risiIndustries/risiWelcomeAdw
-Source0:        https://github.com/risiIndustries/risiWelcomeAdw/archive/refs/heads/main.tar.gz
+URL:            https://github.com/pizzalovingnerd/warmWelcome
+Source0:        https://github.com/pizzalovingnerd/warmWelcome/archive/refs/heads/main.tar.gz
 
 BuildArch:	    noarch
 
@@ -13,17 +13,18 @@ BuildRequires:  python3
 Requires:       python3
 Requires:	    python3-gobject
 Requires:       python3-requests
+Requires:       python3-yaml
 Requires:       libadwaita
 Requires:       lshw
 Requires:       vte291-gtk4
 
 %description
 This welcome program will help guide you through the
-available resources for risiOS as well as help you setup
+available resources for (your distro) as well as help you setup
 your computer to your likings.
 
 %prep
-%autosetup -n risiWelcomeAdw-main
+%autosetup -n warmWelcome-main
 
 %build
 %install
@@ -49,7 +50,7 @@ install -m 755 risi-welcome %{buildroot}%{_bindir}
 %{_datadir}/risiWelcome/icons/*.png
 %{_datadir}/glib-2.0/schemas/io.risi.Welcome.gschema.xml
 %{_datadir}/applications/io.risi.Welcome.desktop
-%{_datadir}/icons/hicolor/scalable/apps/io.risi.Welcome.svg
+%{_datadir}/icons/hicolor/scalable/apps/io.warm.Welcome.svg
 %{_bindir}/risi-welcome
 %{_sysconfdir}/xdg/autostart/io.risi.Welcome.desktop
 

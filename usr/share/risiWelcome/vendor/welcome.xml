@@ -31,7 +31,7 @@
                     <child>
                       <object class="AdwStatusPage">
                         <property name="icon-name">fedora-logo-icon</property>
-                        <property name="title" translatable="yes">Welcome to risiOS 38 (The Cure)</property>
+                        <property name="title" translatable="yes">Welcome to Nobara 39</property>
                         <property name="description" translatable="yes">Quick Setup will allow you to quickly setup your computer to your liking, but you can do this later just by closing this window.</property>
                         <property name="vexpand">true</property>
                         <child>
@@ -296,7 +296,7 @@ fastestmirror=True" >> /etc/dnf/dnf.conf</property>
                                 <property name="title" translatable="yes">Open Source Driver (Nouveau)</property>
                                 <property name="subtitle" translatable="yes">This is not recommended and only advised if you are trying to avoid all proprietary software on your system.</property>
                                 <property name="iconfile">nvidia.png</property>
-                                <property name="actions-required">nvidia</property>
+                                <property name="prereqs-required">nvidia</property>
                                 <property name="group">nvidia</property>
                               </object>
                             </child>
@@ -306,7 +306,7 @@ fastestmirror=True" >> /etc/dnf/dnf.conf</property>
                                 <property name="subtitle" translatable="yes">Recommended for any NVIDIA GPU released after 2014. RPMFusion Required.</property>
                                 <property name="package">akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs nvidia-vaapi-driver</property>
                                 <property name="iconfile">nvidia.png</property>
-                                <property name="actions-required">rpmfusion,nvidia</property>
+                                <property name="prereqs-required">rpmfusion,nvidia</property>
                                 <property name="switch-default">True</property>
                                 <property name="group">nvidia</property>
                               </object>
@@ -317,7 +317,7 @@ fastestmirror=True" >> /etc/dnf/dnf.conf</property>
                                 <property name="subtitle" translatable="yes">Recommended for NVIDIA Kepler GPUs found between 2012-2014. RPMFusion Required.</property>
                                 <property name="package">akmod-nvidia-470xx xorg-x11-drv-nvidia-470xx xorg-x11-drv-nvidia-470xx-cuda nvidia-vaapi-driver</property>
                                 <property name="iconfile">nvidia.png</property>
-                                <property name="actions-required">rpmfusion,nvidia</property>
+                                <property name="prereqs-required">rpmfusion,nvidia</property>
                                 <property name="group">nvidia</property>
                               </object>
                             </child>
@@ -327,7 +327,7 @@ fastestmirror=True" >> /etc/dnf/dnf.conf</property>
                                 <property name="subtitle" translatable="yes">Recommended for NVIDIA Fermi GPUs found between 2010-2012. RPMFusion Required.</property>
                                 <property name="package">akmod-nvidia-390xx xorg-x11-drv-nvidia-390xx xorg-x11-drv-nvidia-390xx-cuda nvidia-vaapi-driver</property>
                                 <property name="iconfile">nvidia.png</property>
-                                <property name="actions-required">rpmfusion,nvidia</property>
+                                <property name="prereqs-required">rpmfusion,nvidia</property>
                                 <property name="group">nvidia</property>
                               </object>
                             </child>
@@ -342,7 +342,7 @@ fastestmirror=True" >> /etc/dnf/dnf.conf</property>
                                 <property name="title" translatable="yes">Vanilla Mesa</property>
                                 <property name="subtitle" translatable="yes">Mesa built without support for hardware accelerated codecs. This is not recommended and only advised if you are trying to avoid all proprietary software on your system.</property>
                                 <property name="iconfile">mesa.png</property>
-                                <property name="actions-required">amd</property>
+                                <property name="prereqs-required">amd</property>
                                 <property name="group">amd</property>
                               </object>
                             </child>
@@ -354,7 +354,7 @@ fastestmirror=True" >> /etc/dnf/dnf.conf</property>
                                 <property name="package">mesa-va-drivers-freeworld.i686 mesa-vdpau-drivers-freeworld.i686</property>
                                 <property name="iconfile">mesa.png</property>
                                 <property name="switch-default">True</property>
-                                <property name="actions-required">rpmfusion,amd</property>
+                                <property name="prereqs-required">rpmfusion,amd</property>
                                 <property name="group">amd</property>
                               </object>
                             </child>
@@ -371,7 +371,7 @@ fastestmirror=True" >> /etc/dnf/dnf.conf</property>
                                 <property name="iconfile">intel.png</property>
                                 <property name="package">intel-media-driver libva-intel-driver</property>
                                 <property name="switch-default">True</property>
-                                <property name="actions-required">intel,rpmfusion</property>
+                                <property name="prereqs-required">intel,rpmfusion</property>
                               </object>
                             </child>
                           </object>
@@ -670,7 +670,7 @@ circular</property>
                                     <property name="subtitle" translatable="yes">Store and game launcher with 1000s of games. Requires RPMFusion</property>
                                     <property name="package">steam</property>
                                     <property name="iconfile">steam.png</property>
-                                    <property name="actions-required">rpmfusion</property>
+                                    <property name="prereqs-required">rpmfusion</property>
                                   </object>
                                 </child>
                                 <child>
@@ -765,7 +765,7 @@ circular</property>
                                     <property name="title" translatable="yes">Discord</property>
                                     <property name="subtitle" translatable="yes">Gaming focused text, video, and voice chat app. Requires RPMFusion</property>
                                     <property name="package">discord</property>
-                                    <property name="actions-required">rpmfusion</property>
+                                    <property name="prereqs-required">rpmfusion</property>
                                     <property name="iconfile">discord.png</property>
                                   </object>
                                 </child>
@@ -799,7 +799,7 @@ circular</property>
                                     <property name="subtitle" translatable="yes">Tools for NVIDIA GPUs. Requires RPMFusion and an NVIDIA GPU.</property>
                                     <property name="package">gwe</property>
                                     <property name="iconfile">gwe.png</property>
-                                    <property name="actions-required">rpmfusion,nvidia</property>
+                                    <property name="prereqs-required">rpmfusion,nvidia</property>
                                   </object>
                                 </child>
                                 <child>
@@ -876,7 +876,7 @@ circular</property>
                                     <property name="package">openshot</property>
                                     <property name="iconfile">openshot.png</property>
                                     <property name="subtitle" translatable="yes">Requires RPMFusion</property>
-                                    <property name="actions-required">rpmfusion</property>
+                                    <property name="prereqs-required">rpmfusion</property>
                                   </object>
                                 </child>
                                 <child>
@@ -885,7 +885,7 @@ circular</property>
                                     <property name="package">shotcut</property>
                                     <property name="iconfile">shotcut.png</property>
                                     <property name="subtitle" translatable="yes">Requires RPMFusion</property>
-                                    <property name="actions-required">rpmfusion</property>
+                                    <property name="prereqs-required">rpmfusion</property>
                                   </object>
                                 </child>
                                 <child>
@@ -905,7 +905,7 @@ circular</property>
                                     <property name="title" translatable="yes">Open Broadcaster Software (OBS Studio)</property>
                                     <property name="subtitle" translatable="yes">A program for video/screen recording and live streaming. Requires RPMFusion</property>
                                     <property name="package">obs-studio</property>
-                                    <property name="actions-required">rpmfusion</property>
+                                    <property name="prereqs-required">rpmfusion</property>
                                     <property name="iconfile">obs.png</property>
                                   </object>
                                 </child>
@@ -914,7 +914,7 @@ circular</property>
                                     <property name="title" translatable="yes">Handbrake</property>
                                     <property name="subtitle" translatable="yes">Video converter and transcoder. Requires RPMFusion</property>
                                     <property name="package">HandBrake-gui</property>
-                                    <property name="actions-required">rpmfusion</property>
+                                    <property name="prereqs-required">rpmfusion</property>
                                     <property name="iconfile">handbrake.png</property>
                                   </object>
                                 </child>
@@ -1217,21 +1217,6 @@ force close this window (this will run in the background with a regular close), 
                     </property>
                   </object>
                 </child>
-<!--                <child>-->
-<!--                  <object class="GtkStackPage">-->
-<!--                    <property name="name">tour</property>-->
-<!--                    <property name="title" translatable="1">Tour</property>-->
-<!--                    <property name="child">-->
-<!--                      <object class="GtkBox">-->
-<!--                        <property name="orientation">vertical</property>-->
-<!--                        <property name="hexpand">true</property>-->
-<!--                        <child>-->
-<!--                          <object class="Tour" />-->
-<!--                        </child>-->
-<!--                      </object>-->
-<!--                    </property>-->
-<!--                  </object>-->
-<!--                </child>-->
                 <child>
                   <object class="GtkStackPage">
                     <property name="name">support</property>

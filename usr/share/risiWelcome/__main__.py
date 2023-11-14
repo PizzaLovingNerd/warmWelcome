@@ -5,10 +5,10 @@ import time
 import gi
 import threading
 import requests
-
 import gettext
-
 import urllib3
+import yaml
+
 _ = gettext.gettext
 
 gi.require_version("Gtk", "4.0")
@@ -18,7 +18,8 @@ from gi.repository import Gtk, Adw, Vte, GLib, GObject, GdkPixbuf, Gio
 
 setting = Gio.Settings.new("io.risi.Welcome")
 
-_WINDOW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/welcome.xml"
+_CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + "vendor/distro_config.yml"
+_WINDOW_FILE = os.path.dirname(os.path.abspath(__file__)) + "vendor/welcome.xml"
 _PACKAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/package.xml"
 _NAVIGATION_ROW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/navigation_row.xml"
 _SIDEBAR_BUTTON_FILE = os.path.dirname(os.path.abspath(__file__)) + "/sidebar_button.xml"
@@ -28,42 +29,25 @@ _TOUR_FILE = os.path.dirname(os.path.abspath(__file__)) + "/tour.xml"
 _TOUR_PAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/tour_page.xml"
 _PW_PROMPTER = os.path.dirname(os.path.abspath(__file__)) + "/prompter.sh"
 
-packages = []
+# Stores package rows classes
+package_rows = []
 
+# Global variables for script use
 quick_setup_packages = []
 quick_setup_commands = []
-quick_setup_extras = []
+quick_setup_actions = []
+quick_setup_prereqs = []
 welcome_sidebar_buttons = []
+package_groups = {}  # Used for managing switches for multiple choices (mainly NVIDIA)
 
-actions = {
-    "rpmfusion": [
-        "echo Installing RPMFusion Repositories",
-        "dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm",
-        "echo Updating AppStream",
-        "dnf groupupdate core -y --skip-broken",
-        "echo Installing Multimedia Packages",
-        "dnf swap -y ffmpeg-free ffmpeg --allowerasing",
-        "dnf groupupdate multimedia -y --setop=\"install_weak_deps=False\" --exclude=PackageKit-gstreamer-plugin --skip-broken",
-        "echo Sound and Video Packages",
-        "dnf groupupdate sound-and-video -y --skip-broken"
-    ],
-    "flatpak": [
-        "echo Installing Flatpak",
-        "dnf install -y flatpak",
-        "echo Adding Flathub",
-        "flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo",
-        "echo Adding Theme Overrides",
-        "flatpak override --filesystem=~/.themes",
-        "flatpak override --filesystem=xdg-config/gtk-4.0",
-        "flatpak override --filesystem=xdg-config/gtk-3.0"
-    ],
-    "nvidia": [],
-    "amd": [],
-    "intel": []
-}
-package_groups = {}
+# Load config file
+with open(_CONFIG_FILE) as config_file:
+    distro_config = yaml.safe_dump(config_file.read())
+install_command = distro_config["install_command"]
+actions = distro_config["actions"]
+first_page_after_welcome = distro_config["first_page_after_welcome"]
 
-
+# Application
 class Application(Adw.Application):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, application_id='io.risi.Welcome', **kwargs)
@@ -72,31 +56,31 @@ class Application(Adw.Application):
         self.window = self.builder.get_object("main_window")
         self.quick_setup_stack = self.builder.get_object("quickSetupStack")
 
+        # Initialize terminal and add it to window
         self.vte = Vte.Terminal(vexpand=True, hexpand=True)
         self.vte.set_input_enabled(False)
         self.builder.get_object("vteBox").append(self.vte)
 
         self.welcome_leaflet = self.builder.get_object("welcomeLeaflet")
-        
+
     def do_activate(self):
         self.window.set_application(self)
         self.window.maximize()
         self.window.present()
 
+        # Connect objects to functions
         self.builder.get_object("additionalProgramsBack").connect(
             "clicked", self.on_additionalProgramsBackClicked
         )
         self.builder.get_object("welcomeButton").connect("clicked", self.on_welcomeButton)
         self.builder.get_object("progressButton").connect("clicked", self.view_progress)
         self.builder.get_object("installationBack").connect("clicked", self.on_installationBackClicked)
-
-        self.vte.connect("child_exited", self.terminal_exited)
-
         self.builder.get_object("welcomeStack").connect("notify::visible-child", self.on_welcome_stack_switched)
         self.welcome_leaflet.connect("notify::folded", self.on_welcome_leaflet_unfoldable)
         self.welcome_leaflet.navigate(Adw.NavigationDirection.FORWARD)
+        self.vte.connect("child_exited", self.terminal_exited)
 
-        # check if quick setup is needed
+        # Switch to Quick setup if needed, otherwise switch to standard welcome screen
         if os.path.exists("/usr/share/risiWelcome/quick-setup-done"):
             setting.set_boolean("startup-show", False)
             self.builder.get_object("mainStack").set_visible_child(
@@ -107,10 +91,14 @@ class Application(Adw.Application):
             vendor_thread.daemon = True
             vendor_thread.start()
 
-    def terminal_exited(self, terminal, status):
+    def terminal_exited(self, terminal, status):  # Ran when Quick Setup terminal is done
         self.builder.get_object("installSpinner").stop()
+
+        # Opens window back up if it is closed
         if not self.builder.get_object("main_window").get_visible():
             self.builder.get_object("main_window").set_visible(True)
+
+        # Error checking
         if not os.path.exists("/usr/share/risiWelcome/quick-setup-done"):  # Temporary work around for the VTE bug.
             dialog = Adw.MessageDialog(
                 heading=_("Error: confirmation file not created."),
@@ -124,6 +112,7 @@ class Application(Adw.Application):
             dialog.choose()
         elif status != 0:
             print(status)
+            # Work around for checking for root
             if status == 126 or os.path.exists(os.path.expanduser("~") + "/.local/share/risiWelcome/root_requested"):
                 if os.path.exists(os.path.expanduser("~") + "/.local/share/risiWelcome/root_requested"):
                     os.remove(os.path.expanduser("~") + "/.local/share/risiWelcome/root_requested")
@@ -158,27 +147,29 @@ class Application(Adw.Application):
             dialog.connect("response", self.on_dialogs)
             dialog.choose()
 
+    # Checks for graphics card to figure out what driver to recommend
     def get_vendor_data(self):
         # Slight delay to prevent loading confusion for users
         time.sleep(2)
         # Checking GPU Vendor
         lshw_data = None
         print("IGNORE THE WARNING BELOW, THIS DOES NOT AFFECT THE PROGRAM")
-        lshw = subprocess.Popen("lshw -C display", shell=True, stdout=subprocess.PIPE)
+        lshw = subprocess.Popen("lshw -C display", shell=True, stdout=subprocess.PIPE)  # Reads output from lshw
         lshw_data = lshw.stdout.read().decode("utf-8")
         vendor_line = lshw_data.split("vendor: ")[1].split("\n")[0]
         if "nvidia" in vendor_line.lower():
-            quick_setup_extras.append("nvidia")
+            quick_setup_prereqs.append("nvidia")
         elif "amd" in vendor_line.lower():
-            quick_setup_extras.append("amd")
+            quick_setup_prereqs.append("amd")
         elif "intel" in vendor_line.lower():
-            quick_setup_extras.append("intel")
+            quick_setup_prereqs.append("intel")
         else:
             print("WARNING: Unable to detect GPU vendor. Ignore this on a VM.")
             print(f"vendor_line: {vendor_line}")
         GLib.idle_add(lambda: self.builder.get_object("welcomeButton").set_label(_("Get Started")))
         GLib.idle_add(lambda: self.builder.get_object("welcomeButton").set_sensitive(True))
 
+    # Code for dialog options
     def on_dialogs(self, dialog, response):
         if response == "close":
             self.builder.get_object("mainStack").set_transition_type(
@@ -207,12 +198,13 @@ class Application(Adw.Application):
             )
         dialog.destroy()
 
+    # Launches the terminal
     def spawn_vte(self):
-        self.builder.get_object("main_window").set_hide_on_close(True)
+        self.builder.get_object("main_window").set_hide_on_close(True)  # prevents closing window while running
         self.vte.spawn_async(
             Vte.PtyFlags.DEFAULT,
             os.environ['HOME'],
-            generate_bash_script(),
+            generate_bash_script(),  # Gets list of arguments returned from generate_bash_script
             None,  # Environmental Variables (envv)
             GLib.SpawnFlags.DEFAULT,  # Spawn Flags
             None, None,  # Child Setup
@@ -223,15 +215,59 @@ class Application(Adw.Application):
         )
         self.builder.get_object("installSpinner").start()
 
+    # Shows terminal output
     def view_progress(self, button):
         self.builder.get_object("runningStack").set_visible_child(
             self.builder.get_object("vteBox")
         )
         self.builder.get_object("installationBack").set_sensitive(True)
 
+    # Ran when "start" button is clicked
+    def on_welcomeButton(self, button):
+        # Run check_actions in packages to load drivers
+        for package in package_rows:
+            package.check_actions()
+
+        button.set_label(_("Checking Internet Connection..."))
+        button.set_sensitive(False)
+        internet_thread = threading.Thread(target=self.wait_for_internet)
+        internet_thread.daemon = True
+        internet_thread.start()
+
+    # Called when internet access is gotten
+    def wait_for_internet_idle(self, page_id):
+        self.quick_setup_stack.set_visible_child(self.builder.get_object(page_id))
+        button = self.builder.get_object("welcomeButton")
+        button.set_label(_("Get Started"))
+        button.set_sensitive(True)
+
+    # Waits for network access
+    def wait_for_internet(self):
+        connected = False
+        try:
+            response = requests.get("https://nmcheck.gnome.org/check_network_status.txt", timeout=5)
+            if "NetworkManager is online" in response.text:
+                GLib.idle_add(self.wait_for_internet_idle, first_page_after_welcome)
+            elif response.status_code != 200:
+                GLib.idle_add(self.wait_for_internet_idle, "internetBox")
+        except (requests.exceptions.RequestException, urllib3.exceptions.HTTPError):
+            GLib.idle_add(self.wait_for_internet_idle, "internetBox")
+        while not connected:
+            try:
+                response = requests.get("https://nmcheck.gnome.org/check_network_status.txt", timeout=3)
+                if "NetworkManager is online" in response.text:
+                    connected = True
+            except (requests.exceptions.RequestException, urllib3.exceptions.HTTPError):
+                connected = False
+        GLib.idle_add(lambda: self.quick_setup_stack.set_visible_child(
+            self.builder.get_object(first_page_after_welcome)
+        ))
+
+    # Convenience function
     def get_widget_id(self, widget):
         return self.builder.get_object(widget)
 
+    # The following functions are jsut used for navigation
     def reveal_app_list(self, page):
         self.builder.get_object("additionalProgramsStack").set_visible_child(
             self.builder.get_object(page)
@@ -250,44 +286,6 @@ class Application(Adw.Application):
         )
         button.set_sensitive(False)
 
-    def on_welcomeButton(self, button):
-        # Run check_actions in packages to load drivers
-        for package in packages:
-            package.check_actions()
-
-        button.set_label(_("Checking Internet Connection..."))
-        button.set_sensitive(False)
-        internet_thread = threading.Thread(target=self.wait_for_internet)
-        internet_thread.daemon = True
-        internet_thread.start()
-
-    def wait_for_internet_idle(self, page_id):
-        self.quick_setup_stack.set_visible_child(self.builder.get_object(page_id))
-        button = self.builder.get_object("welcomeButton")
-        button.set_label(_("Get Started"))
-        button.set_sensitive(True)
-
-    def wait_for_internet(self):
-        connected = False
-        try:
-            response = requests.get("https://nmcheck.gnome.org/check_network_status.txt", timeout=5)
-            if "NetworkManager is online" in response.text:
-                GLib.idle_add(self.wait_for_internet_idle, "repoPage")
-            elif response.status_code != 200:
-                GLib.idle_add(self.wait_for_internet_idle, "internetBox")
-        except (requests.exceptions.RequestException, urllib3.exceptions.HTTPError):
-            GLib.idle_add(self.wait_for_internet_idle, "internetBox")
-        while not connected:
-            try:
-                response = requests.get("https://nmcheck.gnome.org/check_network_status.txt", timeout=3)
-                if "NetworkManager is online" in response.text:
-                    connected = True
-            except (requests.exceptions.RequestException, urllib3.exceptions.HTTPError):
-                connected = False
-        GLib.idle_add(lambda: self.quick_setup_stack.set_visible_child(
-            self.builder.get_object("repoPage")
-        ))
-
     def on_welcome_stack_switched(self, stack, page):
         if self.welcome_leaflet.get_can_unfold():
             self.welcome_leaflet.navigate(Adw.NavigationDirection.FORWARD)
@@ -302,24 +300,27 @@ class Application(Adw.Application):
         button.set_visible(self.welcome_leaflet.get_can_unfold())
 
 
+# All the data contained by a package row
 @Gtk.Template(filename=_PACKAGE_FILE)
 class Package(Adw.ActionRow):
     __gtype_name__ = "Package"
-    package_name = None
-    action_command = None
-    action_extra = None
-    icon_path = None
-    internal_icon_name = None
-    default = False
-    actions_required_list = None
-    button_group = None
+    package_name = None  # Package to install
+    action_command = None  # command to run
+    action_extra = None  # action to run, this code was different so the variable naming is inconsistent
+    icon_path = None  # icon path for apps
+    internal_icon_name = None  # other icon type, different from icon_name that is unused
+    default = False  # Whether to include this by default
+    prereqs_required_list = None  # Actions are prereqs to make a button sensitive
+    button_group = None  # Group this with other packages for an option
+
     icon = Gtk.Template.Child("icon_image")
     switch = Gtk.Template.Child("switch")
 
     def __init__(self):
         super().__init__(self)
-        packages.append(self)
+        package_rows.append(self)  # Adds itself to package row global
 
+    # Sets all the values based on defaults
     @Gtk.Template.Callback("on_update_defaults")
     def on_update_defaults(self, *args, **kwargs):
         if self.default is True:
@@ -339,6 +340,7 @@ class Package(Adw.ActionRow):
                     self.switch.set_group(package_groups[self.button_group])
         self.check_actions()
 
+    # Whether to toggle a package row
     @Gtk.Template.Callback("toggle_package")
     def toggle_package(self, button):
         if button.get_active():
@@ -347,8 +349,8 @@ class Package(Adw.ActionRow):
             if self.action_command is not None:
                 quick_setup_commands.append(self.action_command)
             if self.action_extra is not None:
-                quick_setup_extras.append(self.action_extra)
-                for package in packages:
+                quick_setup_actions.append(self.action_extra)
+                for package in package_rows:
                     package.check_actions()
         else:
             if self.package_name is not None:
@@ -356,10 +358,28 @@ class Package(Adw.ActionRow):
             if self.action_command is not None:
                 quick_setup_commands.remove(self.action_command)
             if self.action_extra is not None:
-                quick_setup_extras.remove(self.action_extra)
-                for package in packages:
+                quick_setup_actions.remove(self.action_extra)
+                for package in package_rows:
                     package.check_actions()
 
+    # Checks if prereqs are met
+    @Gtk.Template.Callback("check_actions")
+    def check_actions(self, *args, **kwargs):
+        if self.prereqs_required_list is not None:
+            sensitive = True
+            for prereq in self.prereqs_required_list:
+                if prereq not in quick_setup_actions + quick_setup_prereqs:
+                    sensitive = False
+            self.set_sensitive(sensitive)
+
+            self.switch.set_active(False)
+            if sensitive and self.default:
+                self.switch.set_active(True)
+            elif self.button_group is not None:
+                if package_groups[self.button_group] is self.switch:
+                    self.switch.set_active(True)
+
+    # The rest of these functions are getters and setters for GObject
     @GObject.Property(type=str)
     def package(self):
         return self.package_name
@@ -417,41 +437,27 @@ class Package(Adw.ActionRow):
         self.default = default
 
     @GObject.Property(type=str)
-    def actions_required(self):
-        return self.actions_required_list
+    def prereqs_required(self):
+        return self.prereqs_required_list
 
-    @actions_required.setter
-    def actions_required(self, actions):
-        self.actions_required_list = actions.split(",")
+    @prereqs_required.setter
+    def prereqs_required(self, prereqs):
+        self.prereqs_required_list = prereqs.split(",")
 
-    @Gtk.Template.Callback("check_actions")
-    def check_actions(self, *args, **kwargs):
-        if self.actions_required_list is not None:
-            sensitive = True
-            for action in self.actions_required_list:
-                if action not in quick_setup_extras:
-                    sensitive = False
-            self.set_sensitive(sensitive)
-
-            self.switch.set_active(False)
-            if sensitive and self.default:
-                self.switch.set_active(True)
-            elif self.button_group is not None:
-                if package_groups[self.button_group] is self.switch:
-                    self.switch.set_active(True)
 
 @Gtk.Template(filename=_LAUNCHER_FILE)
 class Launcher(Adw.ActionRow):
     __gtype_name__ = "Launcher"
-    launch_command = None
-    icon_path = None
-    internal_icon_name = None
+    launch_command = None  # Command to run on package launch (list)
+    icon_path = None  # Icon path
+    internal_icon_name = None  # Icon name
     icon = Gtk.Template.Child("icon_image")
     button = Gtk.Template.Child("launch_button")
 
     def __init__(self):
         super().__init__(self)
 
+    # Sets Launcher from options
     @Gtk.Template.Callback("on_update_defaults")
     def on_update_defaults(self, *args, **kwargs):
         if self.icon_path is not None:
@@ -462,6 +468,7 @@ class Launcher(Adw.ActionRow):
         if self.internal_icon_name is not None:
             self.icon.set_from_icon_name(self.internal_icon_name)
 
+    # The rest of these functions are getters and setters for GObject
     @Gtk.Template.Callback("run_launcher")
     def run_launcher(self, button):
         subprocess.Popen(self.command)
@@ -536,7 +543,6 @@ class NavigationRow(Adw.ActionRow):
             application.spawn_vte()
             application.builder.get_object("installSpinner").start()
 
-
     @Gtk.Template.Callback("on_previous_page")
     def on_previous_page(self, button):
         application = button.get_root().get_application()
@@ -576,6 +582,7 @@ class SidebarButton(Gtk.Button):
     @Gtk.Template.Callback("on_click")
     def on_click(self, button):
         self.get_root().get_application().welcome_leaflet.navigate(Adw.NavigationDirection.BACK)
+
 
 @Gtk.Template(filename=_CATEGORY_CHOOSER_FILE)
 class CategoryChooser(Adw.ActionRow):
@@ -625,14 +632,15 @@ class CategoryChooser(Adw.ActionRow):
             self.icon.set_from_icon_name(self.internal_icon_name)
 
 
+# Generates bath script
 def generate_bash_script():
-    script = ["#!/bin/bash", "echo Updating System", "sudo dnf upgrade -y"]
+    script = [actions["script_base"]]
     for command in quick_setup_commands:
         script.append(command)
-    for action in quick_setup_extras:
-        script = script + actions[action]
+    for action in quick_setup_actions:
+        script.append(actions[action])
     if quick_setup_packages is not None and quick_setup_packages != []:
-        script.append(f"dnf install -y {' '.join(quick_setup_packages)}")
+        script.append(f"{install_command} {' '.join(quick_setup_packages)}")
     script.append("touch /usr/share/risiWelcome/quick-setup-done")
     script.append("echo 'Done!'")
 
@@ -642,76 +650,6 @@ def generate_bash_script():
     print(bash_file_path)
 
     return ["/usr/bin/bash", _PW_PROMPTER, bash_file_path]
-
-@Gtk.Template(filename=_TOUR_PAGE_FILE)
-class TourPage(Gtk.Box):
-    __gtype_name__ = "TourPage"
-    _title = None
-    _description = None
-    filename = None
-    label = Gtk.Template.Child("label")
-    video_player = Gtk.Template.Child("video")
-
-    @GObject.Property(type=str)
-    def title(self):
-        return self._title
-
-    @title.setter
-    def title(self, title):
-        self._title = title
-
-    @GObject.Property(type=str)
-    def description(self):
-        return self._description
-
-    @description.setter
-    def description(self, description):
-        self._description = description
-
-    @GObject.Property(type=str)
-    def video(self):
-        return self.filename
-
-    @video.setter
-    def video(self, filename):
-        self.filename = os.path.dirname(os.path.abspath(__file__)) + f"/videos/{filename}"
-
-    @Gtk.Template.Callback("on_update_defaults")
-    def on_update_defaults(self, *args, **kwargs):
-        self.label.set_label(self._description)
-        self.video_player.set_filename(self.filename)
-
-
-@Gtk.Template(filename=_TOUR_FILE)
-class Tour(Gtk.Box):
-    __gtype_name__ = "Tour"
-    carousel = Gtk.Template.Child("carousel")
-    back_btn = Gtk.Template.Child("back_btn")
-    fw_btn = Gtk.Template.Child("fw_btn")
-    headerlabel = Gtk.Template.Child("headerlabel")
-
-    Adw.init()
-
-    @Gtk.Template.Callback("on_forward")
-    def on_forward(self, button):
-        self.carousel.scroll_to(self.carousel.get_nth_page(self.carousel.get_position() + 1), True)
-
-    @Gtk.Template.Callback("on_back")
-    def on_back(self, button):
-        self.carousel.scroll_to(self.carousel.get_nth_page(self.carousel.get_position() - 1), True)
-
-    @Gtk.Template.Callback("on_page_changed")
-    def on_page_changed(self, carousel, user_data):
-        self.headerlabel.set_label(carousel.get_nth_page(carousel.get_position()).title)
-        if carousel.get_position() == 0:
-            self.back_btn.set_sensitive(False)
-        else:
-            self.back_btn.set_sensitive(True)
-
-        if carousel.get_position() == carousel.get_n_pages() - 1:
-            self.fw_btn.set_sensitive(False)
-        else:
-            self.fw_btn.set_sensitive(True)
 
 
 if __name__ == "__main__":

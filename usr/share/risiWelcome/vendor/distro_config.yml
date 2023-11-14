@@ -1,0 +1,26 @@
+install_command: "dnf install -y"
+first_page_after_welcome: "repoPage"
+actions:
+  script_base: |
+    #!/bin/bash
+    echo Updating System
+    sudo dnf upgrade -y
+  rpmfusion: |
+    echo Installing RPMFusion Repositories
+    dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    echo Updating AppStream
+    dnf groupupdate core -y --skip-broken
+    echo Installing Multimedia Packages
+    dnf swap -y ffmpeg-free ffmpeg --allowerasing
+    dnf groupupdate multimedia -y --setop=\install_weak_deps=False\ --exclude=PackageKit-gstreamer-plugin --skip-broken
+    echo Sound and Video Packages
+    dnf groupupdate sound-and-video -y --skip-broken
+  flatpak: |
+    echo Installing Flatpak
+    dnf install -y flatpak
+    echo Adding Flathub
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    echo Adding Theme Overrides
+    flatpak override --filesystem=~/.themes
+    flatpak override --filesystem=xdg-config/gtk-4.0
+    flatpak override --filesystem=xdg-config/gtk-3.0
