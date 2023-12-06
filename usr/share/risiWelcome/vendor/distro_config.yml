@@ -1,5 +1,7 @@
-install_command: "dnf install -y"
-first_page_after_welcome: "repoPage"
+install_command:
+  "dnf install -y"
+first_page_after_welcome:
+  "repoPage"
 actions:
   script_base: |
     #!/bin/bash

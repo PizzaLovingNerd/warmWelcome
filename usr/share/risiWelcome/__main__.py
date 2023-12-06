@@ -18,8 +18,8 @@ from gi.repository import Gtk, Adw, Vte, GLib, GObject, GdkPixbuf, Gio
 
 setting = Gio.Settings.new("io.risi.Welcome")
 
-_CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + "vendor/distro_config.yml"
-_WINDOW_FILE = os.path.dirname(os.path.abspath(__file__)) + "vendor/welcome.xml"
+_CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + "/vendor/distro_config.yml"
+_WINDOW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/vendor/welcome.xml"
 _PACKAGE_FILE = os.path.dirname(os.path.abspath(__file__)) + "/package.xml"
 _NAVIGATION_ROW_FILE = os.path.dirname(os.path.abspath(__file__)) + "/navigation_row.xml"
 _SIDEBAR_BUTTON_FILE = os.path.dirname(os.path.abspath(__file__)) + "/sidebar_button.xml"
@@ -42,7 +42,8 @@ package_groups = {}  # Used for managing switches for multiple choices (mainly N
 
 # Load config file
 with open(_CONFIG_FILE) as config_file:
-    distro_config = yaml.safe_dump(config_file.read())
+    distro_config = yaml.safe_load(config_file.read())
+print(distro_config)
 install_command = distro_config["install_command"]
 actions = distro_config["actions"]
 first_page_after_welcome = distro_config["first_page_after_welcome"]

@@ -37,11 +37,11 @@ mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/apps
 cp io.risi.Welcome.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/io.risi.Welcome.svg
 
 
-cat > risi-welcome <<EOF
+cat > warm-welcome <<EOF
 #!/bin/sh
 /usr/bin/env python %{_datadir}/risiWelcome/__main__.py
 EOF
-install -m 755 risi-welcome %{buildroot}%{_bindir}
+install -m 755 warm-welcome %{buildroot}%{_bindir}
 
 %files
 %{_datadir}/risiWelcome/*.py
